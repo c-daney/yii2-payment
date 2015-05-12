@@ -1,0 +1,21 @@
+{
+    "name": "lubaogui/yii2-payment",
+    "description": "yii2的支付扩展，支持支付宝，微信支付等",
+    "type": "library",
+    "keywords": ["yii2","extension","payment"],
+    "license": "GPL-3.0+",
+    "authors": [
+        {
+            "name": "lubaogui",
+            "email": "lbaogui@lubanr.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "lubaogui\\payment\\": ""
+        }
+    }
+}
