@@ -16,14 +16,29 @@ namespace lubaogui\payment;
 class Payment 
 {
     /**
+     * 支付状态定义
+     */
+    const PAY_STATUS_CREATED = 0;
+    const PAY_STATUS_FINISHED = 10;
+    const PAY_STATUS_CLOSED =   20;
+    const PAY_STATUS_SUCCEEDED = 30;
+    /**
      *  支付服务实例
      */
-    public $_payment;
+    private $_payment;
 
     /**
      * provider 支付提供商
      */
     private $_provider;
+
+    /**
+     * 构造函数
+     */
+    public function __construct($provider) 
+    {
+        $this->_provider = $provider;
+    }
 
     /**
      * 支付方法对应的支付服务类
@@ -38,8 +53,8 @@ class Payment
      * 
      * @return object 支付实例
      */
-    public function getPayment() {
-
+    public function getPayment() 
+    {
         if ($this->_payment !== null) {
             return $this->_payment;
         }
@@ -49,8 +64,21 @@ class Payment
                 $config = !is_array($this->paymentMap[$provider]) ? 
                     ['class' => $this->paymentMap[$provider]] : 
                     this->paymentMap[$provider];
+                return Yii::createObject($config);
+            }
+            else {
+                throw new Exception('payment your specified is not supported now!');
             }
         }
-        return Yii::createObject($config);
+    }
+
+    /*
+     * 获取支付供应商支付名称 
+     * 
+     * @return string 支付供应商名称
+     */
+    public function getProvider() 
+    {
+        return $this->_provider;
     }
 }

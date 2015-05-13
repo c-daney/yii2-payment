@@ -5,8 +5,8 @@
  * @license http://www.lubanr.com/license/
  */
 
-require_once(dirname(__FILE__) . 'lib/alipay.config.php'); 
 require_once(dirname(__FILE__) . 'lib/alipay_submit.class.php'); 
+require_once(dirname(__FILE__) . 'lib/alipay_notify.class.php'); 
 
 namespace lubaogui\payment\provider\alipay;
 
@@ -25,22 +25,18 @@ use lubaogui\payment\provider\PayServiceInterface;
 class PayService implements PayServiceInterface
 {
     /**
-     *  支付宝网关地址
-     */
-    private $gateway = ''; 
-
-    /**
      *  支付宝相关配置信息
      */
-    private $config;
+    private $_config;
 
     /**
      * 构造函数 
      *
-     * @param array $alipay_config 配置信息，配置信息重require文件中获得 
+     * @param array $alipayConfig 配置信息，配置信息重require文件中获得 
      */
-    public function __construct($alipay_config) {
-       $this->config = $alipay_config; 
+    public function __construct() 
+    {
+       $this->_config = require(dirname(__FILE__) . 'lib/alipay.config.php'); 
     }
 
     /**
@@ -48,9 +44,10 @@ class PayService implements PayServiceInterface
      *
      * @param array $params 请求数组
      */
-    public function generateRequest($params) {
-        $alipaySubmit = new \AlipaySubmit($this->config);
-        $requestHtml = $alipaySubmit->buildRequestFomr($params, 'get', 'confirm');
+    public function generateRequest($params) 
+    {
+        $alipaySubmit = new \AlipaySubmit($this->_config);
+        $requestHtml = $alipaySubmit->buildRequestForm($params, 'get', 'confirm');
         return $requestHtml;
     }
 
@@ -59,7 +56,45 @@ class PayService implements PayServiceInterface
      *
      * @return boolen 返回验证状态, true代表合法请求，fasle代表无效返回
      */
-    public function verifyReturn() {
+    public function verifyReturn() 
+    {
+        $notify = new \AlipayNotify($this->_config);
+        if ($notify->verifyNotify())
+        {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
+    /**
+     * 支付请求的交易状态
+     *
+     * @return boolen 返回验证状态, true代表合法请求，fasle代表无效返回
+     */
+    public function getPayStatus() 
+    {
+        $returnStatus = $_POST['trade_status'];
+        $payStatus = Payment::PAY_STATUS_CREATE;
+        switch $tradeStatus {
+            case 'WAIT_BUYER_PAY': {
+                $payStatus = Payment::PAY_STATUS_CREATED;               
+                break;
+            }
+            case 'TRADE_FINISHED': {
+                $payStatus = Payment::PAY_STATUS_FINISHED;               
+                break;
+            }
+            case 'TRADE_SUCCESS': {
+                $payStatus = Payment::PAY_STATUS_SUCCEEDED;               
+                break;
+            }
+            case 'TRADE_CLOSED': {
+                $payStatus = Payment::PAY_STATUS_CLOSED;               
+                break;
+            }
+            default: break;
+        }
     }
 }

@@ -28,4 +28,17 @@ Usage
 Once the extension is installed, simply use it in your code by  :
 
 ```php
-<?= \lubaogui\payment\AutoloadExample::widget(); ?>```
+use lubaogui\payment\Payment;
+
+$payment = new Payment('alipay');
+
+//订单相关信息,详细参数参见支付宝文档
+$params = [
+    'title' => '',
+    'xxx' => 'xxx',
+];
+
+echo $payment->generateRequest($params);
+exit;
+
+```
