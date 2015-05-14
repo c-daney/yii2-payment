@@ -27,6 +27,7 @@ Usage
 
 Once the extension is installed, simply use it in your code by  :
 
+
 ```php
 use lubaogui\payment\Payment;
 
@@ -42,3 +43,10 @@ echo $payment->generateRequest($params);
 exit;
 
 ```
+
+对于支付宝支付，需要开始对配置文件进行配置，配置文件位于Provider\alipay\lib\alipay.config.php ,配置完成后可以使用，扩展主要功能:
+
+1. 产生请求html内容，
+2. 验证服务端返回是否合法
+
+对于业务逻辑相关功能，用户可以在自己的产品流程中添加
