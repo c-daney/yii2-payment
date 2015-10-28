@@ -10,7 +10,7 @@ require_once(dirname(__FILE__) . 'lib/alipay_notify.class.php');
 
 namespace lubaogui\payment\provider\alipay;
 
-use lubaogui\payment\provider\PayServiceInterface;
+use lubaogui\payment\PaymentService;
 
 /**
  * 支付宝服务类，主要用于产生支付宝请求和校验支付宝的服务器返回.
@@ -22,10 +22,10 @@ use lubaogui\payment\provider\PayServiceInterface;
  * @author Lu Baogui <lbaogui@lubanr.com>
  * @since 2.0
  */
-class PayService implements PayServiceInterface
+class Payment extends PaymentService
 {
     /**
-     *  支付宝相关配置信息
+     *  相关配置信息
      */
     private $_config;
 
@@ -36,7 +36,7 @@ class PayService implements PayServiceInterface
      */
     public function __construct() 
     {
-       $this->_config = require(dirname(__FILE__) . 'lib/alipay.config.php'); 
+       $this->_config = require(dirname(__FILE__) . '/lib/alipay.config.php'); 
     }
 
     /**
@@ -44,7 +44,7 @@ class PayService implements PayServiceInterface
      *
      * @param array $params 请求数组
      */
-    public function generateRequest($params) 
+    public function generateRequest($trade) 
     {
         $alipaySubmit = new \AlipaySubmit($this->_config);
         $requestHtml = $alipaySubmit->buildRequestForm($params, 'get', 'confirm');
