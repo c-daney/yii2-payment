@@ -10,7 +10,7 @@ require_once(dirname(__FILE__) . 'lib/alipay_notify.class.php');
 
 namespace lubaogui\payment\provider\alipay;
 
-use lubaogui\payment\PaymentService;
+use lubaogui\payment\BasePayServer;
 
 /**
  * 支付宝服务类，主要用于产生支付宝请求和校验支付宝的服务器返回.
@@ -22,7 +22,7 @@ use lubaogui\payment\PaymentService;
  * @author Lu Baogui <lbaogui@lubanr.com>
  * @since 2.0
  */
-class Payment extends PaymentService
+class PayServer extends BasePayServer
 {
     /**
      *  相关配置信息
