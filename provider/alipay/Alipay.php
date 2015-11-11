@@ -60,30 +60,30 @@ class Alipay {
     }
 
     /**
-     * 生成请求参数的签名
+     * 根据请求参数，生成请求参数的签名
      * 
-     * @param $params <Array>
-     * @return <String>
+     * @param $params <Array> 该数组是已经经过ksort之后的请求参数数组，而不是原始请求参数数组
+     * @return <String> 签名结果
      * 未考虑参数中空格被编码成加号“+”等情况
      */
     function buildRequestSign($params) {
-        $paramStr = http_build_str($params);
+        $paramStr = createLinkString($params);
         $result = "";
         switch (strtoupper(trim($this->config['sign_type']))) {
-            case "MD5" :
-                $result = md5($paramStr . $this->config['key']);
-                break;
-            case "RSA" :
-            case "0001" :
-                $priKey = file_get_contents($this->config['private_key_path']);
-                $res = openssl_get_privatekey($priKey);
-                openssl_sign($paramStr, $sign, $res);
-                openssl_free_key($res);
-                //base64编码
-                $result = base64_encode($sign);
-                break;
-            default :
-                $result = "";
+        case "MD5" :
+            $result = md5($paramStr . $this->config['key']);
+            break;
+        case "RSA" :
+        case "0001" :
+            $priKey = file_get_contents($this->config['private_key_path']);
+            $res = openssl_get_privatekey($priKey);
+            openssl_sign($paramStr, $sign, $res);
+            openssl_free_key($res);
+            //base64编码
+            $result = base64_encode($sign);
+            break;
+        default :
+            $result = "";
         }
         return $result;
     }
@@ -349,6 +349,32 @@ class Alipay {
         return $result;
     }
 
-}
+    /**
+     * 把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
+     * @param <Array> $params 需要拼接的数组
+     * @param <Bool> $urlencode 是否需要urlencode,默认不需要
+     * return 拼接完成以后的字符串
+     */
 
+    function generateQueryString($params, $urlencode = false) {
+        $arg  = "";
+        foreach ($params as $key => $val) {
+            if ($urlencode == true) {
+                $arg.=$key."=".urlencode($val)."&";
+            }
+            else {
+                $arg .= $key . "=" . $val . "&";
+            }
+        }
+        //去掉最后一个&字符
+        $arg = substr($arg,0,count($arg)-2);
+
+        //如果存在转义字符，那么去掉转义
+        if(get_magic_quotes_gpc()) {
+            $arg = stripslashes($arg);
+        }
+        return $arg;
+    }
+
+}
 /* vim: set et ts=4 sw=4 sts=4 tw=100: */
