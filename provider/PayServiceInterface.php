@@ -9,7 +9,7 @@ interface PayServiceInterface
      *
      * @param array $params 请求数组
      */
-    public function generateRequest($trade); 
+    public function generateUserRequestHtml($trade); 
 
     /**
      * 验证支付服务器返回

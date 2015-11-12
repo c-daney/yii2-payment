@@ -5,12 +5,10 @@
  * @license http://www.lubanr.com/license/
  */
 
-require_once(dirname(__FILE__) . 'lib/alipay_submit.class.php'); 
-require_once(dirname(__FILE__) . 'lib/alipay_notify.class.php'); 
-
 namespace lubaogui\payment\provider\alipay;
 
 use lubaogui\payment\BasePayServer;
+use lubaogui\payment\provider\Alipay;
 
 /**
  * 支付宝服务类，主要用于产生支付宝请求和校验支付宝的服务器返回.
@@ -24,10 +22,10 @@ use lubaogui\payment\BasePayServer;
  */
 class PayServer extends BasePayServer
 {
-    /**
-     *  相关配置信息
+    /*
+     * alipay 接口类实例
      */
-    private $_config;
+    private $alipay = null;
 
     /**
      * 构造函数 
@@ -36,17 +34,18 @@ class PayServer extends BasePayServer
      */
     public function __construct() 
     {
-       $this->_config = require(dirname(__FILE__) . '/lib/alipay.config.php'); 
+       $config = require(dirname(__FILE__) . '/config/alipay.config.php'); 
+       $this->alipay = new Alipay($config);
     }
 
     /**
-     * 产生用于向支付宝服务器提交的支付请求
+     * 产生返回给用户浏览器向支付宝服务器提交支付支付请求的html代码
      *
      * @param array $params 请求数组
      */
-    public function generateRequest($trade) 
+    public function generateUserRequestHtml($trade) 
     {
-        $alipaySubmit = new \AlipaySubmit($this->_config);
+        $alipaySubmit = new Alipay($this->_config);
         $requestHtml = $alipaySubmit->buildRequestForm($params, 'get', 'confirm');
         return $requestHtml;
     }
@@ -69,7 +68,7 @@ class PayServer extends BasePayServer
     }
 
     /**
-     * 支付请求的交易状态
+     * 获取支付的支付状态 
      *
      * @return boolen 返回验证状态, true代表合法请求，fasle代表无效返回
      */

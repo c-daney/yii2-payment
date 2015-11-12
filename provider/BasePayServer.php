@@ -2,7 +2,7 @@
 
 namespace lubaogui\payment\provider;
 
-abstract class PaymentService extends PaymentServiceInterface
+abstract class BasePayServer extends PayServerInterface
 {
     /**
      * $trade 交易流水
