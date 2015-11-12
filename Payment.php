@@ -16,6 +16,15 @@ namespace lubaogui\payment;
  */
 class Payment 
 {
+
+    /**
+     *  消息定义
+     */
+    const EVENT_PAY_SUCCEEDED = 'paySucceeded';
+    const EVENT_PAY_FAILED = 'payFailed';
+    const EVENT_REFUND_SUCCEEDED = 'refundSucceeded';
+    const EVENT_REFUND_FAILED = 'refundFailed';
+
     /**
      * 支付状态定义
      */
@@ -28,16 +37,17 @@ class Payment
     /**
      *  支付服务实例
      */
-    private $_payServer;
+    private $payServer;
 
     /**
      * provider 支付提供商名称
      */
-    private $_provider;
+    private $provider;
 
-    //支付的回调函数, 此参数为数组，利用call_user_func或者 ReflectionClass的方式回调业务处理
-    private $_successCallback;
-    private $_failCallback;
+    /*
+     * 支付交易内容
+     */
+    public $trans = null;
 
     /**
      * 构造函数
@@ -45,23 +55,23 @@ class Payment
      */
     public function __construct($provider) 
     {
-        $this->_provider = $provider;
-        if (isset($this->_payServerMap[$this->_provider])) {
-            $config = !is_array($this->_payServerMap[$this->_provider]) ? 
-                ['class' => $this->_payServerMap[$this->_provider]] : 
-                this->_payServerMap[$this->_provider];
-            $this->_payServer = Yii::createObject($config);
-            return $this->_payServer;
+        $this->provider = $provider;
+        if (isset($this->payServerMap[$this->provider])) {
+            $config = !is_array($this->payServerMap[$this->provider]) ? 
+                ['class' => $this->payServerMap[$this->provider]] : 
+                this->payServerMap[$this->provider];
+            $this->payServer = Yii::createObject($config);
+            return $this->payServer;
         }
         else {
-            throw new Exception('payment server your specified ' . $this->_provider . ' is not supported now!');
+            throw new Exception('payment server your specified ' . $this->provider . ' is not supported now!');
         }
     }
 
     /**
      * 支付方法对应的支付服务类
      */
-    static private $_payServerMap = [
+    static private $payServerMap = [
         'alipay' => 'lubaogui\payment\provider\alipay\PayServer',
         'wechat' => 'lubaogui\payment\provider\wechatpay\PayServer',
     ];
@@ -73,7 +83,7 @@ class Payment
      */
     public function getPayServer() 
     {
-        return $this->_payServer;
+        return $this->payServer;
     }
 
     /*
@@ -82,7 +92,11 @@ class Payment
      * @return string 支付block内容页面,通常是自动的js跳转
      */
     public gotoPayPage() {
-        return $this->_payServer->generateRequest()；
+        if (empty($this->trans)) {
+            throw new Exception('trans info must be set!');
+        }
+
+        return $this->payServer->generateUserRequestHtml($this->trans)；
     }
 
     /*
@@ -91,7 +105,7 @@ class Payment
      * @return bool 是否是真正的回告
      */
     public verifyReturn() {
-        return $this->_payServer->verifyReturn();
+        return $this->payServer->verifyReturn();
     }
 
     /*
@@ -101,8 +115,25 @@ class Payment
      */
     public function getProvider() 
     {
-        return $this->_provider;
+        return $this->provider;
     }
 
+    /*
+     *  支付成功之后的处理方法
+     * 
+     */
+    public function processSuccess() 
+    {
+        $this->trigger(self::EVENT_PAY_SUCCEEDED);
+    }
+
+    /*
+     *  支付失败之后的处理方法   
+     * 
+     */
+    public function processFailure() 
+    {
+        $this->trigger(self::EVENT_PAY_FAILED);
+    }
 
 }

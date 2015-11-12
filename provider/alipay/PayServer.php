@@ -57,8 +57,7 @@ class PayServer extends BasePayServer
      */
     public function verifyReturn() 
     {
-        $notify = new \AlipayNotify($this->_config);
-        if ($notify->verifyNotify())
+        if ($this->alipay->verifyReturn())
         {
             return true;
         }
