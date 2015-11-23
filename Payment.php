@@ -44,10 +44,8 @@ class Payment
      */
     private $provider;
 
-    /*
-     * 支付交易内容
-     */
-    public $trans = null;
+    //应收账款记录,对于每个支付的server,需要转换成对应的form后提交
+    public $receivable = null; 
 
     /**
      * 构造函数
@@ -77,35 +75,13 @@ class Payment
     ];
 
     /*
-     * 获取实际的支付实例,类支持chain操作
+     * 获取实际的支付实例,支持chain操作
      * 
      * @return object 支付实例
      */
     public function getPayServer() 
     {
         return $this->payServer;
-    }
-
-    /*
-     * 跳转到第三方支付平台支付页面
-     * 
-     * @return string 支付block内容页面,通常是自动的js跳转
-     */
-    public gotoPayPage() {
-        if (empty($this->trans)) {
-            throw new Exception('trans info must be set!');
-        }
-
-        return $this->payServer->generateUserRequestHtml($this->trans)；
-    }
-
-    /*
-     * 验证支付回告是否为支付平台所发
-     * 
-     * @return bool 是否是真正的回告
-     */
-    public verifyReturn() {
-        return $this->payServer->verifyReturn();
     }
 
     /*
@@ -119,19 +95,88 @@ class Payment
     }
 
     /*
-     *  支付成功之后的处理方法
+     * 跳转到第三方支付平台支付页面
      * 
+     * @return string 支付block内容页面,通常是自动的js跳转
      */
-    public function processSuccess() 
+    public generateUserRequestHtml() {
+        if (empty($this->trans)) {
+            throw new Exception('trans info must be set!');
+        }
+
+        return $this->payServer->generateUserRequestHtml($this->trans)；
+    }
+
+    /*
+     * 产生用于用户扫码支付的二维码
+     * 
+     * @return string 支付block内容页面,通常是自动的js跳转
+     */
+    public generateUserScanQRCode() {
+        if (empty($this->trans)) {
+            throw new Exception('trans info must be set!');
+        }
+
+        return $this->payServer->generateUserScanQRCode($this->trans)；
+    }
+
+
+    /**
+     * @brief 
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2015/11/22 15:07:24
+    **/
+    public function paySucceeded() 
     {
         $this->trigger(self::EVENT_PAY_SUCCEEDED);
     }
 
-    /*
-     *  支付失败之后的处理方法   
-     * 
-     */
-    public function processFailure() 
+    /**
+     * @brief 支付失败之后的操作
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2015/11/22 15:07:47
+    **/
+    public function payFailed() 
+    {
+        $this->trigger(self::EVENT_PAY_FAILED);
+    }
+
+    /**
+     * @brief 
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2015/11/22 15:15:08
+    **/
+    public function refundSucceeded() 
+    {
+        $this->trigger(self::EVENT_PAY_SUCCEEDED);
+    }
+
+    /**
+     * @brief 
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2015/11/22 15:15:19
+    **/
+    public function refundFailed() 
     {
         $this->trigger(self::EVENT_PAY_FAILED);
     }

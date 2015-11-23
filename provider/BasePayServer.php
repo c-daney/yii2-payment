@@ -8,7 +8,7 @@ abstract class BasePayServer extends PayServerInterface
      * $trade 交易流水
      */
 
-    private $_trade = [];
+    private $trade = [];
 
     /**
      * 产生用于向支付服务器提交的支付请求页面
@@ -16,14 +16,15 @@ abstract class BasePayServer extends PayServerInterface
      * @param array $params 请求数组
      * @return string 返回请求的form
      */
-    abstract public function generateRequest($order); 
+    abstract public function generateUserRequestHtml($transaction); 
 
     /**
-     * 验证支付服务器返回
+     * 产生用于向支付服务器提交的支付请求页面
      *
-     * @return boolen 返回验证状态, true代表合法请求，fasle代表无效返回
+     * @param array $params 请求数组
+     * @return string 返回请求的form
      */
-    abstract public function verifyReturn(); 
+    abstract public function generateUserScanQRCode($transaction); 
 
     /**
      * 退款接口
@@ -31,4 +32,12 @@ abstract class BasePayServer extends PayServerInterface
      * @return boolen 返回验证状态, true代表合法请求，fasle代表无效返回
      */
     abstract public function refund($order);
+
+    /**
+     * 验证支付服务器返结果
+     *
+     * @return boolen 返回验证状态, true代表合法请求，fasle代表无效返回
+     */
+    abstract public function verifyReturn(); 
+
 }

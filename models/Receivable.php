@@ -7,22 +7,36 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
 /**
- * Receivable model
+ * Receivable model 应收账款
  */
 class Receivable extends ActiveRecord
 {
 
     /**
-     * @inheritdoc
-     */
+     * @brief 
+     *
+     * @return  public static function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2015/11/24 00:06:12
+    **/
     public static function tableName()
     {
-        return '{{%bank}}';
+        return '{{%receivable}}';
     }
 
     /**
-     * @inheritdoc
-     */
+     * @brief 
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2015/11/24 00:06:20
+    **/
     public function behaviors()
     {
         return [

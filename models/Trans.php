@@ -11,9 +11,11 @@ use yii\base\Model;
 class Trans extends Model 
 {
     public $trans_id = 0;
-    public $total_value = 0;
+    public $total_fee = 0;
     public $subject = '';
+    public $body = '';
     public $description = '';
+    public $out_trade_no = '';
 
     public function rules() {
         return [
