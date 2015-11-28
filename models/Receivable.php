@@ -44,14 +44,4 @@ class Receivable extends ActiveRecord
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            ['role', 'default', 'value' => self::ROLE_USER],
-        ];
-    }
-
 }

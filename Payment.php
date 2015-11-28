@@ -120,7 +120,6 @@ class Payment
         return $this->payServer->generateUserScanQRCode($this->trans)；
     }
 
-
     /**
      * @brief 
      *
@@ -163,7 +162,7 @@ class Payment
     **/
     public function refundSucceeded() 
     {
-        $this->trigger(self::EVENT_PAY_SUCCEEDED);
+        $this->trigger(self::EVENT_REFUND_SUCCEEDED);
     }
 
     /**
@@ -178,7 +177,7 @@ class Payment
     **/
     public function refundFailed() 
     {
-        $this->trigger(self::EVENT_PAY_FAILED);
+        $this->trigger(self::EVENT_REFUND_FAILED);
     }
 
 }
