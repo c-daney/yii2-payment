@@ -6,7 +6,7 @@
  **************************************************************************/
 
 /**
- * @file Wechatpay.php
+ * @file WechatPay.php
  * @author 吕宝贵(lbaogui@lubanr.com)
  * @date 2015/11/10 16:04:11
  * @version $Revision$
@@ -16,7 +16,7 @@
 
 namespace lubaogui\payment\provider;
 
-class Wechatpay {
+class WechatPay {
 
     // 配置信息在实例化时从配置文件读入，配置文件需要放在该文件同目录下
     private $config = [ 
