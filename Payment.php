@@ -51,7 +51,7 @@ class Payment
      * 构造函数
      * @param provider string 支付供应商名称
      */
-    public function __construct($provider) 
+    public function __construct($provider = 'alipay') 
     {
         $this->provider = $provider;
         if (isset($this->payServerMap[$this->provider])) {
@@ -71,7 +71,7 @@ class Payment
      */
     static private $payServerMap = [
         'alipay' => 'lubaogui\payment\provider\alipay\PayServer',
-        'wechat' => 'lubaogui\payment\provider\wechatpay\PayServer',
+        'wechatpay' => 'lubaogui\payment\provider\wechatpay\PayServer',
     ];
 
     /*
@@ -94,17 +94,36 @@ class Payment
         return $this->provider;
     }
 
+    /**
+     * @brief 去支付方法，去支付里面可以添加相关逻辑，判断支付的跳转形式
+     *
+     * @return string 跳转的js代码或者是扫描二维码的imageStr 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2015/12/19 19:23:53
+    **/
+    public gotoPay($receivable, $returnType = 'QRCodeUrl') {
+
+        if ($returnType === 'QRCodeUrl') {
+            $this->generateUserScanQRCode($receivable);
+        }
+        else {
+            $this->generateUserRequestHtml($receivable);
+        }
+
+    }
+
+
     /*
      * 跳转到第三方支付平台支付页面
      * 
      * @return string 支付block内容页面,通常是自动的js跳转
      */
-    public generateUserRequestHtml() {
-        if (empty($this->trans)) {
-            throw new Exception('trans info must be set!');
-        }
+    public generateUserRequestHtml($receivable) {
 
-        return $this->payServer->generateUserRequestHtml($this->trans)；
+        return $this->payServer->generateUserRequestHtml($this->receivable)；
     }
 
     /*
@@ -113,7 +132,7 @@ class Payment
      * @return string 支付block内容页面,通常是自动的js跳转
      */
     public generateUserScanQRCode() {
-        if (empty($this->trans)) {
+        if (empty($this->receivable)) {
             throw new Exception('trans info must be set!');
         }
 
