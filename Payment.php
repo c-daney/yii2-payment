@@ -121,63 +121,17 @@ class Payment
     }
 
     /**
-     * @brief 
+     * @brief  设置回调相关处理方法
      *
      * @return  public function 
      * @retval   
      * @see 
      * @note 
      * @author 吕宝贵
-     * @date 2015/11/22 15:07:24
+     * @date 2015/12/19 11:00:21
     **/
-    public function paySucceeded() 
-    {
-        $this->trigger(self::EVENT_PAY_SUCCEEDED);
-    }
-
-    /**
-     * @brief 支付失败之后的操作
-     *
-     * @return  public function 
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2015/11/22 15:07:47
-    **/
-    public function payFailed() 
-    {
-        $this->trigger(self::EVENT_PAY_FAILED);
-    }
-
-    /**
-     * @brief 
-     *
-     * @return  public function 
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2015/11/22 15:15:08
-    **/
-    public function refundSucceeded() 
-    {
-        $this->trigger(self::EVENT_REFUND_SUCCEEDED);
-    }
-
-    /**
-     * @brief 
-     *
-     * @return  public function 
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2015/11/22 15:15:19
-    **/
-    public function refundFailed() 
-    {
-        $this->trigger(self::EVENT_REFUND_FAILED);
+    public function setHandlers($handlers) {
+        $this->payServer->setHandlers = $handlers;
     }
 
 }

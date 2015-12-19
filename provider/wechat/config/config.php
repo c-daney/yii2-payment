@@ -4,9 +4,9 @@
  * Copyright (c) 2015 Lubanr.com All Rights Reserved
  *
  **************************************************************************/
- 
- 
- 
+
+
+
 /**
  * @file config.php
  * @author 吕宝贵(lbaogui@lubanr.com)
@@ -17,9 +17,8 @@
  **/
 
 return [
-
-
-
+    'qrcode_base_url'=>'/util/qrcode?data=',
+    'notify_url'=>'',
 ];
 
 /* vim: set et ts=4 sw=4 sts=4 tw=100: */

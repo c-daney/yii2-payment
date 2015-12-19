@@ -15,8 +15,6 @@ namespace lubaogui\payment\provider;
  *
  **/
 
-use lubaogui\payment\provider\WechatPayNotify;
-
 
 class WechatPay {
 
@@ -48,9 +46,8 @@ class WechatPay {
         $this->payOrder->SetNotify_url($this->config['notify_url']);
     }
 
-
     /**
-     * @brief 
+     * @brief 产生支付二维码的图片地址
      *
      * @return  public function 
      * @retval   
@@ -66,16 +63,16 @@ class WechatPay {
         $this->payOrder->setAttach('用于购买Mr-Hug服务');
         $this->payOrder->SetOut_trade_no($receivable->id);
         $this->payOrder->SetTotal_fee($receivable->money);
-        $this->payOrder->SetTime_start();
-        $this->payOrder->SetTime_expire();
-        $this->payOrder->SetGoods_tag();
-        $this->payOrder->SetTrade_type($this->config['trade_type']);
-        $this->payOrder->SetProduct_id();
+        $this->payOrder->SetTime_start(date('YmdHis', $receivable->created_at));
+        $this->payOrder->SetTime_expire(date('YmdHis', $receivable->created_at+1800);
+        $this->payOrder->SetGoods_tag('服务，充值');
+        $this->payOrder->SetTrade_type('充值服务');
+        $this->payOrder->SetProduct_id(1);
         $result = $this->notify->GetPayUrl($this->payOrder);
         $payUrl = $result['code_url'];
 
         //payQRCodeUrl为的动态生成二维码的在线地址
-        $payQRCodeUrl = $this->config['qrcode_url'] . $payUrl;
+        $payQRCodeUrl = $this->config['qrcode_url'] . urlencode($payUrl);
 
     }
 

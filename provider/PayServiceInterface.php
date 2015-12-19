@@ -12,48 +12,44 @@ interface PayServiceInterface
     public function generateUserRequestHtml($trade); 
 
     /**
-     * 验证支付服务器返回
+     * 产生用于向支付服务器提交的支付请求页面
      *
-     * @return boolen 返回验证状态, true代表合法请求，fasle代表无效返回
+     * @param array $params 请求数组
+     * @return string 返回请求的form
      */
-    public function verifyReturn(); 
+    public function generateUserRequestHtml($receivable); 
 
     /**
-     * 获取支付状态
+     * 产生用于向支付服务器提交的支付请求页面
      *
-     * @return boolen 返回验证状态, true代表合法请求，fasle代表无效返回
+     * @param array $params 请求数组
+     * @return string 返回请求的form
      */
-    public function getPayStatus(); 
+    public function generateUserScanQRCode($receivable); 
 
     /**
-     * 退款接口
+     * @brief 处理支付服务器的前端返回
      *
-     * @return boolen 返回验证状态, true代表合法请求，fasle代表无效返回
-     */
-    public function refund($trade); 
-
-
-    /**
-     * @brief 设置支付成功的回调函数
-     *
-     * @return  public function 
+     * @return  abstract public function 
      * @retval   
      * @see 
      * @note 
      * @author 吕宝贵
-     * @date 2015/12/18 23:01:46
+     * @date 2015/12/19 11:17:28
     **/
-    public function setPaySucceededHandler($paySucceededHandler);
+    public function processReturn(); 
 
     /**
-     * @brief 设置支付失败时的回调函数
+     * @brief 处理支付服务器的后台通知
      *
-     * @return  public function 
+     * @return  abstract public function 
      * @retval   
      * @see 
      * @note 
      * @author 吕宝贵
-     * @date 2015/12/18 23:02:09
+     * @date 2015/12/19 11:16:50
     **/
-    public function setPayFailedHandler($payFailedHandler);
+    public function processNotify(); 
+
+
 }
