@@ -4,6 +4,7 @@
  * Copyright (c) 2015 Lubanr.com All Rights Reserved
  *
  **************************************************************************/
+namespace lubaogui\payment\provider;
 
 /**
  * @file WechatPay.php
@@ -14,7 +15,8 @@
  *
  **/
 
-namespace lubaogui\payment\provider;
+use lubaogui\payment\provider\WechatPayNotify;
+
 
 class WechatPay {
 
@@ -26,7 +28,6 @@ class WechatPay {
     ];
 
     private $payOrder = null;
-    private $notify = null;
 
     /**
      * @brief 构造函数，做的工作主要是将配置文件和默认配置进行merge,同时设置notify所需要的成功和失败的回调函数
@@ -41,26 +42,12 @@ class WechatPay {
     function __construct($isMobile = false){
         $this->config = array_merge($this->config, require_once(dirname(__FILE__) . '/config/config.php'));
         $this->payOrder = new WxPayUnifiedOrder();
-        $this->notify = new WechatPayNotify();
         if (empty($this->payOrder)) {
             return false;
         }
         $this->payOrder->SetNotify_url($this->config['notify_url']);
     }
 
-    /**
-     * @brief 设置Notify的相关回调函数
-     *
-     * @return  public function 
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2015/12/18 23:38:46
-    **/
-    public function setHandlers($handlers) {
-        $this->notify->setHandlers($handlers);
-    }
 
     /**
      * @brief 
@@ -92,19 +79,5 @@ class WechatPay {
 
     }
 
-    /**
-     * @brief 验证支付返回
-     *
-     * @return  public function 
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2015/12/17 21:21:39
-    **/
-    public function processReturn() {
-        //函数会自动调用支付成功和失败的回调函数
-        $this->notify->Handle(false);
-    }
 }
 /* vim: set et ts=4 sw=4 sts=4 tw=100: */

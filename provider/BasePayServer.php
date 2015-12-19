@@ -2,21 +2,33 @@
 
 namespace lubaogui\payment\provider;
 
-abstract class BasePayServer implements PayServerInterface
+class BasePayServer implements PayServerInterface
 {
+    /*
+     * wechatpay 接口类实例
+     */
+    protected $payServer;
+    protected $notifyServer;
+    protected $handlers;
+
     /**
      * $trade 交易流水
      */
-
     private $trade = [];
 
     /**
-     * 产生用于向支付服务器提交的支付请求页面
+     * @brief  设置回调相关处理方法
      *
-     * @param array $params 请求数组
-     * @return string 返回请求的form
-     */
-    abstract public function generateUserRequestHtml($transaction); 
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2015/12/19 11:00:21
+    **/
+    public function setHandlers($handlers) {
+        $this->handlers = $handlers;
+    }
 
     /**
      * 产生用于向支付服务器提交的支付请求页面
@@ -24,20 +36,38 @@ abstract class BasePayServer implements PayServerInterface
      * @param array $params 请求数组
      * @return string 返回请求的form
      */
-    abstract public function generateUserScanQRCode($transaction); 
+    abstract public function generateUserRequestHtml($receivable); 
 
     /**
-     * 退款接口
+     * 产生用于向支付服务器提交的支付请求页面
      *
-     * @return boolen 返回验证状态, true代表合法请求，fasle代表无效返回
+     * @param array $params 请求数组
+     * @return string 返回请求的form
      */
-    abstract public function refund($order);
+    abstract public function generateUserScanQRCode($receivable); 
 
     /**
-     * 验证支付服务器返结果
+     * @brief 处理支付服务器的前端返回
      *
-     * @return boolen 返回验证状态, true代表合法请求，fasle代表无效返回
-     */
-    abstract public function verifyReturn(); 
+     * @return  abstract public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2015/12/19 11:17:28
+    **/
+    abstract public function processReturn(); 
+
+    /**
+     * @brief 处理支付服务器的后台通知
+     *
+     * @return  abstract public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2015/12/19 11:16:50
+    **/
+    abstract public function processNotify(); 
 
 }

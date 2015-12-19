@@ -5,7 +5,7 @@
  * @license http://www.lubanr.com/license/
  */
 
-namespace lubaogui\payment\provider\alipay;
+namespace lubaogui\payment\provider\wechatpay;
 
 use lubaogui\payment\BasePayServer;
 use lubaogui\payment\provider\Alipay;
@@ -22,77 +22,84 @@ use lubaogui\payment\provider\Alipay;
  */
 class PayServer extends BasePayServer
 {
-    /*
-     * alipay 接口类实例
-     */
-    private $alipay = null;
 
     /**
      * 构造函数 
      *
-     * @param array $alipayConfig 配置信息，配置信息重require文件中获得 
+     * @param array $wechatpayConfig 配置信息，配置信息重require文件中获得 
      */
     public function __construct() 
     {
-       $config = require(dirname(__FILE__) . '/config/alipay.config.php'); 
-       $this->alipay = new Alipay($config);
+       $config = require(dirname(__FILE__) . '/config/wechatpay.config.php'); 
+       $this->payServer = new WechatPay($config);
+       $this->wechatNotify = new WechatPayNotify($config);
     }
 
     /**
-     * 产生返回给用户浏览器向支付宝服务器提交支付支付请求的html代码
+     * @brief 产生用于支付的html form,目前对于微信支付，暂时不支持此种方式
      *
-     * @param array $params 请求数组
-     */
+     * @return string html form内容 
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2015/12/19 11:28:49
+    **/
     public function generateUserRequestHtml($trade) 
     {
-        $alipaySubmit = new Alipay($this->_config);
-        $requestHtml = $alipaySubmit->buildRequestForm($params, 'get', 'confirm');
-        return $requestHtml;
+        return '';
     }
 
     /**
-     * 验证支付宝的服务器返回
+     * @brief 产生用于扫描支付的二维码的url地址
      *
-     * @return boolen 返回验证状态, true代表合法请求，fasle代表无效返回
-     */
-    public function verifyReturn() 
-    {
-        if ($this->alipay->verifyReturn())
-        {
-            return true;
-        }
-        else {
-            return false;
-        }
+     * @return url 用于产生二维码的url地址  
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2015/12/19 11:23:08
+    **/
+    public function generateUserScanQRCode($receivable) {
+        return $this->payServer->generatePayQRCodeUrl($receivable);
     }
 
     /**
-     * 获取支付的支付状态 
+     * 获取支付单号的支付状态 
      *
      * @return boolen 返回验证状态, true代表合法请求，fasle代表无效返回
      */
-    public function getPayStatus() 
+    public function getPayStatus($receivableId) 
     {
-        $returnStatus = $_POST['trade_status'];
-        $payStatus = Payment::PAY_STATUS_CREATE;
-        switch $tradeStatus {
-            case 'WAIT_BUYER_PAY': {
-                $payStatus = Payment::PAY_STATUS_CREATED;               
-                break;
-            }
-            case 'TRADE_FINISHED': {
-                $payStatus = Payment::PAY_STATUS_FINISHED;               
-                break;
-            }
-            case 'TRADE_SUCCESS': {
-                $payStatus = Payment::PAY_STATUS_SUCCEEDED;               
-                break;
-            }
-            case 'TRADE_CLOSED': {
-                $payStatus = Payment::PAY_STATUS_CLOSED;               
-                break;
-            }
-            default: break;
-        }
+        return true;
     }
+
+    /**
+     * @brief 处理后台的支付通知消息，通过调用回调函数来处理相关业务逻辑
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2015/12/19 10:49:12
+    **/
+    public function processNotify() {
+        $this->notifyServer->Handle(false);
+    }
+
+    /**
+     * @brief 
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2015/12/19 10:49:18
+    **/
+    public function processReturn() {
+
+
+    }
+
 }
