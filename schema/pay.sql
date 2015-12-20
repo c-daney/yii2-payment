@@ -3,6 +3,7 @@ drop table if exists `pay_channel`;
 create table `pay_channel` (
     `id` smallint unsigned primary key not null auto_increment comment '自增id',
     `name` varchar(30) not null default '' comment '支付平台名称',
+    `alias` varchar(15) not null comment '支付平台别名',
     `company` varchar(64) not null default '' comment '第三方支付平台公司',
     `url` varchar(64) not null default '' comment '公司网站地址',
     `icon` varchar(256) not null default '' comment '支付logo',
