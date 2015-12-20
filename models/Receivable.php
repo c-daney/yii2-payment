@@ -5,6 +5,8 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use lubaogui\accountt\models\UserAccount;
+use lubaogui\accountt\models\Trans;
 
 /**
  * Receivable model 应收账款
@@ -42,6 +44,43 @@ class Receivable extends ActiveRecord
         return [
             TimestampBehavior::className(),
         ];
+    }
+
+    /**
+     * @brief 待支付款项支付成功的处理逻辑
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2015/12/20 11:59:54
+    **/
+    public function paySuccess() {
+
+        if (empty($this->userAccount)) {
+            return false;
+        }
+        else {
+            $this->status = 1; //设置支付成功
+            //用户账户增加余额
+            if ($this->save() && $this->UserAccount->plus($this->money, '用户充值')) {
+                
+                //收款关联的交易id问题，交给controller层次去做
+                return true;
+            }
+            return false;
+        }
+
+    }
+
+    public function getUserAccount() {
+        return $this->hasOne(UserAccount::className(), ['uid'=>'uid']);
+    }
+
+
+    public function getTrans() {
+        return $this->hasOne(Trans::className(), ['id'=>'trans_id']);
     }
 
 }
