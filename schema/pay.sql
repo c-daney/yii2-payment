@@ -19,7 +19,7 @@ create table `pay_channel` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='充值渠道列表';
 
 -----------
---银行卡绑定表，提现时使用 
+-- 银行卡绑定表，提现时使用 
 ------------
 drop table if exists `user_bank_card`;
 create table `user_bank_card` (
@@ -36,7 +36,7 @@ create table `user_bank_card` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户银行卡绑定表';
 
 -----------
---银行表,数量稀少，不同银行的退款单和收款单有不同的格式，可以在记录中配置
+-- 银行表,数量稀少，不同银行的退款单和收款单有不同的格式，可以在记录中配置
 ------------
 drop table if exists `bank`;
 create table `bank` (
@@ -50,7 +50,7 @@ create table `bank` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='银行列表';
 
 -----------
---应收账款, 主要是充值和第三方支付的接口,充值理论上不可退款，不采用直接购买的方式也是考虑到第三方平台对订单敏感词的过滤
+-- 应收账款, 主要是充值和第三方支付的接口,充值理论上不可退款，不采用直接购买的方式也是考虑到第三方平台对订单敏感词的过滤
 ------------
 drop table if exists `receivable`;
 create table `receivable` (
@@ -58,7 +58,7 @@ create table `receivable` (
     `type` tinyint unsigned not null comment '付款类型: 1 用户充值 目前仅有充值会存在从第三方收款',
     `trans_id` varchar(32) not null default '' comment '和变动关联的交易单号',
     `uid` bigint(20) unsigned not null default 0 comment '收款用户id,该值为公司账户uid',
-    `currency` tinyint unsigned not null default 1 comment '币种: 1 人民币'
+    `currency` tinyint unsigned not null default 1 comment '币种: 1 人民币',
     `from_uid` bigint unsigned not null comment '付款用户uid, 该场景下是指用户uid',
     `from_channel_id` smallint unsigned not null comment '付款渠道id, 渠道参加渠道表,对应于pay_channel中的id',
     `from_channel_name` varchar(12)  not null comment '付款渠道名称',
@@ -82,7 +82,7 @@ create table `payable` (
     `trans_id` varchar(32) not null default '' comment '和变动关联的交易单号',
     `pay_method` tinyint unsigned not null comment '支付形式: 1 银行付款  2 原路返回,原路返回的支持不太好',
     `uid` bigint(20) unsigned not null default 0 comment '用户id',
-    `currency` tinyint unsigned not null default 1 comment '币种: 1 人民币'
+    `currency` tinyint unsigned not null default 1 comment '币种: 1 人民币',
     `status` tinyint unsigned not null comment '付款状态: 1 新建成功,待下载汇总, 2 已下载，待银行付款  3 付款成功 4 付款失败',
     `from_uid` bigint unsigned not null comment '付款用户uid, 该场景下是指公司账户id',
     `from_user_bank_id` bigint unsigned not null default 0 comment '实际付款银行账号id',
