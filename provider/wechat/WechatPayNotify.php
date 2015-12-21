@@ -22,8 +22,8 @@ class WechatPayNotify extends WxPayNotify
      * @date 2015/12/18 23:21:12
     **/
     public function setHandlers($handlers) {
-        $this->paySucceededHandler = $handlers['succeededHandler'];
-        $this->payFailedHanlder = $handlers['payFailedHanlder'];
+        $this->paySucceededHandler = $handlers['paySuccessHandler'];
+        $this->payFailedHanlder = $handlers['payFailHanlder'];
     }
 
 	/**

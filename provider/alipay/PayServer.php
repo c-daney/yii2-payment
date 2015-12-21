@@ -55,13 +55,14 @@ class PayServer extends BasePayServer
      *
      * @return boolen 返回验证状态, true代表合法请求，fasle代表无效返回
      */
-    public function verifyReturn() 
+    public function processNotify() 
     {
         if ($this->alipay->verifyReturn())
         {
-            return true;
+            return call_user_func($this->handlers['paySuccessHanlder'], $data);
         }
         else {
+            call_user_func($this->handlers['payFailHandler']);
             return false;
         }
     }

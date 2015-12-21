@@ -153,4 +153,18 @@ class Payment
         $this->payServer->setHandlers = $handlers;
     }
 
+    /**
+     * @brief 处理回调逻辑
+     *
+     * @return  public function 
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2015/12/21 20:21:38
+    **/
+    public function processNotify() {
+
+
+    }
+
 }

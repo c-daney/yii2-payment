@@ -84,7 +84,7 @@ class PayServer extends BasePayServer
      * @date 2015/12/19 10:49:12
     **/
     public function processNotify() {
-        $this->notifyServer->Handle(false);
+        return $this->notifyServer->Handle(false);
     }
 
     /**
