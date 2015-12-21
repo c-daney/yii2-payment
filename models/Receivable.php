@@ -13,6 +13,10 @@ use lubaogui\accountt\models\Trans;
  */
 class Receivable extends ActiveRecord
 {
+    //代收账款状态，等待支付，支付成功，已入账
+    const PAY_STATUS_WAITPAY = 1;
+    const PAY_STATUS_SUCCEEDED = 2;
+    const PAY_STATUS_FINISHED = 3;
 
     /**
      * @brief 
@@ -47,7 +51,7 @@ class Receivable extends ActiveRecord
     }
 
     /**
-     * @brief 待支付款项支付成功的处理逻辑
+     * @brief 待支付款项支付成功的处理逻辑,此处仅处理用户账户的收款逻辑
      *
      * @return  public function 
      * @retval   
@@ -62,7 +66,7 @@ class Receivable extends ActiveRecord
             return false;
         }
         else {
-            $this->status = 1; //设置支付成功
+            $this->status = self::PAY_STATUS_SUCCEEDED; //设置支付成功
             //用户账户增加余额
             if ($this->save() && $this->UserAccount->plus($this->money, '用户充值')) {
                 
