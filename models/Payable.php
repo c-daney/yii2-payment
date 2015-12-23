@@ -54,33 +54,7 @@ class Payable extends ActiveRecord
      * @date 2015/12/22 10:50:25
     **/
     public function getUserAccount() {
-        return $this->hasOne(UserAccount::className, ['uid'=>'uid']);
-    }
-
-    /**
-     * @brief 完成支付
-     *
-     * @return  public function 
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2015/12/22 14:24:12
-    **/
-    public function finishPay() {
-        if ($this->trans->status === Trans::PAY_STATUS_FINISHED) {
-            return false;
-        }
-        else {
-            $this->status = self::PAY_STATUS_FINISHED;
-            $this->finish_time = time();
-            if ($this->save()) {
-                return true;
-            }
-            else {
-                return false;
-            }
-        }
+        return $this->hasOne(UserAccount::className(), ['uid'=>'uid']);
     }
 
     /**
