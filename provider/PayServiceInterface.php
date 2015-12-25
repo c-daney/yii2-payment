@@ -5,13 +5,6 @@ namespace lubaogui\payment\provider;
 interface PayServiceInterface 
 {
     /**
-     * 产生用于向支付宝服务器提交的支付请求
-     *
-     * @param array $params 请求数组
-     */
-    public function generateUserRequestHtml($trade); 
-
-    /**
      * 产生用于向支付服务器提交的支付请求页面
      *
      * @param array $params 请求数组

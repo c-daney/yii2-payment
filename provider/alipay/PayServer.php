@@ -7,7 +7,7 @@
 
 namespace lubaogui\payment\provider\alipay;
 
-use lubaogui\payment\BasePayServer;
+use lubaogui\payment\provider\BasePayServer;
 use lubaogui\payment\provider\Alipay;
 
 /**
@@ -76,7 +76,7 @@ class PayServer extends BasePayServer
     {
         $returnStatus = $_POST['trade_status'];
         $payStatus = Payment::PAY_STATUS_CREATE;
-        switch $tradeStatus {
+        switch ($tradeStatus) {
             case 'WAIT_BUYER_PAY': {
                 $payStatus = Payment::PAY_STATUS_CREATED;               
                 break;

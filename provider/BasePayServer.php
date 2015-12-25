@@ -2,7 +2,9 @@
 
 namespace lubaogui\payment\provider;
 
-class BasePayServer implements PayServerInterface
+use lubaogui\payment\provider\PayServiceInterface;
+
+abstract class BasePayServer implements PayServiceInterface
 {
     /*
      * wechatpay 接口类实例

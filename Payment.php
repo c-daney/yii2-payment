@@ -57,7 +57,7 @@ class Payment
         if (isset($this->payServerMap[$this->provider])) {
             $config = !is_array($this->payServerMap[$this->provider]) ? 
                 ['class' => $this->payServerMap[$this->provider]] : 
-                this->payServerMap[$this->provider];
+                $this->payServerMap[$this->provider];
             $this->payServer = Yii::createObject($config);
             return $this->payServer;
         }
@@ -69,7 +69,7 @@ class Payment
     /**
      * 支付方法对应的支付服务类
      */
-    static private $payServerMap = [
+    private $payServerMap = [
         'alipay' => 'lubaogui\payment\provider\alipay\PayServer',
         'wechatpay' => 'lubaogui\payment\provider\wechatpay\PayServer',
     ];
@@ -104,7 +104,7 @@ class Payment
      * @author 吕宝贵
      * @date 2015/12/19 19:23:53
     **/
-    public gotoPay($receivable, $returnType = 'QRCodeUrl') {
+    public function gotoPay($receivable, $returnType = 'QRCodeUrl') {
 
         if ($returnType === 'QRCodeUrl') {
             $this->generateUserScanQRCode($receivable);
@@ -121,9 +121,9 @@ class Payment
      * 
      * @return string 支付block内容页面,通常是自动的js跳转
      */
-    public generateUserRequestHtml($receivable) {
+    public function generateUserRequestHtml($receivable) {
 
-        return $this->payServer->generateUserRequestHtml($this->receivable)；
+        return $this->payServer->generateUserRequestHtml($this->receivable);
     }
 
     /*
@@ -131,12 +131,12 @@ class Payment
      * 
      * @return string 支付block内容页面,通常是自动的js跳转
      */
-    public generateUserScanQRCode() {
+    public function generateUserScanQRCode() {
         if (empty($this->receivable)) {
             throw new Exception('trans info must be set!');
         }
 
-        return $this->payServer->generateUserScanQRCode($this->trans)；
+        return $this->payServer->generateUserScanQRCode($this->trans);
     }
 
     /**
