@@ -96,4 +96,31 @@ class PayServer extends BasePayServer
             default: break;
         }
     }
+
+    /**
+     * @brief 生成用于支付的扫描二维码
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2015/12/25 23:56:10
+    **/
+    public function generateUserScanQRCode($receivable) { 
+        return ''; 
+    }
+
+    /**
+     * @brief 处理用户返回
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2015/12/25 23:55:54
+    **/
+    public function processReturn() { 
+    } 
 }
