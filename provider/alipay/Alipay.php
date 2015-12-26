@@ -43,15 +43,15 @@ class Alipay {
         'seller_email' => 'email@domain.com'
     ];
 
-    static private $service               = 'create_direct_pay_by_user';
-    static private $serviceMobile           = 'alipay.wap.trade.create.direct';
+    private $service               = 'create_direct_pay_by_user';
+    private $serviceMobile           = 'alipay.wap.trade.create.direct';
 
-    static private $alipayGateway        = 'https://mapi.alipay.com/gateway.do?';
-    static private $alipayGatewayMobile = 'http://wappaygw.alipay.com/service/rest.htm?';
-    static private $verifyUrl            = 'http://notify.alipay.com/trade/notify_query.do?';
-    static private $verifyUrlHttps      = 'https://mapi.alipay.com/gateway.do?service=notify_verify&';
+    private $alipayGateway        = 'https://mapi.alipay.com/gateway.do?';
+    private $alipayGatewayMobile = 'http://wappaygw.alipay.com/service/rest.htm?';
+    private $verifyUrl            = 'http://notify.alipay.com/trade/notify_query.do?';
+    private $verifyUrlHttps      = 'https://mapi.alipay.com/gateway.do?service=notify_verify&';
 
-    function __construct($isMobile = false){
+    function __construct($config, $isMobile = false){
         $this->config = $config;
         $this->isMobile = $isMobile;
         if ($isMobile) {
