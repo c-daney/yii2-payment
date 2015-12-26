@@ -107,10 +107,10 @@ class Payment
     public function gotoPay($receivable, $returnType = 'QRCodeUrl') {
 
         if ($returnType === 'QRCodeUrl') {
-            $this->generateUserScanQRCode($receivable);
+            return $this->generateUserScanQRCode($receivable);
         }
         else {
-            $this->generateUserRequestHtml($receivable);
+            return $this->generateUserRequestHtml($receivable);
         }
 
     }
