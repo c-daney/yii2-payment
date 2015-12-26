@@ -22,25 +22,25 @@ class Alipay {
     // 配置信息在实例化时从配置文件读入，配置文件需要放在该文件同目录下
     private $config = [ 
         // // 即时到账方式
-        // 'payment_type' => 1,
+        'payment_type' => 1,
         // // 传输协议
         // 'transport' => 'http',
         // // 编码方式
-        // 'input_charset' => 'utf-8',
+        'input_charset' => 'utf-8',
         // // 签名方法
         // 'sign_type' => 'MD5',
         // // 支付完成异步通知调用地址
-        // 'notify_url' => 'http://'.$_SERVER['HTTP_HOST'.'>/order/callback_alipay/notify',
+        'notify_url' => 'http://'.$_SERVER['HTTP_HOST'.'>/order/callback_alipay/notify',
         // // 支付完成同步返回地址
-        // 'return_url' => 'http://'.$_SERVER['HTTP_HOST'.'>/order/callback_alipay/return',
+        'return_url' => 'http://'.$_SERVER['HTTP_HOST'.'>/order/callback_alipay/return',
         // // 证书路径
-        // 'cacert' => APPPATH.'third_party/alipay/cacert.pem',
+        'cacert' => APPPATH.'third_party/alipay/cacert.pem',
         // // 支付宝商家 ID
-        // 'partner'      => '2088xxxxxxxx',
+        'partner'      => '2088xxxxxxxx',
         // // 支付宝商家 KEY
         // 'key'          => 'xxxxxxxxxxxx',
         // // 支付宝商家注册邮箱
-        // 'seller_email' => 'email@domain.com'
+        'seller_email' => 'email@domain.com'
     ];
 
     static private $service               = 'create_direct_pay_by_user';
@@ -68,7 +68,7 @@ class Alipay {
      * 未考虑参数中空格被编码成加号“+”等情况
      */
     function buildRequestSign($params) {
-        $paramStr = createLinkString($params);
+        $paramStr = $this->generateQueryString($params);
         $result = "";
         switch (strtoupper(trim($this->config['sign_type']))) {
         case "MD5" :
@@ -334,7 +334,7 @@ class Alipay {
      * @param $private_key_path 商户私钥文件路径
      * return 解密后内容，明文
      */
-    function rsaDecrypt($content, $private_key_path) {
+    protected function rsaDecrypt($content, $private_key_path) {
         $priKey = file_get_contents($private_key_path);
         $res = openssl_get_privatekey($priKey);
         //用base64将内容还原成二进制
@@ -357,7 +357,7 @@ class Alipay {
      * return 拼接完成以后的字符串
      */
 
-    function generateQueryString($params, $urlencode = false) {
+    protected function generateQueryString($params, $urlencode = false) {
         $arg  = "";
         foreach ($params as $key => $val) {
             if ($urlencode == true) {

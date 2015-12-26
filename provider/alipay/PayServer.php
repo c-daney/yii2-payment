@@ -38,14 +38,14 @@ class PayServer extends BasePayServer
     }
 
     /**
-     * 产生返回给用户浏览器向支付宝服务器提交支付支付请求的html代码
+     * 产生返回给用户浏览器向支付宝服务器提交支付支付请求的html代码,此处完成Receivable向order的转换
      *
-     * @param array $params 请求数组
+     * @param Receivable object 请求数组
      */
-    public function generateUserRequestHtml($trade) 
+    public function generateUserRequestHtml($receivable) 
     {
-        $alipaySubmit = new Alipay($this->_config);
-        $requestHtml = $alipaySubmit->buildRequestForm($params, 'get', 'confirm');
+        $submitToAlipayParams = $this->transformToAlipayParams($receivable);
+        $requestHtml = $this->alipay->buildRequestForm($submitToAlipayParams, 'get', 'confirm');
         return $requestHtml;
     }
 
@@ -122,4 +122,29 @@ class PayServer extends BasePayServer
     **/
     public function processReturn() { 
     } 
+
+    /**
+     * @brief 将Receivable转换成符合支付宝的支付参数
+     *
+     * @return  protected function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2015/12/26 12:04:41
+    **/
+    protected function transformToAlipayParams($receivable) {
+
+        $alipayParams = [];
+        
+        $alipayParams['out_trade_no'] = $receivable->id;
+        $alipayParams['subject'] = $receivable->description;
+        $alipayParams['total_fee'] = $receivable->money;
+        $alipayParams['body'] = $receivable->description;
+        $alipayParams['show_url'] = '';
+
+        return $alipayParams;
+
+    }
+
 }
