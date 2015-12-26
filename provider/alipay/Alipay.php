@@ -5,6 +5,8 @@
  *
  **************************************************************************/
 
+namespace lubaogui\payment\provider\alipay;
+
 /**
  * @file Alipay.php
  * @author 吕宝贵(lbaogui@lubanr.com)
@@ -14,7 +16,6 @@
  *
  **/
 
-namespace lubaogui\payment\provider;
 
 class Alipay {
 

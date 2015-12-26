@@ -8,7 +8,6 @@
 namespace lubaogui\payment\provider\alipay;
 
 use lubaogui\payment\provider\BasePayServer;
-use lubaogui\payment\provider\Alipay;
 
 /**
  * 支付宝服务类，主要用于产生支付宝请求和校验支付宝的服务器返回.
