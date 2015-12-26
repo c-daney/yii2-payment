@@ -71,7 +71,7 @@ class Payment
      */
     private $payServerMap = [
         'alipay' => 'lubaogui\payment\provider\alipay\PayServer',
-        'wechatpay' => 'lubaogui\payment\provider\wechatpay\PayServer',
+        'wechatpay' => 'lubaogui\payment\provider\wechat\PayServer',
     ];
 
     /*

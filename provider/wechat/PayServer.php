@@ -5,9 +5,9 @@
  * @license http://www.lubanr.com/license/
  */
 
-namespace lubaogui\payment\provider\wechatpay;
+namespace lubaogui\payment\provider\wechat;
 
-use lubaogui\payment\BasePayServer;
+use lubaogui\payment\provider\BasePayServer;
 use lubaogui\payment\provider\Alipay;
 
 /**

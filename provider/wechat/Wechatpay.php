@@ -4,7 +4,7 @@
  * Copyright (c) 2015 Lubanr.com All Rights Reserved
  *
  **************************************************************************/
-namespace lubaogui\payment\provider;
+namespace lubaogui\payment\provider\wechat;
 
 /**
  * @file WechatPay.php
@@ -15,6 +15,7 @@ namespace lubaogui\payment\provider;
  *
  **/
 
+require_once('lib/WxPay.Data.php');
 
 class WechatPay {
 
@@ -38,8 +39,8 @@ class WechatPay {
      * @date 2015/12/17 20:56:45
     **/
     function __construct($isMobile = false){
-        $this->config = array_merge($this->config, require_once(dirname(__FILE__) . '/config/config.php'));
-        $this->payOrder = new WxPayUnifiedOrder();
+        $this->config = array_merge($this->config, require(dirname(__FILE__) . '/config/config.php'));
+        $this->payOrder = new \WxPayUnifiedOrder();
         if (empty($this->payOrder)) {
             return false;
         }
@@ -64,7 +65,7 @@ class WechatPay {
         $this->payOrder->SetOut_trade_no($receivable->id);
         $this->payOrder->SetTotal_fee($receivable->money);
         $this->payOrder->SetTime_start(date('YmdHis', $receivable->created_at));
-        $this->payOrder->SetTime_expire(date('YmdHis', $receivable->created_at+1800);
+        $this->payOrder->SetTime_expire(date('YmdHis', $receivable->created_at+1800));
         $this->payOrder->SetGoods_tag('服务，充值');
         $this->payOrder->SetTrade_type('充值服务');
         $this->payOrder->SetProduct_id(1);

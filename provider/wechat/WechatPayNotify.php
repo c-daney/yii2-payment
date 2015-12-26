@@ -1,15 +1,13 @@
 <?php
-require_once "../lib/WxPay.Api.php";
-require_once '../lib/WxPay.Notify.php';
-require_once 'log.php';
+require_once 'lib/WxPay.Api.php';
+require_once 'lib/WxPay.Notify.php';
 
-class WechatPayNotify extends WxPayNotify
+class WechatPayNotify extends \WxPayNotify
 {
 
     public $paySucceededHandler;
     public $payFailedHanlder;
     public $refundSucceededHandler;
-
 
     /**
      * @brief 设置通知成功的回调函数
