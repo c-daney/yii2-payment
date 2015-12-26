@@ -17,8 +17,8 @@
  **/
 
 return [
-    'qrcode_base_url'=>'/util/qrcode?data=',
-    'notify_url'=>'',
+    'qrcode_base_url'=>'http://travel.lubanr.com/util/qrcode?data=',
+    'notify_url'=>'http://travel.lubanr.com/account/notify?channel_id=2',
 ];
 
 /* vim: set et ts=4 sw=4 sts=4 tw=100: */
