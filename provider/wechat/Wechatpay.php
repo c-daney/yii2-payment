@@ -24,7 +24,7 @@ class WechatPay {
     private $config = [ 
         'notify_url'=>'',
         'trade_type'=>'NATIVE',
-        'qrcode_url'=>'',
+        'qrcode_gen_url'=>'',
     ];
 
     private $payOrder = null;
@@ -70,12 +70,12 @@ class WechatPay {
         $this->payOrder->SetTime_start(date('YmdHis', $receivable->created_at));
         $this->payOrder->SetTime_expire(date('YmdHis', $receivable->created_at+1800));
         $this->payOrder->SetGoods_tag('服务，充值');
-        $this->payOrder->SetTrade_type('充值服务');
+        $this->payOrder->SetTrade_type($this->config['trade_type']);
         $this->payOrder->SetProduct_id(1);
 
         $result = $this->notify->GetPayUrl($this->payOrder);
         $payUrl = $result['code_url']; 
-        $payQRCodeUrl = $this->config['qrcode_url'] . urlencode($payUrl);
+        $payQRCodeUrl = $this->config['qrcode_gen_url'] . urlencode($payUrl);
 
         return $payQRCodeUrl;
 
