@@ -16,6 +16,7 @@ namespace lubaogui\payment\provider\wechat;
  **/
 
 require_once('lib/WxPay.Data.php');
+require_once('lib/WxPay.NativePay.php');
 
 class WechatPay {
 
@@ -27,6 +28,7 @@ class WechatPay {
     ];
 
     private $payOrder = null;
+    private $notify = null;
 
     /**
      * @brief 构造函数，做的工作主要是将配置文件和默认配置进行merge,同时设置notify所需要的成功和失败的回调函数
@@ -41,6 +43,7 @@ class WechatPay {
     function __construct($isMobile = false){
         $this->config = array_merge($this->config, require(dirname(__FILE__) . '/config/config.php'));
         $this->payOrder = new \WxPayUnifiedOrder();
+        $this->notify = new \NativePay();
         if (empty($this->payOrder)) {
             return false;
         }
@@ -57,7 +60,7 @@ class WechatPay {
      * @author 吕宝贵
      * @date 2015/12/17 20:52:43
     **/
-    public function generatePayQRCodeUrl($receivable) {
+    public function generateUserScanQRCode($receivable) {
 
         $currentTime = date("YmdHis");
         $this->payOrder->setBody('Mr-Hug产品充值购买');
@@ -69,11 +72,12 @@ class WechatPay {
         $this->payOrder->SetGoods_tag('服务，充值');
         $this->payOrder->SetTrade_type('充值服务');
         $this->payOrder->SetProduct_id(1);
-        $result = $this->notify->GetPayUrl($this->payOrder);
-        $payUrl = $result['code_url'];
 
-        //payQRCodeUrl为的动态生成二维码的在线地址
+        $result = $this->notify->GetPayUrl($this->payOrder);
+        $payUrl = $result['code_url']; 
         $payQRCodeUrl = $this->config['qrcode_url'] . urlencode($payUrl);
+
+        return $payQRCodeUrl;
 
     }
 

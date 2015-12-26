@@ -32,7 +32,7 @@ class PayServer extends BasePayServer
     {
        $config = require(dirname(__FILE__) . '/config/wechatpay.config.php'); 
        $this->payServer = new WechatPay($config);
-       $this->wechatNotify = new WechatPayNotify($config);
+       $this->notifyServer = new WechatPayNotify($config);
     }
 
     /**
@@ -60,7 +60,9 @@ class PayServer extends BasePayServer
      * @date 2015/12/19 11:23:08
     **/
     public function generateUserScanQRCode($receivable) {
-        return $this->payServer->generatePayQRCodeUrl($receivable);
+
+        return $this->payServer->generateUserScanQRCode($receivable);
+
     }
 
     /**
