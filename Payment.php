@@ -131,12 +131,12 @@ class Payment
      * 
      * @return string 支付block内容页面,通常是自动的js跳转
      */
-    public function generateUserScanQRCode() {
-        if (empty($this->receivable)) {
+    public function generateUserScanQRCode($receivable) {
+        if (empty($receivable)) {
             throw new Exception('trans info must be set!');
         }
 
-        return $this->payServer->generateUserScanQRCode($this->trans);
+        return $this->payServer->generateUserScanQRCode($receivable);
     }
 
     /**
