@@ -8,7 +8,8 @@
 namespace lubaogui\payment\provider\wechat;
 
 use lubaogui\payment\provider\BasePayServer;
-use lubaogui\payment\provider\Alipay;
+use lubaogui\payment\provider\wechat\WechatPay;
+use lubaogui\payment\provider\wechat\WechatPayNotify;
 
 /**
  * 支付宝服务类，主要用于产生支付宝请求和校验支付宝的服务器返回.
@@ -30,7 +31,7 @@ class PayServer extends BasePayServer
      */
     public function __construct() 
     {
-       $config = require(dirname(__FILE__) . '/config/wechatpay.config.php'); 
+       $config = require(dirname(__FILE__) . '/config/config.php'); 
        $this->payServer = new WechatPay($config);
        $this->notifyServer = new WechatPayNotify($config);
     }
