@@ -75,8 +75,12 @@ class WechatPay {
 
         $result = $this->notify->GetPayUrl($this->payOrder);
         $payUrl = $result['code_url']; 
-        $payQRCodeUrl = $this->config['qrcode_gen_url'] . urlencode($payUrl);
 
+        if (! $payUrl) {
+            return false;
+        }
+
+        $payQRCodeUrl = $this->config['qrcode_gen_url'] . urlencode($payUrl);
         return $payQRCodeUrl;
 
     }

@@ -18,7 +18,7 @@
 
 return [
     'qrcode_gen_url'=>'http://paysdk.weixin.qq.com/example/qrcode.php?data=',
-    'notify_url'=>'http://travel.lubanr.com/account/notify?channel_id=2',
+    'notify_url'=>'http://travel.lubanr.com/account/notify',
 ];
 
 /* vim: set et ts=4 sw=4 sts=4 tw=100: */
