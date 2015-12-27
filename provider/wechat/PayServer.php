@@ -87,7 +87,16 @@ class PayServer extends BasePayServer
      * @date 2015/12/19 10:49:12
     **/
     public function processNotify() {
-        return $this->notifyServer->Handle(false);
+
+        $this->notifyServer->setHandlers($this->handlers);
+        $this->notifyServer->Handle(false);
+        if ($this->notifyServer->GetReturn_code() == "SUCCESS") {
+            return true;
+        }
+        else {
+            return false;
+        }
+
     }
 
     /**

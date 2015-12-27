@@ -8,6 +8,7 @@
 namespace lubaogui\payment;
 
 use Yii;
+use yii\base\Exception;
 
 /**
  * 支付组件接口,暴露给外部的接口,组件虽有models等，但不对外提供功能，对外只提供几个接口函数, 收款和提现
@@ -166,6 +167,7 @@ class Payment
     **/
     public function processNotify() {
 
+        return $this->payServer->processNotify();
 
     }
 

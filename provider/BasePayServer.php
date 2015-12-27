@@ -14,11 +14,6 @@ abstract class BasePayServer implements PayServiceInterface
     protected $handlers;
 
     /**
-     * $trade 交易流水
-     */
-    private $trade = [];
-
-    /**
      * @brief  设置回调相关处理方法
      *
      * @return  public function 

@@ -79,13 +79,11 @@ class WechatPayNotify extends \WxPayNotify
             return false;
         }
         else {
-            if (call_user_func($this->paySucceededHandler, $data)) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            $receivableId = $data['out_trade_no'];
+            $receivable = Receivable::findOne($receivableId);
+            return call_user_func($this->paySucceededHandler, $data);
         }
     }
+
 }
 
