@@ -17,7 +17,7 @@
  **/
 
 return [
-    'qrcode_gen_url'=>'http://travel.lubanr.com/util/qrcode?data=',
+    'qrcode_gen_url'=>'http://paysdk.weixin.qq.com/example/qrcode.php?data=',
     'notify_url'=>'http://travel.lubanr.com/account/notify?channel_id=2',
 ];
 
