@@ -91,7 +91,7 @@ class PayServer extends BasePayServer
         $this->notifyServer->setHandlers($this->handlers);
         $this->notifyServer->Handle(false);
         if ($this->notifyServer->GetReturn_code() == "SUCCESS") {
-            return true;
+            return $this->notifyServer->getCallbackResult();
         }
         else {
             return false;

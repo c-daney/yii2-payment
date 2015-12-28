@@ -7,6 +7,10 @@
  */
 class WxPayNotify extends WxPayNotifyReply
 {
+
+    //回调结果
+    private $callbackResult = null;
+
 	/**
 	 * 
 	 * 回调入口
@@ -26,10 +30,26 @@ class WxPayNotify extends WxPayNotifyReply
 			//该分支在成功回调到NotifyCallBack方法，处理完成之后流程
 			$this->SetReturn_code("SUCCESS");
 			$this->SetReturn_msg("OK");
+            $this->callbackResult = $result;
 		}
 		$this->ReplyNotify($needSign);
 	}
 	
+
+    /**
+     * @brief 获取回调最后的结果数据
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2015/12/28 11:17:07
+    **/
+    public function getCallbackResult() {
+        return $this->callbackResult;
+    }
+
 	/**
 	 * 
 	 * 回调方法入口，子类可重写该方法
