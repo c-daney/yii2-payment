@@ -42,7 +42,7 @@ interface PayServiceInterface
      * @author 吕宝贵
      * @date 2015/12/19 11:16:50
     **/
-    public function processNotify(); 
+    public function processNotify($handlers); 
 
 
 }

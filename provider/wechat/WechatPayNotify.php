@@ -5,6 +5,8 @@ namespace lubaogui\payment\provider\wechat;
 require_once 'lib/WxPay.Api.php';
 require_once 'lib/WxPay.Notify.php';
 
+use lubaogui\payment\models\Receivable; 
+
 class WechatPayNotify extends \WxPayNotify
 {
 
@@ -39,10 +41,9 @@ class WechatPayNotify extends \WxPayNotify
 	**/
 	public function Queryorder($transaction_id)
 	{
-		$input = new WxPayOrderQuery();
+		$input = new \WxPayOrderQuery();
 		$input->SetTransaction_id($transaction_id);
-		$result = WxPayApi::orderQuery($input);
-		Log::DEBUG("query:" . json_encode($result));
+		$result = \WxPayApi::orderQuery($input);
 		if(array_key_exists("return_code", $result)
 			&& array_key_exists("result_code", $result)
 			&& $result["return_code"] == "SUCCESS"

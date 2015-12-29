@@ -11,21 +11,6 @@ abstract class BasePayServer implements PayServiceInterface
      */
     protected $payServer;
     protected $notifyServer;
-    protected $handlers;
-
-    /**
-     * @brief  设置回调相关处理方法
-     *
-     * @return  public function 
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2015/12/19 11:00:21
-    **/
-    public function setHandlers($handlers) {
-        $this->handlers = $handlers;
-    }
 
     /**
      * 产生用于向支付服务器提交的支付请求页面
@@ -65,6 +50,6 @@ abstract class BasePayServer implements PayServiceInterface
      * @author 吕宝贵
      * @date 2015/12/19 11:16:50
     **/
-    abstract public function processNotify(); 
+    abstract public function processNotify($handlers); 
 
 }

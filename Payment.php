@@ -143,21 +143,7 @@ class Payment
     }
 
     /**
-     * @brief  设置回调相关处理方法
-     *
-     * @return  public function 
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2015/12/19 11:00:21
-    **/
-    public function setHandlers($handlers) {
-        $this->payServer->setHandlers = $handlers;
-    }
-
-    /**
-     * @brief 处理回调逻辑
+     * @brief 处理支付回告逻辑
      *
      * @return  public function 
      * @see 
@@ -165,9 +151,9 @@ class Payment
      * @author 吕宝贵
      * @date 2015/12/21 20:21:38
     **/
-    public function processNotify() {
+    public function processNotify($handlers) {
 
-        return $this->payServer->processNotify();
+        return $this->payServer->processNotify($handlers);
 
     }
 
