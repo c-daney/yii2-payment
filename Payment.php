@@ -126,7 +126,7 @@ class Payment
      */
     public function generateUserRequestHtml($receivable) {
 
-        return $this->payServer->generateUserRequestHtml($this->receivable);
+        return $this->payServer->generateUserRequestHtml($receivable);
     }
 
     /*
