@@ -141,7 +141,7 @@ class Alipay {
      */
     function buildRequestForm($params, $method = 'post', $target = '_self') {
         $params = $this->buildRequestParams($params);
-        $html = "<form id='alipaysubmit' name='alipaysubmit' action='".$this->alipay_gateway."_input_charset=".trim(strtolower($this->config['input_charset']))."' method='$method' target='$target'>";
+        $html = "<form id='alipaysubmit' name='alipaysubmit' action='".$this->alipayGateway."_input_charset=".trim(strtolower($this->config['input_charset']))."' method='$method' target='$target'>";
         foreach ($params as $key => $value) {
             $html .= "<input type='hidden' name='$key' value='$value'/>";
         }
@@ -186,7 +186,7 @@ class Alipay {
 
             '_input_charset'    => $this->config['input_charset']
         ));
-        $url = $this->alipay_gateway;
+        $url = $this->alipayGateway;
         $input_charset = trim(strtolower($this->config['input_charset']));
         if (trim($input_charset) != '') {
             $url = $url."_input_charset=".$input_charset;
