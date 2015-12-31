@@ -30,11 +30,11 @@ class Alipay {
         // // 签名方法
         // 'sign_type' => 'MD5',
         // // 支付完成异步通知调用地址
-        'notify_url' => 'http://'.$_SERVER['HTTP_HOST'.'>/order/callback_alipay/notify',
+        'notify_url' => '',
         // // 支付完成同步返回地址
-        'return_url' => 'http://'.$_SERVER['HTTP_HOST'.'>/order/callback_alipay/return',
+        'return_url' => '',
         // // 证书路径
-        'cacert' => APPPATH.'third_party/alipay/cacert.pem',
+        'cacert' =>  APPPATH . 'third_party/alipay/cacert.pem',
         // // 支付宝商家 ID
         'partner'      => '2088xxxxxxxx',
         // // 支付宝商家 KEY

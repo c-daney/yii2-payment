@@ -51,6 +51,14 @@ class Payment
     public $receivable = null; 
 
     /**
+     * 支付方法对应的支付服务类
+     */
+    private $payServerMap = [
+        'alipay' => 'lubaogui\payment\provider\alipay\PayServer',
+        'wechatpay' => 'lubaogui\payment\provider\wechat\PayServer',
+    ];
+
+    /**
      * 构造函数
      * @param provider string 支付供应商名称
      */
@@ -68,14 +76,6 @@ class Payment
             throw new Exception('payment server your specified ' . $this->provider . ' is not supported now!');
         }
     }
-
-    /**
-     * 支付方法对应的支付服务类
-     */
-    private $payServerMap = [
-        'alipay' => 'lubaogui\payment\provider\alipay\PayServer',
-        'wechatpay' => 'lubaogui\payment\provider\wechat\PayServer',
-    ];
 
     /*
      * 获取实际的支付实例,支持chain操作
