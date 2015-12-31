@@ -30,17 +30,16 @@ Once the extension is installed, simply use it in your code by  :
 
 ```php
 use lubaogui\payment\Payment;
+use lubaogui\payment\Receivable;
 
 $payment = new Payment('alipay');
 
 //订单相关信息,详细参数参见支付宝文档
-$params = [
-    'title' => '',
-    'xxx' => 'xxx',
-];
+$receivable = new Receivable();
 
-echo $payment->generateRequest($params);
-exit;
+$receivable->money =154;
+
+return $payment->generateUserRequestHtml($receivable);
 
 ```
 
@@ -50,3 +49,6 @@ exit;
 2. 验证服务端返回是否合法
 
 对于业务逻辑相关功能，用户可以在自己的产品流程中添加
+此模块结合lubaogui/yii2-account模块一起使用，效果更佳。
+
+如果有愿意一起讨论开发的，请加 QQ: 6649216 谢谢。
