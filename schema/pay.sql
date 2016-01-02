@@ -65,7 +65,6 @@ create table `receivable` (
 drop table if exists `payable`;
 create table `payable` (
     `id` bigint unsigned primary key not null auto_increment comment '自增id,付款给对方的id',
-    `enabled` tinyint(1) unsigned not null default 0 comment '账号状态: 1 有效 2 异常封禁 0为非法值',
     `trans_id` varchar(32) not null default '' comment '和变动关联的交易单号',
     `pay_method` tinyint unsigned not null comment '支付形式: 1 银行付款  2 原路返回,原路返回的支持不太好',
     `uid` bigint(20) unsigned not null default 0 comment '用户id',
@@ -74,7 +73,7 @@ create table `payable` (
     `from_uid` bigint unsigned not null comment '付款用户uid, 该场景下是指公司账户id',
     `from_user_bank_id` bigint unsigned not null default 0 comment '实际付款银行账号id',
     `user_bank_card_id` bigint unsigned not null default 0 comment '实际付款银行账号id',
-    `user_bank_id` bigint unsigned not null default 0 comment '实际付款银行账号id',
+    `user_bank_id` bigint unsigned not null default 0 comment '实际收款银行账号id',
     `user_bank_card` varchar(32)  not null default '' comment '收款人银行账号id',
     `money` decimal(12,2) not null default '0.0' comment '付款金额',
     `failded_reason` varchar(32) not null default '' comment '付款失败原因',
