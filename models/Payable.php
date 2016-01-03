@@ -41,7 +41,6 @@ class Payable extends ActiveRecord
     public function rules()
     {
         return [
-            ['role', 'default', 'value' => self::ROLE_USER],
         ];
     }
 
