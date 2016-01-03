@@ -54,7 +54,7 @@ class Payable extends ActiveRecord
      * @date 2015/12/22 10:50:25
     **/
     public function getUserAccount() {
-        return $this->hasOne(UserAccount::className(), ['uid'=>'uid']);
+        return $this->hasOne(UserAccount::className(), ['uid'=>'receive_uid']);
     }
 
     /**
