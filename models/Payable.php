@@ -15,7 +15,7 @@ class Payable extends ActiveRecord
     const PAY_STATUS_PAYING = 2;
     const PAY_STATUS_FINISHED = 3;
 
-    const PAY_MODE_DIRECTPAY = 1;
+    const PAY_METHOD_DIRECTPAY = 1;
 
     /**
      * @inheritdoc
