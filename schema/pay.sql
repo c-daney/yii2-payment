@@ -78,7 +78,8 @@ create table `payable` (
     `memo` varchar(16) not null default '' comment '备忘',
     `created_at` int(10) not null default 0 comment '记录创建时间',
     `updated_at` int(10) not null default 0 comment '记录更新时间',
-    key uidx_type_status (`user_bank_id`, `status`, `updated_at`),
+    key uidx_ruid_status (`receive_uid`, `status`, `updated_at`),
+    key uidx_puid_status (`pay_uid`, `status`, `updated_at`),
     key idx_trans (`trans_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='应付账款';
 
