@@ -9,6 +9,7 @@ namespace lubaogui\payment;
 
 use Yii;
 use yii\base\Exception;
+use lubaogui\account\behaviors\ErrorBehavior;;
 
 /**
  * 支付组件接口,暴露给外部的接口,组件虽有models等，但不对外提供功能，对外只提供几个接口函数, 收款和提现
@@ -57,6 +58,22 @@ class Payment
         'alipay' => 'lubaogui\payment\provider\alipay\PayServer',
         'wechatpay' => 'lubaogui\payment\provider\wechat\PayServer',
     ];
+
+    /**
+     * @brief 默认的错误behaviors列表，此处主要是追加错误处理behavior
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2015/12/30 16:55:03
+    **/
+    public function behaviors() {
+        return [
+            ErrorBehavior::className(),
+        ];
+    }
 
     /**
      * 构造函数
