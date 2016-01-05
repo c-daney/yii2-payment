@@ -23,8 +23,11 @@ create table `user_bank_card` (
     `uid` bigint(20) unsigned not null default 0 comment '用户id',
     `bank_id` smallint unsigned not null default 0 comment '银行id',
     `bank_name` varchar(30) not null default '' comment '银行名称',
-    `account` varchar(64) not null default '' comment '银行账号',
     `card_type` tinyint unsigned not null comment '账号类型: 1 借记卡 2信用卡',
+    `account_no` varchar(64) not null default '' comment '银行账号',
+    `account_name` varchar(64) not null default '' comment '用户真是姓名',
+    `province` varchar(16) not null default '' comment '省份名称',
+    `city` varchar(16) not null default '' comment '城市名称',
     `verified` tinyint(1) unsigned not null default '0' comment '是否验证过', 
     `created_at` int(10) not null default 0 comment '记录创建时间',
     `updated_at` int(10) not null default 0 comment '记录更新时间',
@@ -76,6 +79,7 @@ create table `payable` (
     `money` decimal(12,2) not null default '0.0' comment '付款金额',
     `failded_reason` varchar(32) not null default '' comment '付款失败原因',
     `memo` varchar(16) not null default '' comment '备忘',
+    `process_batch_no` int unsigned not null default 0 comment '支付批处理批次号',
     `created_at` int(10) not null default 0 comment '记录创建时间',
     `updated_at` int(10) not null default 0 comment '记录更新时间',
     key uidx_ruid_status (`receive_uid`, `status`, `updated_at`),
@@ -93,6 +97,23 @@ create table `pay_log` (
     `action` tinyint not null comment '变化行为: 1 下载 2 付款成功  3 付款失败',
     `action_name` varchar(8) not null comment '变化行为: 1 下载 2 付款成功  3 付款失败',
     `created_at` int(10) not null default 0 comment '记录创建时间',
+    `updated_at` int(10) not null default 0 comment '记录更新时间',
     key uidx_trans (`trans_id`, `created_at`) 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='应付账款日志';
+
+drop table if exists `payable_process_batch`;
+create table `payable_process_batch` (
+    `id` bigint unsigned primary key not null auto_increment comment '自增id',
+    `count` int unsigned not null default 0 comment '支付记录数',
+    `total_money` decimal(16,2) not null default 0.00 comment '支付总金额',
+    `filename` varchar(32) not null default '' comment '下载的文件名称',
+    `download_time` int(10) not null default 0 comment '批次记录下载时间',
+    `pay_time` int(10) not null default 0 comment '支付完成时间',
+    `admin_uid` bigint(20) unsigned not null default 0 comment '处理管理员uid',
+    `admin_username` varchar(20) not null default '' comment '处理管理员名称',
+    `created_at` int(10) not null default 0 comment '记录创建时间',
+    `updated_at` int(10) not null default 0 comment '记录更新时间',
+    key uidx_uidc (`admin_uid`, `created_at`), 
+    key uidx_uidu (`admin_uid`, `updated_at`) 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='支付处理批次';
 
