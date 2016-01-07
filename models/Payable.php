@@ -72,4 +72,18 @@ class Payable extends ActiveRecord
         return $this->hasOne(Trans::className(), ['id'=>'trans_id']);
     }
 
+    /**
+     * @brief 获取账号关联的银行卡
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/01/07 10:38:46
+    **/
+    public function getReceiverBankAccount() {
+        return $this->hasOne(UserBankCard::className(), ['uid'=>'receive_uid']);
+    }
+
 }
