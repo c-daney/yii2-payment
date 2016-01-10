@@ -24,6 +24,7 @@ create table `user_bank_card` (
     `bank_id` smallint unsigned not null default 0 comment '银行id',
     `bank_name` varchar(30) not null default '' comment '银行名称',
     `card_type` tinyint unsigned not null comment '账号类型: 1 借记卡 2信用卡',
+    `card_type_name` varchar(16) not null comment '账号类型名称',
     `account_no` varchar(64) not null default '' comment '银行账号',
     `account_name` varchar(64) not null default '' comment '用户真是姓名',
     `province` varchar(16) not null default '' comment '省份名称',
@@ -117,3 +118,6 @@ create table `payable_process_batch` (
     key uidx_uidu (`admin_uid`, `updated_at`) 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='支付处理批次';
 
+insert into pay_channel(id, name, alias, enabled) values(1, '支付宝', 'alipay', 1);
+insert into pay_channel(id, name, alias, enabled) values(2, '微信支付', 'wechatpay', 1);
+alter table `pay_channel` AUTO_INCREMENT=3;
