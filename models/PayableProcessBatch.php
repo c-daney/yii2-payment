@@ -5,11 +5,12 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use lubaogui\account\models\Trans;
 
 /**
- * UserBankCard model
+ * Payable model
  */
-class UserBankCard extends ActiveRecord
+class Payable extends ActiveRecord
 {
 
     /**
@@ -17,7 +18,7 @@ class UserBankCard extends ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%user_bank_card}}';
+        return '{{%payable_process_batch}}';
     }
 
     /**
