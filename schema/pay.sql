@@ -105,6 +105,7 @@ create table `pay_log` (
 drop table if exists `payable_process_batch`;
 create table `payable_process_batch` (
     `id` bigint unsigned primary key not null auto_increment comment '自增id',
+    `status` tinyint unsigned not null comment ' 2 已下载，待银行付款  3 付款成功',
     `count` int unsigned not null default 0 comment '支付记录数',
     `total_money` decimal(16,2) not null default 0.00 comment '支付总金额',
     `filename` varchar(32) not null default '' comment '下载的文件名称',
