@@ -10,7 +10,7 @@ use lubaogui\account\models\Trans;
 /**
  * Payable model
  */
-class Payable extends ActiveRecord
+class PayableProcessBatch extends ActiveRecord
 {
 
     /**
