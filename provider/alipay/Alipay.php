@@ -20,28 +20,7 @@ namespace lubaogui\payment\provider\alipay;
 class Alipay {
 
     // 配置信息在实例化时从配置文件读入，配置文件需要放在该文件同目录下
-    private $config = [ 
-        // // 即时到账方式
-        'payment_type' => 1,
-        // // 传输协议
-        // 'transport' => 'http',
-        // // 编码方式
-        'input_charset' => 'utf-8',
-        // // 签名方法
-        // 'sign_type' => 'MD5',
-        // // 支付完成异步通知调用地址
-        'notify_url' => '',
-        // // 支付完成同步返回地址
-        'return_url' => '',
-        // // 证书路径
-        'cacert' =>  APPPATH . 'third_party/alipay/cacert.pem',
-        // // 支付宝商家 ID
-        'partner'      => '2088xxxxxxxx',
-        // // 支付宝商家 KEY
-        // 'key'          => 'xxxxxxxxxxxx',
-        // // 支付宝商家注册邮箱
-        'seller_email' => 'email@domain.com'
-    ];
+    private $config = [];
 
     private $service               = 'create_direct_pay_by_user';
     private $serviceMobile           = 'alipay.wap.trade.create.direct';
@@ -72,7 +51,8 @@ class Alipay {
         $result = "";
         switch (strtoupper(trim($this->config['sign_type']))) {
         case "MD5" :
-            $result = md5($paramStr . $this->config['key']);
+            $signStr = $paramStr . $this->config['key'];
+            $result = md5($signStr);
             break;
         case "RSA" :
         case "0001" :
@@ -107,19 +87,19 @@ class Alipay {
      * 
      */
     function buildRequestParams($params) {
-        $default = array(
+        $baseParams = array(
             'service' => $this->service,
             'partner' => $this->config['partner']
         );
         if (!$this->is_mobile) {
-            $default = array_merge($default, array(
+            $baseParams = array_merge($baseParams, [ 
+                'seller_email'=> trim($this->config['seller_email']),
                 'payment_type' => $this->config['payment_type'],
-                'seller_id'    => $this->config['partner'],
-                'notify_url'   => $this->config['notify_url'],
-                'return_url'   => $this->config['return_url']
-            ));
+                '_input_charset'=> trim($strtolower($this->config['input_charset'])),
+                ]
+            );
         }
-        $params = $this->filterParams(array_merge($default, $params));
+        $params = $this->filterParams(array_merge($baseParams, $params));
         ksort($params);
         reset($params);
         $params['sign'] = $this->buildRequestSign($params);
@@ -290,7 +270,10 @@ class Alipay {
     function filterParams($params) {
         $result = [];
         foreach ($params as $key => $value) {
-            if ($key != "sign" && $key != "sign_type" && $value) {
+            if ($key == "sign" || $key == "sign_type" || $value == '') {
+                continue;
+            }
+            else {
                 $result[$key] = $value;
             }
         }
@@ -361,7 +344,7 @@ class Alipay {
         $arg  = "";
         foreach ($params as $key => $val) {
             if ($urlencode == true) {
-                $arg.=$key."=".urlencode($val)."&";
+                $arg .= $key . "=" . urlencode($val) . '&';
             }
             else {
                 $arg .= $key . "=" . $val . "&";

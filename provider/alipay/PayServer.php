@@ -45,7 +45,7 @@ class PayServer extends BasePayServer
     public function generateUserRequestHtml($receivable) 
     {
         $submitToAlipayParams = $this->transformToAlipayParams($receivable);
-        $requestHtml = $this->alipay->buildRequestForm($submitToAlipayParams, 'get', 'confirm');
+        $requestHtml = $this->alipay->buildRequestForm($submitToAlipayParams, 'post', 'confirm');
         return $requestHtml;
     }
 
@@ -139,9 +139,11 @@ class PayServer extends BasePayServer
         
         $alipayParams['out_trade_no'] = $receivable->id;
         $alipayParams['subject'] = $receivable->description;
-        $alipayParams['total_fee'] = $receivable->money*100;
+        $alipayParams['total_fee'] = $receivable->money;
         $alipayParams['body'] = $receivable->description;
         $alipayParams['show_url'] = '';
+        $alipayParams['notify_url'] = 'http://www.mr-hug.com/account/alipay-pay-notify';
+        $alipayParams['return_url'] = 'http://www.mr-hug.com/user-booking/view';
 
         return $alipayParams;
 
