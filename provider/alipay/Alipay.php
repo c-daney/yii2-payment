@@ -21,6 +21,7 @@ class Alipay {
 
     // 配置信息在实例化时从配置文件读入，配置文件需要放在该文件同目录下
     private $config = [];
+    private $notifyData = [];
 
     private $service               = 'create_direct_pay_by_user';
     private $serviceMobile           = 'alipay.wap.trade.create.direct';
@@ -206,18 +207,33 @@ class Alipay {
     }
 
     /**
+     * @brief 返回支付宝返回的数据
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/01/16 00:25:41
+    **/
+    public function getNotifyData() {
+        return $this->notifyData;
+    }
+
+    /**
      * 支付完成验证返回参数（包含同步和异步）
      * 
      * @param $async <Boolean> 是否异步通知模式
      * 
      * @return <Boolean>
      */
-    function verifyCallback() {
+    function verifyNotify() {
         $async = empty($_GET);
         $data = $async ? $_POST : $_GET;
         if (empty($data)) {
-            return FALSE;
+            return false;
         }
+        $this->notifyData = $data;
         $signValid = $this->verifyParameters($data, $data["sign"]);
         $notify_id = $data['notify_id'];
         if ($async && $this->is_mobile){
@@ -242,6 +258,13 @@ class Alipay {
         return $signValid && preg_match("/true$/i", $responseTxt);
     }
 
+    /**
+     * 支付完成验证返回参数（包含同步和异步）
+     * 
+     * @param $async <Boolean> 是否异步通知模式
+     * 
+     * @return <Boolean>
+     */
     function verifyParameters($params, $sign) {
         $params = $this->filterParams($params);
         if (!$this->is_mobile) {

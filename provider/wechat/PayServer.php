@@ -79,8 +79,7 @@ class PayServer extends BasePayServer
     /**
      * @brief 处理后台的支付通知消息，通过调用回调函数来处理相关业务逻辑
      *
-     * @return  public function 
-     * @retval   
+     * @return array 数组，返回数组 
      * @see 
      * @note 
      * @author 吕宝贵

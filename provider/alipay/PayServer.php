@@ -56,7 +56,7 @@ class PayServer extends BasePayServer
      */
     public function processNotify($handlers) 
     {
-        if ($this->alipay->verifyReturn())
+        if ($this->alipay->verifyNotify())
         {
             return call_user_func($this->handlers['paySuccessHanlder'], $data);
         }
