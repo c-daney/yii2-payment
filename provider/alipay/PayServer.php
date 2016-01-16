@@ -8,6 +8,7 @@
 namespace lubaogui\payment\provider\alipay;
 
 use lubaogui\payment\provider\BasePayServer;
+use lubaogui\payment\models\Receivable;
 
 /**
  * 支付宝服务类，主要用于产生支付宝请求和校验支付宝的服务器返回.
@@ -58,10 +59,21 @@ class PayServer extends BasePayServer
     {
         if ($this->alipay->verifyNotify())
         {
-            return call_user_func($this->handlers['paySuccessHanlder'], $data);
+            $notifyData = $this->alipay->getNotifyData();
+            if ($notifyData['trade_status'] == 'TRADE_SUCCESS') {
+                $receivableId = $notifyData['out_trade_no'];
+                $receivable = Receivable::fineOne($receivableId);
+                if (empty($receivable) || $receivable->status == Receivable::PAY_STATUS_FINISHED) {
+                    return false;
+                }
+                return call_user_func($handlers['paySuccessHandler'], $receivable);
+            }
+            else {
+                return false;
+            }
         }
         else {
-            call_user_func($this->handlers['payFailHandler']);
+            call_user_func($handlers['payFailHandler'], []);
             return false;
         }
     }
@@ -142,8 +154,8 @@ class PayServer extends BasePayServer
         $alipayParams['total_fee'] = $receivable->money;
         $alipayParams['body'] = $receivable->description;
         $alipayParams['show_url'] = '';
-        $alipayParams['notify_url'] = 'http://www.mr-hug.com/account/alipay-pay-notify';
-        $alipayParams['return_url'] = 'http://www.mr-hug.com/user-booking/view';
+        $alipayParams['notify_url'] = 'http://www.mr-hug.com/account/alipay-notify';
+        $alipayParams['return_url'] = 'http://www.mr-hug.com/user-booking';
 
         return $alipayParams;
 

@@ -306,8 +306,8 @@ class Alipay {
     function verifyFromServer($notify_id) {
         $transport = strtolower(trim($this->config['transport']));
         $partner = trim($this->config['partner']);
-        $veryfy_url = ($transport == 'https' ? $this->verify_url_https : $this->verify_url) . "partner=$partner&notify_id=$notify_id";
-        $curl = curl_init($veryfy_url);
+        $veryfyUrl = ($transport == 'https' ? $this->verifyUrlHttps : $this->verifyUrl) . "partner=$partner&notify_id=$notify_id";
+        $curl = curl_init($veryfyUrl);
         curl_setopt($curl, CURLOPT_HEADER, 0 ); // 过滤HTTP头
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);//SSL证书认证
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);//严格认证

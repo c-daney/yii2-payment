@@ -82,6 +82,9 @@ class WechatPayNotify extends \WxPayNotify
         else {
             $receivableId = $data['out_trade_no'];
             $receivable = Receivable::findOne($receivableId);
+            if (empty($receivable) || $receivable->status == Receivable::PAY_STATUS_FINISHED) {
+                return false;
+            }
             return call_user_func($this->paySucceededHandler, $receivable);
         }
     }
