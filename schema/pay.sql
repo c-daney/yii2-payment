@@ -50,8 +50,9 @@ drop table if exists `receivable`;
 create table `receivable` (
     `id` bigint unsigned primary key not null auto_increment comment '自增id',
     `type` tinyint unsigned not null comment '付款类型: 1 用户充值 目前仅有充值会存在从第三方收款',
-    `trans_id` varchar(32) not null default '' comment '和变动关联的交易单号',
-    `uid` bigint(20) unsigned not null default 0 comment '收款用户id,该值为公司账户uid',
+    `trans_id` bigint unsigned not null default 0 comment '和变动关联的交易单号',
+    `out_trade_no` varchar(32) not null default '' comment '第三方支付交易号',
+    `receive_uid` bigint(20) unsigned not null default 0 comment '收款用户id,该值为公司账户uid',
     `currency` tinyint unsigned not null default 1 comment '币种: 1 人民币',
     `from_uid` bigint unsigned not null comment '付款用户uid, 该场景下是指用户uid',
     `from_channel_id` smallint unsigned not null comment '付款渠道id, 渠道参加渠道表,对应于pay_channel中的id',

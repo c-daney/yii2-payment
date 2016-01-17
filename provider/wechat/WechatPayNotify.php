@@ -66,7 +66,6 @@ class WechatPayNotify extends \WxPayNotify
 	**/
 	public function NotifyProcess($data, &$msg)
     {
-        $notfiyOutput = [];
 
         if(!array_key_exists("transaction_id", $data)){
             $msg = "输入参数不正确";
@@ -82,11 +81,52 @@ class WechatPayNotify extends \WxPayNotify
         else {
             $receivableId = $data['out_trade_no'];
             $receivable = Receivable::findOne($receivableId);
-            if (empty($receivable) || $receivable->status == Receivable::PAY_STATUS_FINISHED) {
-                return false;
+            if (empty($receivable)) {
+                $this->setFailReply();
+                exit;
             }
+            if ($receivable->status == Receivable::PAY_STATUS_FINISHED) {
+                $this->setSuccessReply();
+                exit;
+            }
+            $receivable->from_channel_id = 2;
+            $receivable->from_channel_name = 'wechatpay';
+            $receivable->out_trade_no = $data['transaction_id'];
+            $receivable->user_channel_account = '';
             return call_user_func($this->paySucceededHandler, $receivable);
         }
+    }
+
+    /**
+     * @brief 设置成功返回，并返回给微信服务器
+     *
+     * @return  protected function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/01/17 17:41:17
+    **/
+    protected function setSuccessReply($needSign = true) {
+        $this->SetReturn_code("SUCCESS");
+        $this->SetReturn_msg("OK");
+        $this->ReplyNotify($needSign);
+    }
+
+    /**
+     * @brief 设置失败并返回 
+     *
+     * @return  protected function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/01/17 17:42:44
+    **/
+    protected function setFailReply() {
+        $this->SetReturn_code("FAIL");
+        $this->SetReturn_msg('Failed');
+        $this->ReplyNotify(false);
     }
 
 }

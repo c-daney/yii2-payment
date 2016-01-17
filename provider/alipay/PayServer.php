@@ -63,9 +63,17 @@ class PayServer extends BasePayServer
             if ($notifyData['trade_status'] == 'TRADE_SUCCESS') {
                 $receivableId = $notifyData['out_trade_no'];
                 $receivable = Receivable::fineOne($receivableId);
-                if (empty($receivable) || $receivable->status == Receivable::PAY_STATUS_FINISHED) {
+                if (empty($receivable)) {
                     return false;
                 }
+                if ($receivable->status == Receivable::PAY_STATUS_FINISHED) {
+                     echo 'success';
+                     exit;
+                }
+                $receivable->user_channel_account = $notifyData['buyer_email'];
+                $receivable->from_channel_id = 1;
+                $receivable->from_channel_name = 'alipay';
+                $receivable->out_trade_no = $notifyData['trade_no'];
                 return call_user_func($handlers['paySuccessHandler'], $receivable);
             }
             else {
