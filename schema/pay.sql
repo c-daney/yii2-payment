@@ -27,6 +27,7 @@ create table `user_bank_card` (
     `card_type_name` varchar(16) not null comment '账号类型名称',
     `account_no` varchar(64) not null default '' comment '银行账号',
     `account_name` varchar(64) not null default '' comment '用户真是姓名',
+    `country` varchar(16) not null default '' comment '国家名称',
     `province` varchar(16) not null default '' comment '省份名称',
     `city` varchar(16) not null default '' comment '城市名称',
     `verified` tinyint(1) unsigned not null default '0' comment '是否验证过', 
