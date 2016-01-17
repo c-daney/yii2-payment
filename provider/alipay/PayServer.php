@@ -159,7 +159,7 @@ class PayServer extends BasePayServer
         
         $alipayParams['out_trade_no'] = $receivable->id;
         $alipayParams['subject'] = $receivable->description;
-        $alipayParams['total_fee'] = $receivable->money;
+        $alipayParams['total_fee'] = round($receivable->money, 2);
         $alipayParams['body'] = $receivable->description;
         $alipayParams['show_url'] = '';
         $alipayParams['notify_url'] = 'http://www.mr-hug.com/account/alipay-notify';

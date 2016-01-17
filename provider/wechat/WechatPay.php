@@ -68,7 +68,7 @@ class WechatPay {
         $this->payOrder->setBody('Mr-Hug产品充值购买');
         $this->payOrder->setAttach('用于购买Mr-Hug服务');
         $this->payOrder->SetOut_trade_no($receivable->id);
-        $this->payOrder->SetTotal_fee($receivable->money * 100);
+        $this->payOrder->SetTotal_fee(round($receivable->money, 2) * 100);
         $this->payOrder->SetTime_start(date('YmdHis', $receivable->created_at));
         $this->payOrder->SetTime_expire(date('YmdHis', $receivable->created_at+1800));
         $this->payOrder->SetGoods_tag('服务，充值');
