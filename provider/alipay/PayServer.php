@@ -62,7 +62,7 @@ class PayServer extends BasePayServer
             $notifyData = $this->alipay->getNotifyData();
             if ($notifyData['trade_status'] == 'TRADE_SUCCESS') {
                 $receivableId = $notifyData['out_trade_no'];
-                $receivable = Receivable::fineOne($receivableId);
+                $receivable = Receivable::findOne($receivableId);
                 if (empty($receivable)) {
                     return false;
                 }

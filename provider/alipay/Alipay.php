@@ -88,15 +88,15 @@ class Alipay {
      * 
      */
     function buildRequestParams($params) {
-        $baseParams = array(
+        $baseParams = [ 
             'service' => $this->service,
             'partner' => $this->config['partner']
-        );
+        ];
         if (!$this->is_mobile) {
             $baseParams = array_merge($baseParams, [ 
                 'seller_email'=> trim($this->config['seller_email']),
                 'payment_type' => $this->config['payment_type'],
-                '_input_charset'=> trim($strtolower($this->config['input_charset'])),
+                '_input_charset'=> trim(strtolower($this->config['input_charset'])),
                 ]
             );
         }
@@ -120,7 +120,7 @@ class Alipay {
      *
      * @return string 返回给用户的跳转到支付宝的html字符串
      */
-    function buildRequestForm($params, $method = 'post', $target = '_self') {
+    public function buildRequestForm($params, $method = 'post', $target = '_self') {
         $params = $this->buildRequestParams($params);
         $html = "<form id='alipaysubmit' name='alipaysubmit' action='".$this->alipayGateway."_input_charset=".trim(strtolower($this->config['input_charset']))."' method='$method' target='$target'>";
         foreach ($params as $key => $value) {
