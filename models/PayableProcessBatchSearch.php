@@ -5,7 +5,7 @@ namespace lubaogui\payment\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Device;
+use lubaogui\payment\models\PayableProcessBatch;
 
 /**
  * PayableProcessBatchSearch represents the model behind the search form about `common\models\Device`.
@@ -41,7 +41,7 @@ class PayableProcessBatchSearch extends PayableProcessBatch
      */
     public function search($params)
     {
-        $query = Device::find();
+        $query = PayableProcessBatch::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -57,8 +57,8 @@ class PayableProcessBatchSearch extends PayableProcessBatch
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'admin_uid' => $this->admin_uid,
             'status' => $this->status,
+            'admin_uid' => $this->admin_uid,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
