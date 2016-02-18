@@ -87,4 +87,18 @@ class Payable extends ActiveRecord
         return $this->hasOne(UserBankCard::className(), ['uid'=>'receive_uid']);
     }
 
+    /**
+     * @brief 付款给用户成功之后的操作 
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/02/18 20:49:50
+    **/
+    public function payFinished($callback = null) {
+        return true;
+    }
+
 }
