@@ -81,9 +81,44 @@ class WechatPay {
             throw new Exception($result['err_code_des']);
         }
 
+        $result = $this->generateUserRequestParams($receivable);
+
         $payUrl = $result['code_url']; 
         $payQRCodeUrl = $this->config['qrcode_gen_url'] . urlencode($payUrl);
         return $payQRCodeUrl;
+
+    }
+
+    /**
+     * @brief 产生用于微信支付的参数列表
+     *
+     * @return array 支付参数列表   
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/02/26 00:12:06
+    **/
+    public function generateUserRequestParams($receivable) {
+
+        $currentTime = date("YmdHis");
+        $this->payOrder->setBody('Mr-Hug产品充值购买');
+        $this->payOrder->setAttach('用于购买Mr-Hug服务');
+        $this->payOrder->SetOut_trade_no($receivable->id);
+        $this->payOrder->SetTotal_fee(round($receivable->money, 2) * 100);
+        $this->payOrder->SetTime_start(date('YmdHis', $receivable->created_at));
+        $this->payOrder->SetTime_expire(date('YmdHis', $receivable->created_at+1800));
+        $this->payOrder->SetGoods_tag('服务，充值');
+        $this->payOrder->SetTrade_type($this->config['trade_type']);
+        $this->payOrder->SetProduct_id(1);
+
+        $result = $this->notify->GetPayUrl($this->payOrder);
+
+        if ($result['return_code'] !== 'SUCCESS'  && $result['result_code'] !== 'SUCCESS') {
+            throw new Exception($result['err_code_des']);
+        }
+
+        return $result;
 
     }
 

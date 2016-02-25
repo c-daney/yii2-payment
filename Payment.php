@@ -147,6 +147,17 @@ class Payment
     }
 
     /*
+     * 返回用户客户端提交支付请求的请求参数 
+     * 
+     * @return array 支付请求的数组信息 
+     */
+    public function generateUserRequestParams($receivable) {
+
+        return $this->payServer->generateUserRequestParams($receivable);
+
+    }
+
+    /*
      * 产生用于用户扫码支付的二维码
      * 
      * @return string 支付block内容页面,通常是自动的js跳转

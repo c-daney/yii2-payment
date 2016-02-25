@@ -50,6 +50,21 @@ class PayServer extends BasePayServer
         return '';
     }
 
+
+    /**
+     * @brief 产生客户端支付请求的参数列表
+     *
+     * @return array 参数数组 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/02/26 00:09:02
+    **/
+    public function generateUserRequestParams($receivable) {
+        return $this->payServer->generateUserRequestParams($receivable);
+    }
+
     /**
      * @brief 产生用于扫描支付的二维码的url地址
      *
