@@ -51,6 +51,21 @@ class PayServer extends BasePayServer
     }
 
     /**
+     * @brief 产生用户端请求的参数数组
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/02/26 10:39:45
+    **/
+    public function generateUserRequestParams($receivable)
+    {
+        return [];
+    }
+
+    /**
      * 验证支付宝的服务器返回
      *
      * @return boolen 返回验证状态, true代表合法请求，fasle代表无效返回

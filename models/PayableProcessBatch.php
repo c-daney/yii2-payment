@@ -12,6 +12,8 @@ use lubaogui\account\models\Trans;
  */
 class PayableProcessBatch extends ActiveRecord
 {
+    const BATCH_PAY_STATUS_PAYING = 0;
+    const BATCH_PAY_STATUS_FINISHED = 1;
 
     /**
      * @inheritdoc

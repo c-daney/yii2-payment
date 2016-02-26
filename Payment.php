@@ -129,12 +129,14 @@ class Payment
         if ($returnType === 'QRCodeUrl') {
             return $this->generateUserScanQRCode($receivable);
         }
+        else if ($returnType === 'AppRequestArray') {
+            return $this->generateUserRequestParams($receivable);
+        }
         else {
             return $this->generateUserRequestHtml($receivable);
         }
 
     }
-
 
     /*
      * 跳转到第三方支付平台支付页面

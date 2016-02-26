@@ -13,6 +13,18 @@ interface PayServiceInterface
     public function generateUserRequestHtml($receivable); 
 
     /**
+     * @brief 返回客户端用户请求支付的数组
+     *
+     * @return array 返回用户请求参数 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/02/26 10:33:50
+    **/
+    public function generateUserRequestParams($receivable); 
+
+    /**
      * 产生用于向支付服务器提交的支付请求页面
      *
      * @param array $params 请求数组

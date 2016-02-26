@@ -26,6 +26,14 @@ abstract class BasePayServer implements PayServiceInterface
      * @param array $params 请求数组
      * @return string 返回请求的form
      */
+    abstract public function generateUserRequestParams($receivable); 
+
+    /**
+     * 产生用于向支付服务器提交的支付请求页面
+     *
+     * @param array $params 请求数组
+     * @return string 返回请求的form
+     */
     abstract public function generateUserScanQRCode($receivable); 
 
     /**
