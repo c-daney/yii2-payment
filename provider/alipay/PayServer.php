@@ -62,7 +62,9 @@ class PayServer extends BasePayServer
     **/
     public function generateUserRequestParams($receivable)
     {
-        return [];
+        $submitToAlipayParams = $this->transformToAlipayParams($receivable);
+        $requestStr = $this->alipay->buildRequestString($submitToAlipayParams);
+        return $requestStr;
     }
 
     /**

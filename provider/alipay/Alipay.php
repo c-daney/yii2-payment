@@ -87,7 +87,7 @@ class Alipay {
      * @return <Array>
      * 
      */
-    function buildRequestParams($params) {
+    public function buildRequestParams($params) {
         $baseParams = [ 
             'service' => $this->service,
             'partner' => $this->config['partner']
@@ -108,6 +108,22 @@ class Alipay {
             $params['sign_type'] = strtoupper(trim($this->config['sign_type']));
         }
         return $params;
+    }
+
+    /**
+     * @brief 生成客户端支付需要的string
+     *
+     * @return string 支付字符串 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/02/26 15:50:41
+    **/
+    public function buildRequestString($params) {
+        $processParams = $this->buildRequestParams($params);
+        $submitString = http_build_query($processParams);
+        return $submitString;
     }
 
     /**
