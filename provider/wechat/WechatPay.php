@@ -116,14 +116,14 @@ class WechatPay {
         $result = $this->notify->GetPayUrl($this->payOrder);
 
         if ($result['return_code'] !== 'SUCCESS') {
-            throw new Exception('参数错误:' . $result['return_msg']);
+            throw new Exception($result['return_msg']);
         }
 
         if ($result['result_code'] !== 'SUCCESS') {
-            throw new Exception($result['err_code']);
+            throw new Exception($result['err_code_des']);
         }
-        return $result;
 
+        return $result;
     }
 
 }
