@@ -19,6 +19,7 @@ require_once('lib/WxPay.Data.php');
 require_once('lib/WxPay.NativePay.php');
 
 use yii\base\Exception;
+use Yii;
 
 class WechatPay {
 
@@ -107,17 +108,20 @@ class WechatPay {
         $this->payOrder->SetOut_trade_no($receivable->id);
         $this->payOrder->SetTotal_fee(round($receivable->money, 2) * 100);
         $this->payOrder->SetTime_start(date('YmdHis', $receivable->created_at));
-        $this->payOrder->SetTime_expire(date('YmdHis', $receivable->created_at+1800));
+        $this->payOrder->SetTime_expire(date('YmdHis', $receivable->created_at+1800000));
         $this->payOrder->SetGoods_tag('服务，充值');
         $this->payOrder->SetTrade_type($this->config['trade_type']);
         $this->payOrder->SetProduct_id(1);
 
         $result = $this->notify->GetPayUrl($this->payOrder);
 
-        if ($result['return_code'] !== 'SUCCESS'  && $result['result_code'] !== 'SUCCESS') {
-            throw new Exception($result['err_code_des']);
+        if ($result['return_code'] !== 'SUCCESS') {
+            throw new Exception('参数错误:' . $result['return_msg']);
         }
 
+        if ($result['result_code'] !== 'SUCCESS') {
+            throw new Exception($result['err_code']);
+        }
         return $result;
 
     }
