@@ -110,12 +110,13 @@ class WechatPay {
         $this->payOrder->SetOut_trade_no($receivable->id);
         $this->payOrder->SetTotal_fee(round($receivable->money, 2) * 100);
         $this->payOrder->SetTime_start(date('YmdHis', $receivable->created_at));
-        $this->payOrder->SetTime_expire(date('YmdHis', $receivable->created_at+1800000));
+        $this->payOrder->SetTime_expire(date('YmdHis', $receivable->created_at+1800));
         $this->payOrder->SetGoods_tag('服务，充值');
-        $this->payOrder->SetTrade_type($this->config['trade_type']);
+        $this->payOrder->SetTrade_type('APP');
         $this->payOrder->SetProduct_id(1);
+        $this->payOrder->SetNotify_url($this->config['mobile_notify_url']);
 
-        $result = $this->notify->GetPayUrl($this->payOrder);
+        $result = $this->notify->GetOrderInfo($this->payOrder);
 
         if ($result['return_code'] !== 'SUCCESS') {
             throw new Exception($result['return_msg']);
@@ -126,10 +127,62 @@ class WechatPay {
         }
 
         $clientOrderParams = [];
+        $clientOrderParams['appid'] = $result['apid'];
+        $clientOrderParams['noncestr'] = $result['nonce_str'];
+        $clientOrderParams['partnerid'] = $result['mch_id'];
+        $clientOrderParams['prepayid'] = $result['prepay_id'];
         $clientOrderParams['timestamp'] = $receivable->created_at;
-        $result['timestamp'] = $receivable->created_at;
-        $result['package'] = 'Sign=WXPay';
+        $clientOrderParams['package'] = 'Sign=WXPay';
+        $clientOrderParams['sign'] = $this->makeSign($clientOrderParams, $this->config['mobile_key']);
+        return $clientOrderParams;
+    }
+
+    /**
+     * @brief 对移动支付参数进行签名
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/02/29 20:34:26
+    **/
+    public function makeSign($params, $key) {
+
+        ksort($params);
+        $string = $this->toUrlParams($params);
+        $string = $string . '&key=' . $key;
+        $string = md5($string);
+        $result = strtoupper($string);
         return $result;
+
+    }
+
+    /**
+     * @brief 将参数转化成url字符串
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/02/29 20:38:30
+    **/
+    public function toUrlParams($params) {
+
+        $buff = '';
+        foreach ($params as $k => $v) {
+
+            if ($key != 'sign' && $v != '' && !is_array($v)) {
+
+                $buff .= $k . '=' . '&';
+
+            }
+            $buff = trim($buff, '&');
+            return $buff;
+
+        }
+
     }
 
 }
