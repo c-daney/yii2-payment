@@ -100,10 +100,10 @@ class PayServer extends BasePayServer
      * @author 吕宝贵
      * @date 2015/12/19 10:49:12
     **/
-    public function processNotify($handlers) {
+    public function processNotify($handlers, $isMobile = false) {
 
         $this->notifyServer->setHandlers($handlers);
-        $this->notifyServer->Handle(false);
+        $this->notifyServer->Handle(true, $isMobile);
         if ($this->notifyServer->GetReturn_code() == "SUCCESS") {
             return $this->notifyServer->getCallbackResult();
         }

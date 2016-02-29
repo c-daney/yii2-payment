@@ -78,11 +78,13 @@ class WechatPay {
 
         $result = $this->notify->GetPayUrl($this->payOrder);
 
-        if ($result['return_code'] !== 'SUCCESS'  && $result['result_code'] !== 'SUCCESS') {
-            throw new Exception($result['err_code_des']);
+        if ($result['return_code'] !== 'SUCCESS') {
+            throw new Exception($result['return_msg']);
         }
 
-        $result = $this->generateUserRequestParams($receivable);
+        if ($result['result_code'] !== 'SUCCESS') {
+            throw new Exception($result['err_code_des']);
+        }
 
         $payUrl = $result['code_url']; 
         $payQRCodeUrl = $this->config['qrcode_gen_url'] . urlencode($payUrl);
@@ -123,6 +125,10 @@ class WechatPay {
             throw new Exception($result['err_code_des']);
         }
 
+        $clientOrderParams = [];
+        $clientOrderParams['timestamp'] = $receivable->created_at;
+        $result['timestamp'] = $receivable->created_at;
+        $result['package'] = 'Sign=WXPay';
         return $result;
     }
 
