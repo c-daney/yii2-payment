@@ -53,4 +53,15 @@ class NativePay
 			return $result;
 		}
 	}
+
+	public function GetOrderInfo($input)
+	{
+		if($input->GetTrade_type() == "APP")
+		{
+			$result = WxPayApi::unifiedOrder($input, true);
+			return $result;
+		}
+	}
+
+
 }

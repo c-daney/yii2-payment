@@ -64,7 +64,7 @@ class WechatPayNotify extends \WxPayNotify
 	 * @author 吕宝贵
 	 * @date 2015/12/18 10:49:48
 	**/
-	public function NotifyProcess($data, &$msg)
+	public function NotifyProcess($data, &$msg, $isMobile = false)
     {
 
         if(!array_key_exists("transaction_id", $data)){

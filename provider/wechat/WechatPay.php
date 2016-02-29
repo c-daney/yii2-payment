@@ -17,6 +17,7 @@ namespace lubaogui\payment\provider\wechat;
 
 require_once('lib/WxPay.Data.php');
 require_once('lib/WxPay.NativePay.php');
+require_once('lib/WxPay.Config.php');
 
 use yii\base\Exception;
 use Yii;
@@ -34,7 +35,8 @@ class WechatPay {
     private $notify = null;
 
     /**
-     * @brief 构造函数，做的工作主要是将配置文件和默认配置进行merge,同时设置notify所需要的成功和失败的回调函数
+     * @brief 构造函数，做的工作主要是将配置文件和默认配置进行merge,同时设置notify所需要的成功和失败的回调函数,
+     * 微信的pc端支付和移动端支付不一直，因此构建时候需要提供参数，是否是移动端
      *
      * @return  function 
      * @retval   
@@ -50,7 +52,6 @@ class WechatPay {
         if (empty($this->payOrder)) {
             return false;
         }
-        $this->payOrder->SetNotify_url($this->config['notify_url']);
     }
 
     /**
@@ -73,8 +74,8 @@ class WechatPay {
         $this->payOrder->SetTime_start(date('YmdHis', $receivable->created_at));
         $this->payOrder->SetTime_expire(date('YmdHis', $receivable->created_at+1800));
         $this->payOrder->SetGoods_tag('服务，充值');
-        $this->payOrder->SetTrade_type($this->config['trade_type']);
         $this->payOrder->SetProduct_id(1);
+        $this->payOrder->SetNotify_url($this->config['notify_url']);
 
         $result = $this->notify->GetPayUrl($this->payOrder);
 
@@ -112,11 +113,10 @@ class WechatPay {
         $this->payOrder->SetTime_start(date('YmdHis', $receivable->created_at));
         $this->payOrder->SetTime_expire(date('YmdHis', $receivable->created_at+1800));
         $this->payOrder->SetGoods_tag('服务，充值');
-        $this->payOrder->SetTrade_type('APP');
         $this->payOrder->SetProduct_id(1);
         $this->payOrder->SetNotify_url($this->config['mobile_notify_url']);
 
-        $result = $this->notify->GetOrderInfo($this->payOrder);
+        $result = $this->notify->GetOrderInfo($this->payOrder, $isMobile);
 
         if ($result['return_code'] !== 'SUCCESS') {
             throw new Exception($result['return_msg']);
@@ -133,7 +133,7 @@ class WechatPay {
         $clientOrderParams['prepayid'] = $result['prepay_id'];
         $clientOrderParams['timestamp'] = $receivable->created_at;
         $clientOrderParams['package'] = 'Sign=WXPay';
-        $clientOrderParams['sign'] = $this->makeSign($clientOrderParams, $this->config['mobile_key']);
+        $clientOrderParams['sign'] = $this->makeSign($clientOrderParams, \WxPayConfig::MOBILE_KEY);
         return $clientOrderParams;
     }
 
