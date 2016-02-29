@@ -48,6 +48,14 @@ class WechatPay {
     function __construct($isMobile = false){
         $this->config = array_merge($this->config, require(dirname(__FILE__) . '/config/config.php'));
         $this->payOrder = new \WxPayUnifiedOrder();
+        if ($isMobile) {
+            $this->payOrder->SetNotify_url($this->config['mobile_notify_url']);
+            $this->payOrder->SetTrade_type('APP');
+        }
+        else {
+            $this->payOrder->SetNotify_url($this->config['notify_url']);
+            $this->payOrder->SetTrade_type('NATIVE');
+        }
         $this->notify = new \NativePay();
         if (empty($this->payOrder)) {
             return false;
@@ -114,7 +122,6 @@ class WechatPay {
         $this->payOrder->SetTime_expire(date('YmdHis', $receivable->created_at+1800));
         $this->payOrder->SetGoods_tag('服务，充值');
         $this->payOrder->SetProduct_id(1);
-        $this->payOrder->SetNotify_url($this->config['mobile_notify_url']);
 
         $result = $this->notify->GetOrderInfo($this->payOrder, $isMobile);
 
