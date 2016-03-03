@@ -20,9 +20,9 @@ class WxPayDataBase
 	* 设置签名，详见签名生成算法
 	* @param string $value 
 	**/
-	public function SetSign()
+	public function SetSign($isMobile = false)
 	{
-		$sign = $this->MakeSign();
+		$sign = $this->MakeSign($isMobile);
 		$this->values['sign'] = $sign;
 		return $sign;
 	}
@@ -108,13 +108,18 @@ class WxPayDataBase
 	 * 生成签名
 	 * @return 签名，本函数不覆盖sign成员变量，如要设置签名需要调用SetSign方法赋值
 	 */
-	public function MakeSign()
+	public function MakeSign($isMobile = false)
 	{
 		//签名步骤一：按字典序排序参数
 		ksort($this->values);
 		$string = $this->ToUrlParams();
 		//签名步骤二：在string后加入KEY
-		$string = $string . "&key=".WxPayConfig::KEY;
+        if ($isMobile) { 
+		    $string = $string . "&key=".WxPayConfig::MOBILE_KEY;
+        }
+        else {
+		    $string = $string . "&key=".WxPayConfig::KEY;
+        }
 		//签名步骤三：MD5加密
 		$string = md5($string);
 		//签名步骤四：所有字符转为大写
@@ -143,14 +148,14 @@ class WxPayResults extends WxPayDataBase
 	 * 
 	 * 检测签名
 	 */
-	public function CheckSign()
+	public function CheckSign($isMobile = false)
 	{
 		//fix异常
 		if(!$this->IsSignSet()){
 			throw new WxPayException("签名错误！");
 		}
 		
-		$sign = $this->MakeSign();
+		$sign = $this->MakeSign($isMobile);
 		if($this->GetSign() == $sign){
 			return true;
 		}

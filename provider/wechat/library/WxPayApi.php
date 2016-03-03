@@ -12,6 +12,10 @@ require_once "WxPay.Data.php";
  */
 class WxPayApi
 {
+
+    //统一下单服务端url地址
+    const UNIFIED_ORDER_URL = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
+
 	/**
 	 * 
 	 * 统一下单，WxPayUnifiedOrder中out_trade_no、body、total_fee、trade_type必填
@@ -19,51 +23,23 @@ class WxPayApi
 	 * @param WxPayUnifiedOrder $inputObj
 	 * @param int $timeOut
 	 * @throws WxPayException
-	 * @return 成功时返回，其他抛异常
+	 * @return  成功时返回，其他抛异常
 	 */
-	public static function unifiedOrder($inputObj, $timeOut = 6)
+	public static function unifiedOrder($payOrder, $timeOut = 6)
 	{
-		$url = "https://api.mch.weixin.qq.com/pay/unifiedorder";
-		//检测必填参数
-		if(!$inputObj->IsOut_trade_noSet()) {
-			throw new WxPayException("缺少统一支付接口必填参数out_trade_no！");
-		}else if(!$inputObj->IsBodySet()){
-			throw new WxPayException("缺少统一支付接口必填参数body！");
-		}else if(!$inputObj->IsTotal_feeSet()) {
-			throw new WxPayException("缺少统一支付接口必填参数total_fee！");
-		}else if(!$inputObj->IsTrade_typeSet()) {
-			throw new WxPayException("缺少统一支付接口必填参数trade_type！");
-		}
-		
-		//关联参数
-		if($inputObj->GetTrade_type() == "JSAPI" && !$inputObj->IsOpenidSet()){
-			throw new WxPayException("统一支付接口中，缺少必填参数openid！trade_type为JSAPI时，openid为必填参数！");
-		}
-		if($inputObj->GetTrade_type() == "NATIVE" && !$inputObj->IsProduct_idSet()){
-			throw new WxPayException("统一支付接口中，缺少必填参数product_id！trade_type为JSAPI时，product_id为必填参数！");
-		}
-		
-		//异步通知url未设置，则使用配置文件中的url
-		if(!$inputObj->IsNotify_urlSet()){
-			$inputObj->SetNotify_url(WxPayConfig::NOTIFY_URL);//异步通知url
-		}
-		
-		$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
-		$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
-		$inputObj->SetSpbill_create_ip($_SERVER['REMOTE_ADDR']);//终端ip	  
-		//$inputObj->SetSpbill_create_ip("1.1.1.1");  	    
-		$inputObj->SetNonce_str(self::getNonceStr());//随机字符串
 		
 		//签名
-		$inputObj->SetSign();
-		$xml = $inputObj->ToXml();
+		$payOrder->setSign();
+        //生成Xml
+		$xml = $payOrder->ToXml();
 		
 		$startTimeStamp = self::getMillisecond();//请求开始时间
-		$response = self::postXmlCurl($xml, $url, false, $timeOut);
-		$result = WxPayResults::Init($response);
-		self::reportCostTime($url, $startTimeStamp, $result);//上报请求花费时间
+		$response = self::postXmlCurl($xml, self::UNIFIED_ORDER_URL, false, $timeOut);
+		$result = WxPayResults::load($response);
+		self::reportCostTime(self::UNIFIED_ORDER_URL, $startTimeStamp, $result);//上报请求花费时间
 		
 		return $result;
+
 	}
 	
 	/**
