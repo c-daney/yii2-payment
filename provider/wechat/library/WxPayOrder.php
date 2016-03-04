@@ -20,6 +20,20 @@ namespace lubaogui\payment\provider\wechat\library;
 class WxPayOrder extends WxPayBase {
 
 
+    /**
+     * @brief 将订单信息转换成xml格式
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/03/04 17:38:19
+    **/
+    public function toXml() {
+
+
+    }
 }
 
 /* vim: set et ts=4 sw=4 sts=4 tw=100: */
