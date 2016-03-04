@@ -20,6 +20,14 @@ namespace lubaogui\payment\provider\wechat\library;
 
 class WxPayBase extends component {
 
+    private $_attributes;
+
+    public function __get($name) {
+        if (isset($this->_attributes[$name]) || array_key_exists($name, $this->_attributes))  {
+            return $this->_attributes[$name];
+        }
+    }
+
     /**
      * @brief 生成签名
      *
