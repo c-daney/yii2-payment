@@ -19,6 +19,7 @@ namespace lubaogui\payment\provider\wechat\library;
 
 class WxPayOrder extends WxPayBase {
 
+    private $_config;
 
     /**
      * @brief 将订单信息转换成xml格式
@@ -32,6 +33,35 @@ class WxPayOrder extends WxPayBase {
     **/
     public function toXml() {
 
+
+    }
+
+    /**
+     * @brief 统一下单
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/03/06 11:53:24
+    **/
+    public function unifiedOrder() {
+
+
+    }
+
+    /**
+     * @brief 订单退款
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/03/06 11:53:48
+    **/
+    public function refundOrder() {
 
     }
 }

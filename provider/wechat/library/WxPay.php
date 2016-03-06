@@ -11,7 +11,7 @@ namespace lubaogui\payment\provider\wechat\library;
 use yii/base/Model;
  
 /**
- * @file WxPayBase.php
+ * @file WxPay.php
  * @author 吕宝贵(lbaogui@lubanr.com)
  * @date 2016/03/03 18:00:59
  * @version $Revision$
@@ -19,7 +19,7 @@ use yii/base/Model;
  *
  **/
 
-class WxPayBase extends Model 
+class WxPay extends Model 
 {
 
     /**
