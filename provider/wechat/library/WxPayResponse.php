@@ -18,18 +18,9 @@ namespace lubaogui\payment\provider\wechat\library;
  *
  **/
 
-class WxPayResponse extends component {
-
-    public function makeSign($params, $key) {
-        ksort($params);
-        $string = $this->toUrlParams($params);
-        $string = $string . '&key=' . $key;
-        $string = md5($string);
-        $result = strtoupper($string);
-        return $result;
-    } 
-
+class WxPayResponse extends WxPayBase {
     
+    public function __construct()
 
 }
 

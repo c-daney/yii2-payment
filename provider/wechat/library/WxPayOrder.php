@@ -19,21 +19,46 @@ namespace lubaogui\payment\provider\wechat\library;
 
 class WxPayOrder extends WxPayBase {
 
-    private $_config;
+    const WECHAT_PAY_SERVER = '';
+    const WECHAT_SHORTURL_SERVER = '';
+    const WECHAT_CLOSE_SERVER = '';
+    const WECHAT_CLOSE_SERVER = '';
+
+    public $trade_type;
+    public $out_trade_no;
+    public $body;
+    public $detail;
+    public $total_fee;
+    public $once_str;
+    public $fee_type;
+
+    public $sign;
+    public $appId;
+    public $mchId;
+    public $key;
 
     /**
-     * @brief 将订单信息转换成xml格式
+     * @brief 场景规则列表
      *
-     * @return  public function 
+     * @return  array 规则列表 
      * @retval   
      * @see 
      * @note 
      * @author 吕宝贵
-     * @date 2016/03/04 17:38:19
+     * @date 2016/03/06 14:50:39
     **/
-    public function toXml() {
+    public function rules() {
+        return [
+            'unifiedOrder' => [
 
+            ],
+            'query' => [
 
+            ],
+            'close' => [
+
+            ],
+        ];
     }
 
     /**
@@ -46,8 +71,51 @@ class WxPayOrder extends WxPayBase {
      * @author 吕宝贵
      * @date 2016/03/06 11:53:24
     **/
-    public function unifiedOrder() {
+    public function unifiedOrder($orderParams) {
 
+        $this->scenario = 'unifiedOrder';
+        $this->load($orderParams);
+        //签名
+        $this->setSign();
+        $xmlString = $this->toXml($orderParams);
+        
+        //统一下单的结果
+        $wxResponse = new WxPayResponse(WxPayClient::postXmlToServer($xmlString, $url));
+        return $wxResponse;
+
+    }
+
+    /**
+     * @brief 查询订单 
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/03/06 11:53:48
+    **/
+    public function query($orderParams) {
+
+        $this->scenario = 'query';
+        $this->load($orderParams);
+        $this->setSign();
+        $wxResponse = new WxPayResponse(WxPayClient::postXmlToServer($xmlString, $url));
+        return $wxResponse;
+
+    }
+
+    /**
+     * @brief 关闭订单
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/03/06 15:15:25
+    **/
+    public function close($orderParams) {
 
     }
 
@@ -59,9 +127,9 @@ class WxPayOrder extends WxPayBase {
      * @see 
      * @note 
      * @author 吕宝贵
-     * @date 2016/03/06 11:53:48
+     * @date 2016/03/06 15:17:59
     **/
-    public function refundOrder() {
+    public function refund($orderParams) {
 
     }
 }
