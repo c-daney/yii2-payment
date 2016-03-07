@@ -19,8 +19,29 @@ namespace lubaogui\payment\provider\wechat\library;
  **/
 
 class WxPayResponse extends WxPayBase {
-    
-    public function __construct()
+
+    public function __construct($xml) {
+        if ($xml) {
+            $data = $this->transferXmlToArray($xml);
+            if (!is_array($data)) {
+                return false;
+            }
+            else {
+                $this->setAttributes($data, false);
+                if ($this->getAttribute('return_code') !== 'SUCCESS') {
+                    $this->addError('display-message:error', $this->getAttribute('return_msg'));
+                }
+                else {
+                    if ($this->getAttribute('result_code') !== 'SUCCESS') {
+                        $this->addError('display-message:error', $this->getAttribute('err_code_desc'));
+                    }
+                }
+            }
+        }
+        else {
+            return false;
+        }
+    }
 
 }
 
