@@ -32,7 +32,7 @@ class WxPayClient extends Model
      * @author 吕宝贵
      * @date 2016/03/07 17:00:07
     **/
-    public function generateUnifiedOrder($payOrder) {
+    public static function generateUnifiedOrder($payOrder) {
         $payOrder->setSign();
         $xml = $payOrder->toXml();
         $response = new WxPayResponse($this->postXmlToWechatServer($xml, $url));
@@ -49,7 +49,7 @@ class WxPayClient extends Model
      * @author 吕宝贵
      * @date 2016/03/07 16:59:54
     **/
-    public function queryOrder($payOrder) {
+    public static function queryOrder($payOrder) {
 
     }
 
@@ -63,7 +63,7 @@ class WxPayClient extends Model
      * @author 吕宝贵
      * @date 2016/03/07 17:00:24
     **/
-    public function closeOrder($payOrder) {
+    public static function closeOrder($payOrder) {
 
     }
 
@@ -77,7 +77,7 @@ class WxPayClient extends Model
      * @author 吕宝贵
      * @date 2016/03/06 12:17:28
     **/
-    public function shorturl($payOrder, $timeout = 6) {
+    public static function shorturl($payOrder, $timeout = 6) {
 
     }
 
@@ -91,7 +91,7 @@ class WxPayClient extends Model
      * @author 吕宝贵
      * @date 2016/03/07 17:27:53
     **/
-    public function replyNotify($xml) {
+    public static function replyNotify($xml) {
 
     }
 
@@ -105,7 +105,7 @@ class WxPayClient extends Model
      * @author 吕宝贵
      * @date 2016/03/06 12:17:28
     **/
-    protected function postXmlToWechatServer($xml, $url, $useCert = false, $timeout = 30) {
+    protected static function postXmlToWechatServer($xml, $url, $useCert = false, $timeout = 30) {
 
     }
 

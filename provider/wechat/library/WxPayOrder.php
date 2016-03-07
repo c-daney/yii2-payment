@@ -110,24 +110,6 @@ class WxPayOrder extends WxPayBase
 
     }
 
-    /**
-     * @brief 订单退款
-     *
-     * @return  public function 
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2016/03/06 15:17:59
-    **/
-    public function refund($orderParams) {
-
-    }
-
-    protected function makeSign() {
-
-    }
-
 }
 
 /* vim: set et ts=4 sw=4 sts=4 tw=100: */
