@@ -17,12 +17,8 @@ namespace lubaogui\payment\provider\wechat\library;
  *
  **/
 
-class WxPayOrder extends WxPayBase {
-
-    const WECHAT_PAY_SERVER = '';
-    const WECHAT_SHORTURL_SERVER = '';
-    const WECHAT_CLOSE_SERVER = '';
-    const WECHAT_CLOSE_SERVER = '';
+class WxPayOrder extends WxPayBase 
+{
 
     public $trade_type;
     public $out_trade_no;
@@ -31,11 +27,6 @@ class WxPayOrder extends WxPayBase {
     public $total_fee;
     public $once_str;
     public $fee_type;
-
-    public $sign;
-    public $appId;
-    public $mchId;
-    public $key;
 
     /**
      * @brief 场景规则列表
@@ -71,7 +62,7 @@ class WxPayOrder extends WxPayBase {
      * @author 吕宝贵
      * @date 2016/03/06 11:53:24
     **/
-    public function unifiedOrder($orderParams) {
+    public function generateUnifiedOrder($orderParams) {
 
         $this->scenario = 'unifiedOrder';
         $this->load($orderParams);
@@ -132,6 +123,11 @@ class WxPayOrder extends WxPayBase {
     public function refund($orderParams) {
 
     }
+
+    protected function makeSign() {
+
+    }
+
 }
 
 /* vim: set et ts=4 sw=4 sts=4 tw=100: */

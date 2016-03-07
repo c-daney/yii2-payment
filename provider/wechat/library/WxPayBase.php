@@ -8,7 +8,8 @@
  
 namespace lubaogui\payment\provider\wechat\library;
  
-use yii/base/Model;
+use yii\base\Model;
+use lubaogui\payment\provider\wechat\library\PayBase;
  
 /**
  * @file WxPayBase.php
@@ -19,77 +20,13 @@ use yii/base/Model;
  *
  **/
 
-class WxPayBase extends Model 
+class WxPayBase extends PayBase 
 {
 
     //所有的wechatPay
     public $appId;
     public $mchId;
     public $key;
-
-    private $_attributes = [];
-
-    /**
-     * @brief 获取属性名称
-     *
-     * @return  public function 
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2016/03/07 15:49:24
-    **/
-    public function __get($name) {
-
-        if (isset($this->_attributes[$name]) || array_key_exists($name, $this->_attributes)) {
-            return $this->_attributes[$name];
-        } elseif ($this->hasAttribute($name)) {
-            return null;
-        }
-        else {
-            if (isset($this->_related[$name]) || array_key_exists($name, $this->_related)) {
-                return $this->_related[$name];
-            }
-            $value = parent::__get($name);
-            return $value;
-        }
-
-    }
-
-    /**
-     * @brief 设置某个属性值 PHP magic function
-     *
-     * @return  public function 
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2016/03/07 15:49:36
-    **/
-    public function __set($name, $value) {
-
-        if ($this->hasAttribute($name)) {
-            $this->_attributes[$name] = $value;
-        }
-        else {
-            parent::__set($name, $value);
-        }
-
-    }
-
-    /**
-     * @brief 判断是否含有某个名称的属性
-     *
-     * @return  bool 是否包含该属性
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2016/03/07 16:14:00
-    **/
-    public function hasAttribute($name) {
-        return isset($this->_attributes[$name]) || in_array($name, $this->attributes());
-    }
 
     /**
      * @brief 设置签名
@@ -104,123 +41,6 @@ class WxPayBase extends Model
     public function setSign() {
         $this->$_attributes['sign'] = $this->makeSign();
     }
-
-    /**
-     * @brief 将数据放入到属性列表中
-     *
-     * @return array  
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2016/03/06 18:20:30
-    **/
-    public function load($data,  $formName = null) {
-        //load的时候需要考虑数据安全性，是否所有属性可以批量导入
-        $scope = $formName === null ? $this->formName() : $formName;
-        if ($scope === '' && !empty($data)) { 
-            $this->setAttributes($data);
-            return true;
-        }
-        elseif (isset($data[$scope])) {
-            $this->setAttributes($data[$scope]);
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    /**
-     * @brief 设置属性
-     *
-     * @return  public function 
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2016/03/06 18:20:17
-    **/
-    public function setAttributes($data, $safeOnly = true) {
-        if (is_array($data)) {
-            $attributes = array_flip($safeOnly ? $this->safeAttributes() : $this->attributes());
-            foreach ($data as $name => $value) {
-                if (isset($attributes[$name])) {
-                    $this->$name = $value;
-                } elseif ($safeOnly) {
-                    $this->onUnsafeAttribute($name, $value);
-                }
-            }
-        }
-    }
-
-    public function safeAttributes() {
-        $scenario = $this->getScenario();
-        $scenarios = $this->scenarios();
-        if (!isset($scenarios[$scenario])) {
-            return [];
-        }
-        $attributes = [];
-        foreach ($scenarios[$scenario] as $attribute) {
-            if ($attribute[0] !== '!') {
-                $attributes[] = $attribute;
-            }
-        }
-        return $attributes;
-    }
-
-
-
-    /**
-     * @brief 获取属性列表
-     *
-     * @return  public function 
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2016/03/07 11:03:08
-    **/
-    public function attributes() {
-        return $this->_attributes;
-    }
-
-    /**
-     * @brief 设置属性值 
-     *
-     * @return  public 
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2016/03/07 11:03:21
-    **/
-    public setAttribute($name) {
-
-    }
-
-    /**
-     * @brief 获取属性值
-     *
-     * @return  public function 
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2016/03/07 11:03:38
-    **/
-    public function getAttribute($name) {
-
-    }
-
-    public function getScenario() {
-        return $this->_scenario;
-    }
-
-    public function setScenario($value) {
-        $this->_scenario = $value;
-    }
-
 
     /**
      * @brief 生成签名
