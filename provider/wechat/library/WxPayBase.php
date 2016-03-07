@@ -44,8 +44,18 @@ class WxPayBase extends Model
         $this->$_attributes['sign'] = $this->makeSign();
     }
 
-    public function attributes() {
-        return $this->_attributes;
+    /**
+     * @brief 将数据放入到属性列表中
+     *
+     * @return array  
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/03/06 18:20:30
+    **/
+    public function load($data,  $formName = '') {
+
     }
 
     /**
@@ -58,23 +68,52 @@ class WxPayBase extends Model
      * @author 吕宝贵
      * @date 2016/03/06 18:20:17
     **/
-    public function setAttributes() {
+    public function setAttributes($data, $safeAttributesOnly = true) {
 
     }
 
     /**
-     * @brief 将数据放入到属性列表中
+     * @brief 获取属性列表
      *
-     * @return array  
+     * @return  public function 
      * @retval   
      * @see 
      * @note 
      * @author 吕宝贵
-     * @date 2016/03/06 18:20:30
+     * @date 2016/03/07 11:03:08
     **/
-    public function load($data, $safeAttributesOnly = true) {
+    public function attributes() {
+        return $this->_attributes;
+    }
+
+    /**
+     * @brief 设置属性值 
+     *
+     * @return  public 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/03/07 11:03:21
+    **/
+    public setAttribute($name) {
 
     }
+
+    /**
+     * @brief 获取属性值
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/03/07 11:03:38
+    **/
+    public function getAttribute($name) {
+
+    }
+
 
     /**
      * @brief 生成签名
