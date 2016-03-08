@@ -81,6 +81,33 @@ class WxPayClient extends Model
 
     }
 
+
+    /**
+     * @brief 向服务器返回成功消息
+     *
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/03/08 10:45:10
+    **/
+    public static function replySuccess() {
+
+    }
+
+    /**
+     * @brief 向服务器返回失败消息
+     *
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/03/08 10:45:25
+    **/
+    public static function replyFailure() {
+
+    }
+
     /**
      * @brief 对通知进行回复，该函数是对接口的封装
      *
@@ -91,7 +118,7 @@ class WxPayClient extends Model
      * @author 吕宝贵
      * @date 2016/03/07 17:27:53
     **/
-    public static function replyNotify($xml) {
+    protected static function replyNotify($xml) {
 
     }
 
