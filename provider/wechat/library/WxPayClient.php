@@ -21,9 +21,11 @@ use yii/base/Model;
 
 class WxPayClient extends Model 
 {
-    const URL_WXPAY_UNIFIED_ORDER = '';
-    const URL_WXPAY_SHORTURL = '';
-    const URL_WXPAY_ORDER_QUERY = '';
+    const URL_WXPAY_UNIFIED_ORDER = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
+    const URL_WXPAY_SHORTURL = 'https://api.mch.weixin.qq.com/tools/shorturl';
+    const URL_WXPAY_ORDER_QUERY = 'https://api.mch.weixin.qq.com/pay/orderquery';
+    const URL_WXPAY_ORDER_CLOSE = 'https://api.mch.weixin.qq.com/pay/closeorder';
+    const URL_WXPAY_ORDER_CLOSE = 'https://api.mch.weixin.qq.com/secapi/pay/refund';
 
     /**
      * @brief 统一下单
@@ -38,7 +40,7 @@ class WxPayClient extends Model
     public static function generateUnifiedOrder($payOrder) {
         $payOrder->setSign();
         $xml = $payOrder->toXml();
-        $response = new WxPayResponse($this->postXmlToWechatServer($xml, $url));
+        $response = new WxPayResponse($this->postXmlToWechatServer($xml, self::URL_WXPAY_UNIFIED_ORDER));
         return $response;
     }
 
@@ -53,7 +55,10 @@ class WxPayClient extends Model
      * @date 2016/03/07 16:59:54
     **/
     public static function queryOrder($payOrder) {
-
+        $payOrder->setSign();
+        $xml = $payOrder->toXml();
+        $response = new WxPayResponse($this->postXmlToWechatServer($xml, self::URL_WXPAY_ORDER_QUERY));
+        return $response;
     }
 
     /**
@@ -67,7 +72,10 @@ class WxPayClient extends Model
      * @date 2016/03/07 17:00:24
     **/
     public static function closeOrder($payOrder) {
-
+        $payOrder->setSign();
+        $xml = $payOrder->toXml();
+        $response = new WxPayResponse($this->postXmlToWechatServer($xml, self::URL_WXPAY_ORDER_CLOSE));
+        return $response;
     }
 
     /**
@@ -81,7 +89,10 @@ class WxPayClient extends Model
      * @date 2016/03/06 12:17:28
     **/
     public static function shorturl($payOrder, $timeout = 6) {
-
+        $payOrder->setSign();
+        $xml = $payOrder->toXml();
+        $response = new WxPayResponse($this->postXmlToWechatServer($xml, self::URL_WXPAY_SHORTURL));
+        return $response;
     }
 
 
@@ -94,7 +105,7 @@ class WxPayClient extends Model
      * @author 吕宝贵
      * @date 2016/03/08 10:45:10
     **/
-    public static function replySuccess() {
+    public static function replyNotifySuccess() {
 
     }
 
@@ -107,7 +118,7 @@ class WxPayClient extends Model
      * @author 吕宝贵
      * @date 2016/03/08 10:45:25
     **/
-    public static function replyFailure() {
+    public static function replyNotifyFailure() {
 
     }
 
