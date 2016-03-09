@@ -21,6 +21,9 @@ use yii/base/Model;
 
 class WxPayClient extends Model 
 {
+    const URL_WXPAY_UNIFIED_ORDER = '';
+    const URL_WXPAY_SHORTURL = '';
+    const URL_WXPAY_ORDER_QUERY = '';
 
     /**
      * @brief 统一下单
