@@ -19,8 +19,12 @@ use yii/base/Model;
  *
  **/
 
-class WxPayClient extends Model 
+class WxPayClient 
 {
+
+    const CURL_PROXY_HOST = '';
+    const CURL_PROXY_PORT = '';
+
     const URL_WXPAY_UNIFIED_ORDER = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
     const URL_WXPAY_SHORTURL = 'https://api.mch.weixin.qq.com/tools/shorturl';
     const URL_WXPAY_ORDER_QUERY = 'https://api.mch.weixin.qq.com/pay/orderquery';
@@ -38,9 +42,8 @@ class WxPayClient extends Model
      * @date 2016/03/07 17:00:07
     **/
     public static function generateUnifiedOrder($payOrder) {
-        $payOrder->setSign();
-        $xml = $payOrder->toXml();
-        $response = new WxPayResponse($this->postXmlToWechatServer($xml, self::URL_WXPAY_UNIFIED_ORDER));
+        $xml = $payOrder->toXml($payOrder->attributes());
+        $response = new WxPayResponse(self::postXmlToWechatServer($xml, self::URL_WXPAY_UNIFIED_ORDER));
         return $response;
     }
 
@@ -55,10 +58,9 @@ class WxPayClient extends Model
      * @date 2016/03/07 16:59:54
     **/
     public static function queryOrder($payOrder) {
-        $payOrder->setSign();
-        $xml = $payOrder->toXml();
-        $response = new WxPayResponse($this->postXmlToWechatServer($xml, self::URL_WXPAY_ORDER_QUERY));
-        return $response;
+        $xml = $payOrder->toXml($payOrder->attributes());
+        $response = new WxPayResponse(self::postXmlToWechatServer($xml, self::URL_WXPAY_ORDER_QUERY));
+        return $response->isOrderPaySucceeded();
     }
 
     /**
@@ -72,9 +74,8 @@ class WxPayClient extends Model
      * @date 2016/03/07 17:00:24
     **/
     public static function closeOrder($payOrder) {
-        $payOrder->setSign();
         $xml = $payOrder->toXml();
-        $response = new WxPayResponse($this->postXmlToWechatServer($xml, self::URL_WXPAY_ORDER_CLOSE));
+        $response = new WxPayResponse(self::postXmlToWechatServer($xml, self::URL_WXPAY_ORDER_CLOSE));
         return $response;
     }
 
@@ -89,9 +90,8 @@ class WxPayClient extends Model
      * @date 2016/03/06 12:17:28
     **/
     public static function shorturl($payOrder, $timeout = 6) {
-        $payOrder->setSign();
         $xml = $payOrder->toXml();
-        $response = new WxPayResponse($this->postXmlToWechatServer($xml, self::URL_WXPAY_SHORTURL));
+        $response = new WxPayResponse(self::postXmlToWechatServer($xml, self::URL_WXPAY_SHORTURL));
         return $response;
     }
 
@@ -147,6 +147,48 @@ class WxPayClient extends Model
      * @date 2016/03/06 12:17:28
     **/
     protected static function postXmlToWechatServer($xml, $url, $useCert = false, $timeout = 30) {
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+
+        if(self::CURL_PROXY_HOST != "0.0.0.0" && self::CURL_PROXY_PORT != 0 ) {
+            curl_setopt($ch,CURLOPT_PROXY, WxPayConfig::CURL_PROXY_HOST);
+            curl_setopt($ch,CURLOPT_PROXYPORT, WxPayConfig::CURL_PROXY_PORT);
+        }
+
+        curl_setopt($ch,CURLOPT_URL, $url); 
+        curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,TRUE); 
+        curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,2);//严格校验
+        curl_setopt($ch, CURLOPT_HEADER, FALSE); 
+        //要求结果为字符串且输出到屏幕上
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+
+        if($useCert == true){
+            //设置证书
+            //使用证书：cert 与 key 分别属于两个.pem文件
+            curl_setopt($ch,CURLOPT_SSLCERTTYPE,'PEM');
+            curl_setopt($ch,CURLOPT_SSLCERT, WxPayConfig::SSLCERT_PATH);
+            curl_setopt($ch,CURLOPT_SSLKEYTYPE,'PEM');
+            curl_setopt($ch,CURLOPT_SSLKEY, WxPayConfig::SSLKEY_PATH);
+        }
+        //post提交方式
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
+
+        //运行curl
+        $data = curl_exec($ch);
+        //返回结果
+        if($data){
+            curl_close($ch);
+            return $data;
+        } else { 
+            $error = curl_errno($ch);
+            curl_close($ch);
+            throw new WxPayException("curl出错，错误码:$error");
+        }
+
+
+    }
 
     }
 

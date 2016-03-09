@@ -68,7 +68,7 @@ class WxPayOrder extends WxPayBase
         $this->load($orderParams);
         //签名
         $this->setSign();
-        $xmlString = $this->toXml($orderParams);
+        $xmlString = $this->toXml($this->attributes());
         
         //统一下单的结果
         $wxResponse = new WxPayResponse(WxPayClient::postXmlToServer($xmlString, $url));
@@ -79,7 +79,8 @@ class WxPayOrder extends WxPayBase
     /**
      * @brief 查询订单 
      *
-     * @return  public function 
+     * @param int transaction_id 订单交易id
+     * @return bool 是否支付成功 
      * @retval   
      * @see 
      * @note 
@@ -91,8 +92,8 @@ class WxPayOrder extends WxPayBase
         $this->scenario = 'query';
         $this->load($orderParams);
         $this->setSign();
-        $wxResponse = new WxPayResponse(WxPayClient::postXmlToServer($xmlString, $url));
-        return $wxResponse;
+        $wxResponse = WxPayClient::queryOrder($this);
+        return $wxResponse->isOrderSucceeded();
 
     }
 
