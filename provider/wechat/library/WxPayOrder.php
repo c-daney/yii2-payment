@@ -92,8 +92,7 @@ class WxPayOrder extends WxPayBase
         $this->scenario = 'query';
         $this->load($orderParams);
         $this->setSign();
-        $wxResponse = WxPayClient::queryOrder($this);
-        return $wxResponse->isOrderSucceeded();
+        return WxPayClient::queryOrder($this);
 
     }
 

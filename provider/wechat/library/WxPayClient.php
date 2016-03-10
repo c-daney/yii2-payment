@@ -40,7 +40,7 @@ class WxPayClient
      * @note 
      * @author 吕宝贵
      * @date 2016/03/07 17:00:07
-    **/
+     **/
     public static function generateUnifiedOrder($payOrder) {
         $xml = $payOrder->toXml($payOrder->attributes());
         $response = new WxPayResponse(self::postXmlToWechatServer($xml, self::URL_WXPAY_UNIFIED_ORDER));
@@ -50,17 +50,24 @@ class WxPayClient
     /**
      * @brief 查询订单信息
      *
-     * @return    
+     * @return   bool|mixed 如果失败，返回false, 如果成功，返回数组信息 
      * @retval   
      * @see 
      * @note 
      * @author 吕宝贵
      * @date 2016/03/07 16:59:54
-    **/
+     **/
     public static function queryOrder($payOrder) {
+
         $xml = $payOrder->toXml($payOrder->attributes());
         $response = new WxPayResponse(self::postXmlToWechatServer($xml, self::URL_WXPAY_ORDER_QUERY));
-        return $response->isOrderPaySucceeded();
+        if ($response) {
+            return $response->getAttributes();
+        }
+        else {
+            return false;
+        }
+
     }
 
     /**
@@ -72,7 +79,7 @@ class WxPayClient
      * @note 
      * @author 吕宝贵
      * @date 2016/03/07 17:00:24
-    **/
+     **/
     public static function closeOrder($payOrder) {
         $xml = $payOrder->toXml();
         $response = new WxPayResponse(self::postXmlToWechatServer($xml, self::URL_WXPAY_ORDER_CLOSE));
@@ -88,7 +95,7 @@ class WxPayClient
      * @note 
      * @author 吕宝贵
      * @date 2016/03/06 12:17:28
-    **/
+     **/
     public static function shorturl($payOrder, $timeout = 6) {
         $xml = $payOrder->toXml();
         $response = new WxPayResponse(self::postXmlToWechatServer($xml, self::URL_WXPAY_SHORTURL));
@@ -104,7 +111,7 @@ class WxPayClient
      * @note 
      * @author 吕宝贵
      * @date 2016/03/08 10:45:10
-    **/
+     **/
     public static function replyNotifySuccess() {
 
     }
@@ -117,7 +124,7 @@ class WxPayClient
      * @note 
      * @author 吕宝贵
      * @date 2016/03/08 10:45:25
-    **/
+     **/
     public static function replyNotifyFailure() {
 
     }
@@ -131,7 +138,7 @@ class WxPayClient
      * @note 
      * @author 吕宝贵
      * @date 2016/03/07 17:27:53
-    **/
+     **/
     protected static function replyNotify($xml) {
 
     }
@@ -145,7 +152,7 @@ class WxPayClient
      * @note 
      * @author 吕宝贵
      * @date 2016/03/06 12:17:28
-    **/
+     **/
     protected static function postXmlToWechatServer($xml, $url, $useCert = false, $timeout = 30) {
 
         $ch = curl_init();
@@ -186,9 +193,6 @@ class WxPayClient
             curl_close($ch);
             throw new WxPayException("curl出错，错误码:$error");
         }
-
-
-    }
 
     }
 
