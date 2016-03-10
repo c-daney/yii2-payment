@@ -40,32 +40,6 @@ class WxPayNotify extends WxPayBase {
     }
 
     /**
-     * @brief 处理微信支付回告
-     *
-     * @param array $succeededCallback 成功的回调函数
-     * @param array $failedCallback 失败回调函数
-     * @return   
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2016/03/10 10:28:03
-    **/
-    public function handle($succeededCallback, $failedCallback) {
-
-        //如果查询订单支付成功，则走订单支付成功逻辑
-        if ($this->checkOrderStatus() === true) {
-            $result = call_user_func($succeededCallback, $this->_notifyData);
-            return $result;
-        }
-        else {
-            $result = call_user_func($failedCallback, $this->getErrors());
-            return false;
-        }
-
-    }
-
-    /**
      * @brief 
      *
      * @return  public function 
@@ -75,7 +49,7 @@ class WxPayNotify extends WxPayBase {
      * @author 吕宝贵
      * @date 2016/03/10 10:28:03
     **/
-    private function checkOrderStatus($data) {
+    public function checkTradeStatus($data) {
 
         if (empty($data['transaction_id']) && empty($data['out_trade_no'])) {
             $this->addError('transaction_id', 'transaction_id参数为必备参数');
@@ -91,9 +65,6 @@ class WxPayNotify extends WxPayBase {
     }
 
 }
-
-
-
 
 
 /* vim: set et ts=4 sw=4 sts=4 tw=100: */
