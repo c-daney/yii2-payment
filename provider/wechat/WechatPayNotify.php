@@ -98,6 +98,20 @@ class WechatPayNotify extends \WxPayNotify
     }
 
     /**
+     * @brief 查询支付回告中的订单支付状态
+     *
+     * @return  
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/03/11 22:14:02
+    **/
+    public function checkTradeStatus($orderParams) {
+
+    }
+
+    /**
      * @brief 设置成功返回，并返回给微信服务器
      *
      * @return  protected function 
