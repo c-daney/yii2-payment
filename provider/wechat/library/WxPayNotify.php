@@ -57,19 +57,24 @@ class WxPayNotify extends WxPayBase {
         }
         else {
             $payOrder = new WxPayOrder();
-            $orderResult = $payOrder->query($data);
+            $orderResult = $payOrder->queryPayStatus($data);
             $this->_notifyData = $result;
             if ($orderResult['return_code'] !== 'SUCCESS') {
+                $this->addError('wechat-pay', $orderResult['return_msg']);
                 return false;
             }
             if ($orderResult['result_code'] !=== 'SUCCESS') {
+                $this->addError('wechat-pay-error', $orderResult['err_code_des']);
                 return false;
+            }
+            //支付成功
+            if ($orderResult['trade_state'] === 'SUCCESS') {
+                return true;
             }
             return true;
         }
 
     }
-
 
     /**
      * @brief 向服务器发送订单已成功处理信号
