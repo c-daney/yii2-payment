@@ -53,7 +53,7 @@ class WxPayOrder extends WxPayBase
     }
 
     /**
-     * @brief 统一下单
+     * @brief 统一下单, 网络相关调用不得加入到事务处理过程当中
      *
      * @return  public function 
      * @retval   
@@ -87,12 +87,12 @@ class WxPayOrder extends WxPayBase
      * @author 吕宝贵
      * @date 2016/03/06 11:53:48
     **/
-    public function query($orderParams) {
+    public function queryPayStatus($orderParams) {
 
         $this->scenario = 'query';
         $this->load($orderParams);
         $this->setSign();
-        return WxPayClient::queryOrder($this);
+        return WxPayClient::queryOrderPayStatus($this);
 
     }
 

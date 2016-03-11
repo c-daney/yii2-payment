@@ -64,6 +64,42 @@ class WxPayNotify extends WxPayBase {
 
     }
 
+
+    /**
+     * @brief 向服务器发送订单已成功处理信号
+     *
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/03/11 10:24:07
+    **/
+    public function replySuccessToServer() {
+
+        $reply = ['return_code' => 'SUCCESS', 'return_msg' => 'OK'];
+        $replyXml = $this->toXml($reply);
+        WxPayClient::replyNotify($replyXml);
+
+    }
+
+
+    /**
+     * @brief 向服务器发送订单处理失败信号
+     *
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/03/11 10:24:12
+    **/
+    public function replyFailureToServer() {
+
+        $reply = ['return_code' => 'FAIL', 'return_msg' => 'NOT_OK'];
+        $replyXml = $this->toXml($reply);
+        WxPayClient::replyNotify($replyXml);
+
+    }
+
 }
 
 
