@@ -57,8 +57,14 @@ class WxPayNotify extends WxPayBase {
         }
         else {
             $payOrder = new WxPayOrder();
-            $result = $payOrder->query($data);
+            $orderResult = $payOrder->query($data);
             $this->_notifyData = $result;
+            if ($orderResult['return_code'] !== 'SUCCESS') {
+                return false;
+            }
+            if ($orderResult['result_code'] !=== 'SUCCESS') {
+                return false;
+            }
             return true;
         }
 
