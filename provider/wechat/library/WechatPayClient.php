@@ -42,9 +42,11 @@ class WechatPayClient
      * @date 2016/03/07 17:00:07
      **/
     public static function generateUnifiedOrder($payOrder) {
+
         $xml = $payOrder->toXml($payOrder->attributes());
         $response = new WechatPayResponse(self::postXmlToWechatServer($xml, self::URL_WXPAY_UNIFIED_ORDER));
         return $response;
+
     }
 
     /**

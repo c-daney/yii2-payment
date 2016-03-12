@@ -66,12 +66,12 @@ class WechatPayOrder extends WechatPayBase
 
         $this->scenario = 'unifiedOrder';
         $this->load($orderParams);
+
         //签名
         $this->setSign();
-        $xmlString = $this->toXml($this->attributes());
         
         //统一下单的结果
-        $wxResponse = new WechatPayResponse(WechatPayClient::postXmlToServer($xmlString, $url));
+        $wxResponse = WechatPayClient::generateUnifiedOrder($this);
         return $wxResponse;
 
     }
