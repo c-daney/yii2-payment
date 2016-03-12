@@ -12,7 +12,7 @@ use yii\base\Model;
 use lubaogui\payment\provider\wechat\library\PayBase;
  
 /**
- * @file WxPayBase.php
+ * @file WechatPayBase.php
  * @author 吕宝贵(lbaogui@lubanr.com)
  * @date 2016/03/03 18:00:59
  * @version $Revision$
@@ -20,7 +20,7 @@ use lubaogui\payment\provider\wechat\library\PayBase;
  *
  **/
 
-class WxPayBase extends PayBase 
+class WechatPayBase extends PayBase 
 {
 
     //所有的wechatPay
@@ -116,7 +116,7 @@ class WxPayBase extends PayBase
 		if(!is_array($data) 
 			|| count($data) <= 0)
 		{
-    		throw new WxPayException("数组数据异常！");
+    		throw new WechatPayException("数组数据异常！");
     	}
     	
     	$xml = "<xml>";

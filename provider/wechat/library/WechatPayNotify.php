@@ -10,7 +10,7 @@ namespace lubaogui\payment\provider\wechat\library;
  
  
 /**
- * @file WxPayNotify.php
+ * @file WechatPayNotify.php
  * @author 吕宝贵(lbaogui@lubanr.com)
  * @date 2016/03/03 18:00:59
  * @version $Revision$
@@ -18,12 +18,12 @@ namespace lubaogui\payment\provider\wechat\library;
  *
  **/
 
-class WxPayNotify extends WxPayBase {
+class WechatPayNotify extends WechatPayBase {
 
     $private $_notifyData = [];
 
     /**
-     * @brief 构造函数，将Notify的内容转换为WxPayNotify对象
+     * @brief 构造函数，将Notify的内容转换为WechatPayNotify对象
      *
      * @return  public function 
      * @retval   
@@ -56,7 +56,7 @@ class WxPayNotify extends WxPayBase {
             return false;
         }
         else {
-            $payOrder = new WxPayOrder();
+            $payOrder = new WechatPayOrder();
             $orderResult = $payOrder->queryPayStatus($data);
             $this->_notifyData = $result;
             if ($orderResult['return_code'] !== 'SUCCESS') {
@@ -89,7 +89,7 @@ class WxPayNotify extends WxPayBase {
 
         $reply = ['return_code' => 'SUCCESS', 'return_msg' => 'OK'];
         $replyXml = $this->toXml($reply);
-        WxPayClient::replyNotify($replyXml);
+        WechatPayClient::replyNotify($replyXml);
 
     }
 
@@ -107,7 +107,7 @@ class WxPayNotify extends WxPayBase {
 
         $reply = ['return_code' => 'FAIL', 'return_msg' => 'NOT_OK'];
         $replyXml = $this->toXml($reply);
-        WxPayClient::replyNotify($replyXml);
+        WechatPayClient::replyNotify($replyXml);
 
     }
 

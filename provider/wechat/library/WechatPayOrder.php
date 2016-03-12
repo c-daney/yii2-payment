@@ -9,7 +9,7 @@ namespace lubaogui\payment\provider\wechat\library;
  
  
 /**
- * @file WxPayOrder.php
+ * @file WechatPayOrder.php
  * @author 吕宝贵(lbaogui@lubanr.com)
  * @date 2016/03/03 18:03:20
  * @version $Revision$
@@ -17,7 +17,7 @@ namespace lubaogui\payment\provider\wechat\library;
  *
  **/
 
-class WxPayOrder extends WxPayBase 
+class WechatPayOrder extends WechatPayBase 
 {
 
     public $trade_type;
@@ -71,7 +71,7 @@ class WxPayOrder extends WxPayBase
         $xmlString = $this->toXml($this->attributes());
         
         //统一下单的结果
-        $wxResponse = new WxPayResponse(WxPayClient::postXmlToServer($xmlString, $url));
+        $wxResponse = new WechatPayResponse(WechatPayClient::postXmlToServer($xmlString, $url));
         return $wxResponse;
 
     }
@@ -92,7 +92,7 @@ class WxPayOrder extends WxPayBase
         $this->scenario = 'query';
         $this->load($orderParams);
         $this->setSign();
-        return WxPayClient::queryOrderPayStatus($this);
+        return WechatPayClient::queryOrderPayStatus($this);
 
     }
 

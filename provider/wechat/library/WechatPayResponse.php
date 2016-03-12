@@ -10,7 +10,7 @@ namespace lubaogui\payment\provider\wechat\library;
  
  
 /**
- * @file WxPayResponse.php
+ * @file WechatPayResponse.php
  * @author 吕宝贵(lbaogui@lubanr.com)
  * @date 2016/03/03 18:00:59
  * @version $Revision$
@@ -18,7 +18,7 @@ namespace lubaogui\payment\provider\wechat\library;
  *
  **/
 
-class WxPayResponse extends WxPayBase {
+class WechatPayResponse extends WechatPayBase {
 
     public function __construct($xml) {
         if ($xml) {
