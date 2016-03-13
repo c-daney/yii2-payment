@@ -45,18 +45,9 @@ class WechatPay {
      * @author 吕宝贵
      * @date 2015/12/17 20:56:45
     **/
-    function __construct($isMobile = false){
+    function __construct(){
         $this->config = array_merge($this->config, require(dirname(__FILE__) . '/config/config.php'));
-        $this->payOrder = new \WxPayUnifiedOrder();
-        if ($isMobile) {
-            $this->payOrder->SetNotify_url($this->config['mobile_notify_url']);
-            $this->payOrder->SetTrade_type('APP');
-        }
-        else {
-            $this->payOrder->SetNotify_url($this->config['notify_url']);
-            $this->payOrder->SetTrade_type('NATIVE');
-        }
-        $this->notify = new \NativePay();
+        $this->payOrder = new WechatPayOrder();
         if (empty($this->payOrder)) {
             return false;
         }
@@ -74,26 +65,28 @@ class WechatPay {
     **/
     public function generateUserScanQRCode($receivable) {
 
-        $currentTime = date("YmdHis");
-        $this->payOrder->setBody('Mr-Hug产品充值购买');
-        $this->payOrder->setAttach('用于购买Mr-Hug服务');
-        $this->payOrder->SetOut_trade_no($receivable->id);
-        $this->payOrder->SetTotal_fee(round($receivable->money, 2) * 100);
-        $this->payOrder->SetTime_start(date('YmdHis', $receivable->created_at));
-        $this->payOrder->SetTime_expire(date('YmdHis', $receivable->created_at+1800));
-        $this->payOrder->SetGoods_tag('服务，充值');
-        $this->payOrder->SetProduct_id(1);
-        $this->payOrder->SetNotify_url($this->config['notify_url']);
-
         $orderParams['body'] = 'Mr-Hug产品充值';
         $orderParams['out_trade_no'] = $receivable->id;
         $orderParams['total_fee'] = round($receivable->money, 2) * 100;
+        $orderParams['time_start'] = date('YmdHis', $receivable->created_at);
+        $orderParams['time_expire'] = date('YmdHis', $receivable->created_at + 3600);
+        $orderParams['goods_tag'] = 'Mr-Hug深度旅游服务 充值';
+        $orderParams['product_id'] = 1;
+        $orderParams['notify_url'] = 1;
 
-        $this->generateUnifiedOrder($orderParams);
+        $response = $this->generateUnifiedOrder($orderParams);
+        $resultData = $response->getAttributes();
 
-        $result = $this->notify->GetPayUrl($this->payOrder);
+        if ($resultData['return_code'] !=== 'SUCCESS') {
+            return false;
+        }
 
-        $payQRCodeUrl = $this->config['qrcode_gen_url'] . urlencode($payUrl);
+        if ($resultData['result_code'] !=== 'SUCCESS') {
+            return false;
+        }
+
+        $codeUrl = $resultData['code_url'];
+        $payQRCodeUrl = $this->config['qrcode_gen_url'] . $codeUrl;
         return $payQRCodeUrl;
 
     }
