@@ -80,7 +80,6 @@ class WechatPay {
         if ($resultData['return_code'] !=== 'SUCCESS') {
             return false;
         }
-
         if ($resultData['result_code'] !=== 'SUCCESS') {
             return false;
         }
@@ -103,35 +102,39 @@ class WechatPay {
     **/
     public function generateUserRequestParams($receivable) {
 
-        $currentTime = date("YmdHis");
-        $this->payOrder->setBody('Mr-Hug产品充值购买');
-        $this->payOrder->setAttach('用于购买Mr-Hug服务');
-        $this->payOrder->SetOut_trade_no($receivable->id);
-        $this->payOrder->SetTotal_fee(round($receivable->money, 2) * 100);
-        $this->payOrder->SetTime_start(date('YmdHis', $receivable->created_at));
-        $this->payOrder->SetTime_expire(date('YmdHis', $receivable->created_at+1800));
-        $this->payOrder->SetGoods_tag('服务，充值');
-        $this->payOrder->SetProduct_id(1);
+        $orderParams['body'] = 'Mr-Hug产品充值';
+        $orderParams['out_trade_no'] = $receivable->id;
+        $orderParams['total_fee'] = round($receivable->money, 2) * 100;
+        $orderParams['time_start'] = date('YmdHis', $receivable->created_at);
+        $orderParams['time_expire'] = date('YmdHis', $receivable->created_at + 3600);
+        $orderParams['goods_tag'] = 'Mr-Hug深度旅游服务 充值';
+        $orderParams['product_id'] = 1;
+        $orderParams['notify_url'] = 1;
 
-        $result = $this->notify->GetOrderInfo($this->payOrder, $isMobile);
+        $response = $this->generateUnifiedOrder($orderParams);
+        $resultData = $response->getAttributes();
 
-        if ($result['return_code'] !== 'SUCCESS') {
-            throw new Exception($result['return_msg']);
+        if ($resultData['return_code'] !=== 'SUCCESS') {
+            return false;
         }
-
-        if ($result['result_code'] !== 'SUCCESS') {
-            throw new Exception($result['err_code_des']);
+        if ($resultData['result_code'] !=== 'SUCCESS') {
+            return false;
         }
 
         $clientOrderParams = [];
-        $clientOrderParams['appid'] = $result['apid'];
-        $clientOrderParams['noncestr'] = $result['nonce_str'];
-        $clientOrderParams['partnerid'] = $result['mch_id'];
-        $clientOrderParams['prepayid'] = $result['prepay_id'];
+        $clientOrderParams['appid'] = $resultData['apid'];
+        $clientOrderParams['noncestr'] = $resultData['nonce_str'];
+        $clientOrderParams['partnerid'] = $resultData['mch_id'];
+        $clientOrderParams['prepayid'] = $resultData['prepay_id'];
         $clientOrderParams['timestamp'] = $receivable->created_at;
         $clientOrderParams['package'] = 'Sign=WXPay';
-        $clientOrderParams['sign'] = $this->makeSign($clientOrderParams, \WxPayConfig::MOBILE_KEY);
-        return $clientOrderParams;
+
+        $wxPayOrder = new WechatPayOrder();
+        $wxPayOrder -> load($clientOrderParams);
+        $wxPayOrder -> setSign();
+
+        return $wxPayOrder->getAttributes();
+
     }
 
 
