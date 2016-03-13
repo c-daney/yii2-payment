@@ -25,11 +25,7 @@ use Yii;
 class WechatPay {
 
     // 配置信息在实例化时从配置文件读入，配置文件需要放在该文件同目录下
-    private $config = [ 
-        'notify_url'=>'',
-        'trade_type'=>'NATIVE',
-        'qrcode_gen_url'=>'',
-    ];
+    private $_config = [];
 
     private $payOrder = null;
     private $notify = null;
