@@ -56,7 +56,7 @@ class WechatPayNotify extends WechatPayBase {
             return false;
         }
         else {
-            $payOrder = new WechatPayOrder();
+            $payOrder = new WechatPayOrder(array $config);
             $orderResult = $payOrder->queryPayStatus($data);
             $this->_notifyData = $result;
             if ($orderResult['return_code'] !== 'SUCCESS') {
