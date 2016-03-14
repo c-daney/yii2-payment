@@ -9,7 +9,7 @@ namespace lubaogui\payment;
 
 use Yii;
 use yii\base\Exception;
-use lubaogui\account\behaviors\ErrorBehavior;;
+use lubaogui\account\behaviors\ErrorBehavior;
 
 /**
  * 支付组件接口,暴露给外部的接口,组件虽有models等，但不对外提供功能，对外只提供几个接口函数, 收款和提现
@@ -18,7 +18,7 @@ use lubaogui\account\behaviors\ErrorBehavior;;
  * @author Baogui Lu (lbaogui@lubanr.com)
  * @version since 2.0
  */
-class Payment 
+abstract class PayServer extend Object
 {
 
     /**
@@ -39,25 +39,16 @@ class Payment
     const PAY_STATUS_REFUNDED = 40;
 
     /**
-     *  支付服务实例
+     *  支付服务实例,包含支付实例和支付回告实例，根据实际情况初始化对应实例
      */
-    private $_payServer;
+    private $_payService;
+    private $_notifyService;
 
-    /**
-     * provider 支付提供商名称
-     */
-    private $_provider;
+    //默认支付方式
+    public $defaultPayServer;
 
     //应收账款记录,对于每个支付的server,需要转换成对应的form后提交
     public $receivable = null; 
-
-    /**
-     * 支付方法对应的支付服务类
-     */
-    private $_payServerMap = [
-        'alipay' => 'lubaogui\payment\provider\alipay\PayServer',
-        'wechatpay' => 'lubaogui\payment\provider\wechat\PayServer',
-    ];
 
     /**
      * @brief 默认的错误behaviors列表，此处主要是追加错误处理behavior
@@ -81,13 +72,12 @@ class Payment
      */
     public function __construct($provider = 'alipay') 
     {
-        $this->provider = $provider;
-        if (isset($this->_payServerMap[$this->provider])) {
-            $config = !is_array($this->_payServerMap[$this->provider]) ? 
-                ['class' => $this->_payServerMap[$this->provider]] : 
-                $this->_payServerMap[$this->provider];
-            $this->_payServer = Yii::createObject($config);
-            return $this->_payServer;
+        if (isset($this->payServerMap[$this->provider])) {
+            $config = !is_array($this->payServerMap[$this->provider]) ? 
+                ['class' => $this->payServerMap[$this->provider]] : 
+                $this->payServerMap[$this->provider];
+            $this->payServer = Yii::createObject($config);
+            return $this->payServer;
         }
         else {
             throw new Exception('payment server your specified ' . $this->provider . ' is not supported now!');
@@ -99,64 +89,34 @@ class Payment
      * 
      * @return object 支付实例
      */
-    public function getPayServer() 
-    {
-        return $this->_payServer;
-    }
+    abstract public function getPayService();
+
+    /**
+     * @brief 获取回告服务实例
+     *
+     * @return  public functioni 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/03/14 19:13:15
+    **/
+    abstract public function getNotifyService(); 
+    
 
     /*
-     * 获取支付供应商支付名称 
-     * 
-     * @return string 支付供应商名称
-     */
-    public function getProvider() 
-    {
-        return $this->provider;
-    }
-
-    /*
-     * 返回用户客户端提交支付请求的请求参数或者支付页面 
+     * 返回用户客户端提交支付请求的请求参数 
      * 
      * @return array 支付请求的数组信息 
      */
     public function generatePayRequestParams($receivable) {
-
-        return $this->getPayServer()->generatePayRequestParams($receivable);
-
-    }
-
-    /**
-     * @brief 检查某个订单信息的支付结果信息,验证会包含远程调用，不要放在事物中处理
-     *
-     * @return bool  
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2016/03/14 19:20:36
-    **/
-    public function checkPayStatus($orderId = null) {
-        return $this->getPayServer()->checkPayStatus($orderId);
+        return $this->getPayService->generatePayRequestParams($receivable);
     }
 
     /**
      * @brief 
      *
-     * @return  bool 
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2016/03/14 19:24:19
-    **/
-    public function checkRefundStatus($orderId = null) {
-        return $this->getPayServer()->checkRefundStatus($orderId);
-    }
-
-    /**
-     * @brief 
-     *
-     * @return  
+     * @return  public function 
      * @retval   
      * @see 
      * @note 
@@ -164,7 +124,7 @@ class Payment
      * @date 2016/03/14 18:47:03
     **/
     public function replySuccessToServer() {
-        $this->getPayServer()->replySuccessToServer();
+        $this->getNotifyService()->replySuccessToServer();
     }
 
     /**
@@ -178,7 +138,7 @@ class Payment
      * @date 2016/03/14 18:47:07
     **/
     public function replyFailureToServer() {
-        $this->getPayServer()->replyFailureToServer();
+        $this->getNotifyService->replyFailureToServer();
     }
 
 }

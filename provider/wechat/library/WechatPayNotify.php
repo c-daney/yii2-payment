@@ -21,6 +21,7 @@ namespace lubaogui\payment\provider\wechat\library;
 class WechatPayNotify extends WechatPayBase {
 
     $private $_notifyData = [];
+    $private $_config = [];
 
     /**
      * @brief 构造函数，将Notify的内容转换为WechatPayNotify对象
@@ -36,27 +37,32 @@ class WechatPayNotify extends WechatPayBase {
         $xml = file_get_contents("php://input");
         if ($xml) {
             $this->_notifyData = $this->transferXmlToArray($xml);
+            $this->_config['app_id'] = $this->_notifyData['app_id'];
+            $this->_config['mch_id'] = $this->_notifyData['mch_id'];
+            $this->_config['trade_type'] = $this->_notifyData['trade_type'];
         }
     }
 
     /**
-     * @brief 
+     * @brief 检查订单的支付状态，该函数会引起远程网络调用，不能放在事物中处理
      *
-     * @return  public function 
+     * @return  查询交易状态 
      * @retval   
      * @see 
      * @note 
      * @author 吕宝贵
      * @date 2016/03/10 10:28:03
     **/
-    public function checkTradeStatus($data) {
+    public function checkPayStatus() {
+
+        $data = $this->_notifyData;
 
         if (empty($data['transaction_id']) && empty($data['out_trade_no'])) {
             $this->addError('transaction_id', 'transaction_id参数为必备参数');
             return false;
         }
         else {
-            $payOrder = new WechatPayOrder(array $config);
+            $payOrder = new WechatPayOrder($this->_config);
             $orderResult = $payOrder->queryPayStatus($data);
             $this->_notifyData = $result;
             if ($orderResult['return_code'] !== 'SUCCESS') {
@@ -74,6 +80,20 @@ class WechatPayNotify extends WechatPayBase {
             return true;
         }
 
+    }
+
+    /**
+     * @brief 查询退款状态,目前应用不需要使用退款功能
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/03/14 17:45:53
+    **/
+    public function checkRefundStatus() {
+        return true;
     }
 
     /**

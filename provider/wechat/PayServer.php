@@ -7,7 +7,7 @@
 
 namespace lubaogui\payment\provider\wechat;
 
-use lubaogui\payment\provider\BasePayServer;
+use lubaogui\payment\PayServer as BasePayServer;
 use lubaogui\payment\provider\wechat\WechatPay;
 use lubaogui\payment\provider\wechat\WechatPayNotify;
 
@@ -32,24 +32,41 @@ class PayServer extends BasePayServer
     public function __construct() 
     {
        $config = require(dirname(__FILE__) . '/config/config.php'); 
-       $this->payServer = new WechatPay($config);
-       $this->notifyServer = new WechatPayNotify($config);
     }
 
     /**
-     * @brief 产生用于支付的html form,目前对于微信支付，暂时不支持此种方式
+     * @brief 获取实际的支付实例
      *
-     * @return string html form内容 
+     * @return Object 
+     * @retval   
      * @see 
      * @note 
      * @author 吕宝贵
-     * @date 2015/12/19 11:28:49
+     * @date 2016/03/14 19:46:27
     **/
-    public function generateUserRequestHtml($trade) 
-    {
-        return '';
+    public function getPayService() {
+        if (empty($this->_payService)) {
+            $this->_payService = new WechatPay($config);
+        }
+        return $this->_payService;
     }
 
+    /**
+     * @brief 获取回告服务实例
+     *
+     * @return Object 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/03/14 19:49:31
+    **/
+    public function getNotifyService() {
+        if (empty($this->_notifyService)) {
+            $this->_notifyService = new WechatPayNotify($config);
+        }
+        return $this->_notifyService;
+    }
 
     /**
      * @brief 产生客户端支付请求的参数列表
@@ -61,34 +78,22 @@ class PayServer extends BasePayServer
      * @author 吕宝贵
      * @date 2016/02/26 00:09:02
     **/
-    public function generateUserRequestParams($receivable) {
-        return $this->payServer->generateUserRequestParams($receivable);
-    }
+    public function generatePayRequestParams($receivable, $appId) {
 
-    /**
-     * @brief 产生用于扫描支付的二维码的url地址
-     *
-     * @return url 用于产生二维码的url地址  
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2015/12/19 11:23:08
-    **/
-    public function generateUserScanQRCode($receivable) {
+        //根据订单信息，统一下单
+        $orderParams['body'] = 'Mr-Hug产品充值';
+        $orderParams['out_trade_no'] = $receivable->id;
+        $orderParams['total_fee'] = round($receivable->money, 2) * 100;
+        $orderParams['time_start'] = date('YmdHis', $receivable->created_at);
+        $orderParams['time_expire'] = date('YmdHis', $receivable->created_at + 3600);
+        $orderParams['goods_tag'] = 'Mr-Hug深度旅游服务 充值';
+        $orderParams['product_id'] = 1;
 
-        return $this->payServer->generateUserScanQRCode($receivable);
+        if (empty($this->payServer)) {
+            $this->payServer = new WechatPay($appId);
+        }
 
-    }
-
-    /**
-     * 获取支付单号的支付状态 
-     *
-     * @return boolen 返回验证状态, true代表合法请求，fasle代表无效返回
-     */
-    public function getPayStatus($receivableId) 
-    {
-        return true;
+        return $this->payServer->generateUserRequestParams($orderParams);
     }
 
     /**
@@ -100,31 +105,11 @@ class PayServer extends BasePayServer
      * @author 吕宝贵
      * @date 2015/12/19 10:49:12
     **/
-    public function processNotify($handlers, $isMobile = false) {
+    public function processNotify($handlers) {
 
-        $this->notifyServer->setHandlers($handlers);
-        $this->notifyServer->Handle(true, $isMobile);
-        if ($this->notifyServer->GetReturn_code() == "SUCCESS") {
-            return $this->notifyServer->getCallbackResult();
+        if (empty($this->notifyServer)) {
+            $this->notifyServer = new WechatPayNotify();
         }
-        else {
-            return false;
-        }
-
-    }
-
-    /**
-     * @brief 
-     *
-     * @return  public function 
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2015/12/19 10:49:18
-    **/
-    public function processReturn() {
-
 
     }
 
