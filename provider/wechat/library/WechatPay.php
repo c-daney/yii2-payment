@@ -73,7 +73,7 @@ class WechatPay {
         switch ($orderParams['trade_type']) {
         case 'NATIVE': {
             $codeUrl = $resultData['code_url'];
-            $payQRCodeUrl = $this->config['qrcode_gen_url'] . $codeUrl;
+            $payQRCodeUrl = $this->_config['qrcode_gen_url'] . $codeUrl;
             return $payQRCodeUrl;
         }
         case 'APP': {

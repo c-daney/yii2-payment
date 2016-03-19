@@ -17,19 +17,21 @@
  **/
 
 return [
-    'default_app_id'=>'', //默认app_id
+    'default_app_id'=>'wechatpay-native', //默认app_id
     'apps'=>[
-        ''=>[
+        'wechatpay-app'=>[
             'app_id'=>'',       //应用id
             'mch_id'=>'',       //商户id
             'key'=>'',          //私钥
             'notify_url'=>'',   //回调url
+            'qrcode_gen_url'=>'',   //二维码生成地址
         ],
-        ''=>[
+        'wechatpay-native'=>[
             'app_id'=>'',
             'mch_id'=>'',
             'key'=>'',
             'notify_url'=>'',
+            'qrcode_gen_url'=>'',  
         ]
     ],
 ];
