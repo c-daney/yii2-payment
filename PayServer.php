@@ -66,24 +66,6 @@ abstract class PayServer extend Object
         ];
     }
 
-    /**
-     * 构造函数
-     * @param provider string 支付供应商名称
-     */
-    public function __construct($provider = 'alipay') 
-    {
-        if (isset($this->payServerMap[$this->provider])) {
-            $config = !is_array($this->payServerMap[$this->provider]) ? 
-                ['class' => $this->payServerMap[$this->provider]] : 
-                $this->payServerMap[$this->provider];
-            $this->payServer = Yii::createObject($config);
-            return $this->payServer;
-        }
-        else {
-            throw new Exception('payment server your specified ' . $this->provider . ' is not supported now!');
-        }
-    }
-
     /*
      * 获取实际的支付实例,支持chain操作
      * 
@@ -103,7 +85,6 @@ abstract class PayServer extend Object
     **/
     abstract public function getNotifyService(); 
     
-
     /*
      * 返回用户客户端提交支付请求的请求参数 
      * 

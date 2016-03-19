@@ -23,15 +23,22 @@ use lubaogui\payment\provider\wechat\WechatPayNotify;
  */
 class PayServer extends BasePayServer
 {
+    private $_config = []; 
 
     /**
      * 构造函数 
      *
      * @param array $wechatpayConfig 配置信息，配置信息重require文件中获得 
      */
-    public function __construct() 
+    public function __construct($options = null) 
     {
-       $config = require(dirname(__FILE__) . '/config/config.php'); 
+       $configs = require(dirname(__FILE__) . '/config/config.php'); 
+       if (!empty($options['app_id'])) {
+           $this->_config = $configs[$options['app_id']];
+       }
+       else {
+           $this->_config = $configs['apps'][$configs['default_app_id']];
+       }
     }
 
     /**
@@ -46,7 +53,7 @@ class PayServer extends BasePayServer
     **/
     public function getPayService() {
         if (empty($this->_payService)) {
-            $this->_payService = new WechatPay($config);
+            $this->_payService = new WechatPay($this->_config);
         }
         return $this->_payService;
     }
@@ -63,7 +70,7 @@ class PayServer extends BasePayServer
     **/
     public function getNotifyService() {
         if (empty($this->_notifyService)) {
-            $this->_notifyService = new WechatPayNotify($config);
+            $this->_notifyService = new WechatPayNotify($this->_config);
         }
         return $this->_notifyService;
     }
@@ -78,7 +85,7 @@ class PayServer extends BasePayServer
      * @author 吕宝贵
      * @date 2016/02/26 00:09:02
     **/
-    public function generatePayRequestParams($receivable, $appId) {
+    public function generatePayRequestParams($receivable) {
 
         //根据订单信息，统一下单
         $orderParams['body'] = 'Mr-Hug产品充值';
@@ -89,11 +96,8 @@ class PayServer extends BasePayServer
         $orderParams['goods_tag'] = 'Mr-Hug深度旅游服务 充值';
         $orderParams['product_id'] = 1;
 
-        if (empty($this->payServer)) {
-            $this->payServer = new WechatPay($appId);
-        }
-
-        return $this->payServer->generateUserRequestParams($orderParams);
+        $payService = $this->getPayService();
+        return $payService->generatePayRequestParams($orderParams);
     }
 
     /**
@@ -107,9 +111,7 @@ class PayServer extends BasePayServer
     **/
     public function processNotify($handlers) {
 
-        if (empty($this->notifyServer)) {
-            $this->notifyServer = new WechatPayNotify();
-        }
+        $this->getNotifyService()->processNotify($handlers);
 
     }
 
