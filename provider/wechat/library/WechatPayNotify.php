@@ -53,9 +53,15 @@ class WechatPayNotify extends WechatPayBase {
      * @author 吕宝贵
      * @date 2016/03/10 10:28:03
     **/
-    public function checkPayStatus() {
+    public function checkPayStatus($out_trade_no = null) {
 
-        $data = $this->_notifyData;
+        $data = [];
+        if (empty($out_trade_no)) {
+            $data = $this->_notifyData;
+        }
+        else {
+            $data['out_trade_no'] = $out_trade_no;
+        }
 
         if (empty($data['transaction_id']) && empty($data['out_trade_no'])) {
             $this->addError('transaction_id', 'transaction_id参数为必备参数');

@@ -101,6 +101,20 @@ class PayServer extends BasePayServer
     }
 
     /**
+     * @brief 检查订单的支付状态，该函数会引起远程网络调用，不能放在事物中处理
+     *
+     * @return  查询交易状态 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/03/10 10:28:03
+    **/
+    public function checkPayStatus($out_trade_no = null) {
+        return $this->getNotifyService()->checkPayStatus($out_trade_no);
+    }
+
+    /**
      * @brief 处理后台的支付通知消息，通过调用回调函数来处理相关业务逻辑
      *
      * @return array 数组，返回数组 
