@@ -15,19 +15,19 @@ namespace lubaogui\payment\provider\wechat;
  *
  **/
 
-require_once('lib/WxPay.Data.php');
-require_once('lib/WxPay.NativePay.php');
-require_once('lib/WxPay.Config.php');
-
 use yii\base\Exception;
 use Yii;
+use lubaogui\payment\provider\wechat\library\WechatPayOrder;;
+
+
+
 
 class WechatPay {
 
     // 配置信息在实例化时从配置文件读入，配置文件需要放在该文件同目录下
     private $_config = [];
 
-    private $payOrder = null;
+    private $_payOrder = null;
 
     /**
      * @brief 构造函数，做的工作主要是将配置文件和默认配置进行merge,同时设置notify所需要的成功和失败的回调函数,
@@ -40,11 +40,10 @@ class WechatPay {
      * @author 吕宝贵
      * @date 2015/12/17 20:56:45
     **/
-    function __construct($appId){
-        $config = require(dirname(__FILE__) . '/config/config.php');
-        $this->_config = $config[$appId];
-        $this->payOrder = new WechatPayOrder($this->_config);
-        if (empty($this->payOrder)) {
+    function __construct($config = null){
+        $this->_config = $config;
+        $this->_payOrder = new WechatPayOrder($this->_config);
+        if (empty($this->_payOrder)) {
             return false;
         }
     }

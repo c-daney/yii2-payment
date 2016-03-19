@@ -17,7 +17,21 @@
  **/
 
 return [
-    'qrcode_gen_url'=>'http://paysdk.weixin.qq.com/example/qrcode.php?data=',
+    'default_app_id'=>'', //默认app_id
+    'apps'=>[
+        ''=>[
+            'app_id'=>'',       //应用id
+            'mch_id'=>'',       //商户id
+            'key'=>'',          //私钥
+            'notify_url'=>'',   //回调url
+        ],
+        ''=>[
+            'app_id'=>'',
+            'mch_id'=>'',
+            'key'=>'',
+            'notify_url'=>'',
+        ]
+    ],
 ];
 
 /* vim: set et ts=4 sw=4 sts=4 tw=100: */
