@@ -124,7 +124,7 @@ class PayServer extends BasePayServer
      * @date 2015/12/19 10:49:12
     **/
     public function processNotify($handlers) {
-        $this->getNotifyService()->processNotify($handlers);
+        return $this->getNotifyService()->processNotify($handlers);
     }
 
 }

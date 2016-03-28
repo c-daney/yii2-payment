@@ -99,7 +99,21 @@ class WechatPayNotify extends WechatPayBase {
      * @date 2016/03/28 08:16:09
     **/
     public function processNotify($handlers) {
-        return $this->_notifyData['out_trade_no'];
+
+        $receivableId = $this->_notifyData['out_trade_no'];
+        $receivable = Receivable::findOne($receivableId);
+
+        if (!$receivable) {
+            throw new LBUserException('无法找到对应的交易订单', 3, $this->getErrors());
+            return false;
+        }
+
+        $receivable->status = Receivable::PAY_STATUS_FINISHED;
+        if (!$receivable->save()) {
+            throw new LBUserException('保存交易信息失败', 3, $this->getErrors());
+            return false;
+        }
+
     }
 
     /**
