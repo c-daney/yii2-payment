@@ -18,7 +18,8 @@ use lubaogui\account\behaviors\ErrorBehavior;;
  * @author Baogui Lu (lbaogui@lubanr.com)
  * @version since 2.0
  */
-class Payment 
+
+class Payment extends Model
 {
 
     /**
@@ -178,6 +179,21 @@ class Payment
     **/
     public function replyFailureToServer() {
         $this->getPayServer()->replyFailureToServer();
+    }
+
+    /**
+     * @brief 处理回告通知
+     *
+     * @param array $handlers 支付回告的回调处理函数
+     * @return int $trans_id 返回交易id
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/03/28 07:29:47
+    **/
+    public function processNotify($handlers) {
+        return $this->getPayServer()->processNotify($handlers);
     }
 
 }

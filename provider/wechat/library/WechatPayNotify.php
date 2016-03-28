@@ -89,6 +89,20 @@ class WechatPayNotify extends WechatPayBase {
     }
 
     /**
+     * @brief 处理支付回告，并返回交易id
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/03/28 08:16:09
+    **/
+    public function processNotify($handlers) {
+        return $this->_notifyData['out_trade_no'];
+    }
+
+    /**
      * @brief 查询退款状态,目前应用不需要使用退款功能
      *
      * @return  public function 
