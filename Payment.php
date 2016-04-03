@@ -8,6 +8,7 @@
 namespace lubaogui\payment;
 
 use Yii;
+use yii\base\Model;
 use yii\base\Exception;
 use lubaogui\account\behaviors\ErrorBehavior;;
 
