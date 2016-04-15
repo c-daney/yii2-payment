@@ -18,7 +18,7 @@ use lubaogui\account\behaviors\ErrorBehavior;
  * @author Baogui Lu (lbaogui@lubanr.com)
  * @version since 2.0
  */
-abstract class PayServer extend Object
+abstract class PayServer extends Object
 {
 
     /**
