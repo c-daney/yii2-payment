@@ -25,7 +25,7 @@ class PayServer extends BasePayServer
     /*
      * alipay 接口类实例
      */
-    private $alipay = null;
+    private $_alipay = null;
 
     /**
      * 构造函数 
@@ -35,7 +35,15 @@ class PayServer extends BasePayServer
     public function __construct() 
     {
        $config = require(dirname(__FILE__) . '/config/alipay.config.php'); 
-       $this->alipay = new Alipay($config);
+       $this->_alipay = new Alipay($config);
+    }
+
+    public getPayService() {
+        return $this->_alipay;
+    }
+
+    public getNotifyService() {
+        return $this->_alipay;
     }
 
     /**
@@ -46,7 +54,7 @@ class PayServer extends BasePayServer
     public function generateUserRequestHtml($receivable) 
     {
         $submitToAlipayParams = $this->transformToAlipayParams($receivable);
-        $requestHtml = $this->alipay->buildRequestForm($submitToAlipayParams, 'post', 'confirm');
+        $requestHtml = $this->_alipay->buildRequestForm($submitToAlipayParams, 'post', 'confirm');
         return $requestHtml;
     }
 
@@ -63,7 +71,7 @@ class PayServer extends BasePayServer
     public function generateUserRequestParams($receivable)
     {
         $submitToAlipayParams = $this->transformToAlipayParams($receivable);
-        $requestStr = $this->alipay->buildRequestString($submitToAlipayParams);
+        $requestStr = $this->_alipay->buildRequestString($submitToAlipayParams);
         return $requestStr;
     }
 
@@ -74,9 +82,9 @@ class PayServer extends BasePayServer
      */
     public function processNotify($handlers) 
     {
-        if ($this->alipay->verifyNotify())
+        if ($this->_alipay->verifyNotify())
         {
-            $notifyData = $this->alipay->getNotifyData();
+            $notifyData = $this->_alipay->getNotifyData();
             if ($notifyData['trade_status'] == 'TRADE_SUCCESS') {
                 $receivableId = $notifyData['out_trade_no'];
                 $receivable = Receivable::findOne($receivableId);
