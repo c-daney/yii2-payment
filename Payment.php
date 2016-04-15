@@ -83,15 +83,15 @@ class Payment extends Model
      */
     public function __construct($provider = 'alipay', $options = null) 
     {
-        $this->provider = $provider;
-        if (isset($this->_payServerMap[$this->provider])) {
-            $config = !is_array($this->_payServerMap[$this->provider]) ? 
-                ['class' => $this->_payServerMap[$this->provider], 'options'=>$options] : 
-                $this->_payServerMap[$this->provider];
+        $this->_provider = $provider;
+        if (isset($this->_payServerMap[$this->_provider])) {
+            $config = !is_array($this->_payServerMap[$this->_provider]) ? 
+                ['class' => $this->_payServerMap[$this->_provider], 'options'=>$options] : 
+                $this->_payServerMap[$this->_provider];
             $this->_payServer = Yii::createObject($config);
         }
         else {
-            throw new Exception('payment server your specified ' . $this->provider . ' is not supported now!');
+            throw new Exception('payment server your specified ' . $this->_provider . ' is not supported now!');
         }
     }
 
@@ -112,7 +112,7 @@ class Payment extends Model
      */
     public function getProvider() 
     {
-        return $this->provider;
+        return $this->_provider;
     }
 
     /*
