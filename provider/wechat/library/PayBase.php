@@ -8,7 +8,7 @@
  
 namespace lubaogui\payment\provider\wechat\library;
  
-use yii/base/Model;
+use yii\base\Model;
  
 /**
  * @file PayBase.php

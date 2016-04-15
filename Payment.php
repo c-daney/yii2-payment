@@ -81,14 +81,27 @@ class Payment extends Model
      * 构造函数
      * @param provider string 支付供应商名称
      */
-    public function __construct($provider = 'alipay', $options = null) 
+    public function __construct($provider = 'alipay', $options = []) 
     {
         $this->_provider = $provider;
+
         if (isset($this->_payServerMap[$this->_provider])) {
-            $config = !is_array($this->_payServerMap[$this->_provider]) ? 
-                ['class' => $this->_payServerMap[$this->_provider], 'options'=>$options] : 
-                $this->_payServerMap[$this->_provider];
+            if (is_array($this->_payServerMap[$this->_provider])) {
+                $baseConfig = $this->_payServerMap[$this->_provider];
+            }
+            else {
+                if (is_string($this->_payServerMap[$this->_provider])) {
+                    $baseConfig = ['class' => $this->_payServerMap[$this->_provider]];
+                }
+                else {
+                    throw new Exception('error occured when init payserver');
+                }
+            }
+            $config = array_merge($baseConfig, $options);
             $this->_payServer = Yii::createObject($config);
+            if (!$this->_payServer) {
+                throw new Exception('error occured when init payserver');
+            }
         }
         else {
             throw new Exception('payment server your specified ' . $this->_provider . ' is not supported now!');

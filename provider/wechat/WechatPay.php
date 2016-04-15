@@ -19,9 +19,6 @@ use yii\base\Exception;
 use Yii;
 use lubaogui\payment\provider\wechat\library\WechatPayOrder;;
 
-
-
-
 class WechatPay {
 
     // 配置信息在实例化时从配置文件读入，配置文件需要放在该文件同目录下
@@ -115,7 +112,7 @@ class WechatPay {
             $this->addError('wechat-pay-unified-order', $unifiedOrderData['return_msg']);
             return false;
         }
-        if ($unifiedOrderData['result_code'] !=== 'SUCCESS') {
+        if ($unifiedOrderData['result_code'] !== 'SUCCESS') {
             $this->addError('wechat-pay-unified-order', $unifiedOrderData['err_code_des']);
             return false;
         }

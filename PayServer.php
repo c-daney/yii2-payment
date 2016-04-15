@@ -42,8 +42,8 @@ abstract class PayServer extends Object
     /**
      *  支付服务实例,包含支付实例和支付回告实例，根据实际情况初始化对应实例
      */
-    private $_payService;
-    private $_notifyService;
+    protected $_payService;
+    protected $_notifyService;
 
     //默认支付方式
     public $defaultPayServer;
