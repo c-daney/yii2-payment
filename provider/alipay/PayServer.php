@@ -38,11 +38,11 @@ class PayServer extends BasePayServer
        $this->_alipay = new Alipay($config);
     }
 
-    public getPayService() {
+    public function getPayService() {
         return $this->_alipay;
     }
 
-    public getNotifyService() {
+    public function getNotifyService() {
         return $this->_alipay;
     }
 
