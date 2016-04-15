@@ -7,7 +7,7 @@
 
 namespace lubaogui\payment\provider\alipay;
 
-use lubaogui\payment\provider\BasePayServer;
+use lubaogui\payment\PayServer as BasePayServer;
 use lubaogui\payment\models\Receivable;
 
 /**
