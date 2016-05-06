@@ -52,7 +52,9 @@ class WechatPayBase extends PayBase
      * @author 吕宝贵
      * @date 2016/03/04 14:40:30
     **/
-    protected function makeSign($params) {
+    protected function makeSign() {
+        $params = $this->attributes();
+        var_dump($params);exit;
         ksort($params);
         $string = $this->toUrlFormat($params);
         $string = $string . '&key=' . $this->key;

@@ -41,13 +41,13 @@ class WechatPayOrder extends WechatPayBase
     public function rules() {
         return [
             'unifiedOrder' => [
-
+                ['out_trade_no', 'safe'],
             ],
             'query' => [
-
+                ['out_trade_no', 'safe'],
             ],
             'close' => [
-
+                ['out_trade_no', 'safe'],
             ],
         ];
     }
@@ -65,7 +65,7 @@ class WechatPayOrder extends WechatPayBase
     public function generateUnifiedOrder($orderParams) {
 
         $this->scenario = 'unifiedOrder';
-        $this->load($orderParams);
+        $this->load($orderParams, '');
 
         //签名
         $this->setSign();
@@ -90,7 +90,7 @@ class WechatPayOrder extends WechatPayBase
     public function queryPayStatus($orderParams) {
 
         $this->scenario = 'query';
-        $this->load($orderParams);
+        $this->load($orderParams, '');
         $this->setSign();
         return WechatPayClient::queryOrderPayStatus($this);
 
