@@ -23,6 +23,7 @@ class PayBase extends Model
 {
 
     private $_attributes = [];
+    private $_related = [];
 
     /**
      * @brief 获取属性名称

@@ -28,6 +28,13 @@ class WechatPayOrder extends WechatPayBase
     public $once_str;
     public $fee_type;
 
+    public function scenarios() {
+        return [
+            'unifiedOrder'=>['out_trade_no', 'trade_type'],
+            'query'=>['out_trade_no', 'trade_type'],
+        ];
+    }
+
     /**
      * @brief 场景规则列表
      *
@@ -40,15 +47,8 @@ class WechatPayOrder extends WechatPayBase
     **/
     public function rules() {
         return [
-            'unifiedOrder' => [
-                ['out_trade_no', 'safe'],
-            ],
-            'query' => [
-                ['out_trade_no', 'safe'],
-            ],
-            'close' => [
-                ['out_trade_no', 'safe'],
-            ],
+            ['out_trade_no', 'safe', 'on'=>'unifiedOrder'],
+            ['out_trade_no', 'safe', 'on'=>'query'],
         ];
     }
 
@@ -64,7 +64,7 @@ class WechatPayOrder extends WechatPayBase
     **/
     public function generateUnifiedOrder($orderParams) {
 
-        $this->scenario = 'unifiedOrder';
+        $this->setScenario('unifiedOrder');
         $this->load($orderParams, '');
 
         //签名
@@ -89,7 +89,7 @@ class WechatPayOrder extends WechatPayBase
     **/
     public function queryPayStatus($orderParams) {
 
-        $this->scenario = 'query';
+        $this->setScenario('query');
         $this->load($orderParams, '');
         $this->setSign();
         return WechatPayClient::queryOrderPayStatus($this);
