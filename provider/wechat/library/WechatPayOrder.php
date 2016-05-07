@@ -8,6 +8,7 @@
 namespace lubaogui\payment\provider\wechat\library;
  
  
+use Yii;
 /**
  * @file WechatPayOrder.php
  * @author 吕宝贵(lbaogui@lubanr.com)
@@ -20,18 +21,16 @@ namespace lubaogui\payment\provider\wechat\library;
 class WechatPayOrder extends WechatPayBase 
 {
 
-    public $trade_type;
-    public $out_trade_no;
-    public $body;
-    public $detail;
-    public $total_fee;
-    public $once_str;
-    public $fee_type;
-
     public function scenarios() {
         return [
-            'unifiedOrder'=>['out_trade_no', 'trade_type'],
-            'query'=>['out_trade_no', 'trade_type'],
+            'unifiedOrder'=>[
+                'appid', 'mch_id', 'body', 'attach', 'out_trade_no', 'total_fee', 'time_start', 'time_expire', 
+                'goods_tag', 'trade_type', 'notify_url', 'product_id', 'sign' 
+            ],
+            'query'=>[
+                'appid', 'mch_id', 'body', 'attach', 'out_trade_no', 'total_fee', 'time_start', 'time_expire', 
+                'goods_tag', 'trade_type', 'notify_url', 'product_id', 'sign' 
+            ],
         ];
     }
 
@@ -47,7 +46,7 @@ class WechatPayOrder extends WechatPayBase
     **/
     public function rules() {
         return [
-            ['out_trade_no', 'safe', 'on'=>'unifiedOrder'],
+            ['out_trade_no, total_fee, fee_type', 'safe', 'on'=>'unifiedOrder'],
             ['out_trade_no', 'safe', 'on'=>'query'],
         ];
     }
@@ -65,10 +64,14 @@ class WechatPayOrder extends WechatPayBase
     public function generateUnifiedOrder($orderParams) {
 
         $this->setScenario('unifiedOrder');
+        $orderParams = array_merge($this->_config, $orderParams);
         $this->load($orderParams, '');
 
-        //签名
         $this->setSign();
+        Yii::warning("参数加载列表为:");
+        Yii::warning($this->toArray());
+
+        //签名
         
         //统一下单的结果
         $wxResponse = WechatPayClient::generateUnifiedOrder($this);

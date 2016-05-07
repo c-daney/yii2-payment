@@ -8,7 +8,7 @@
  
 namespace lubaogui\payment\provider\wechat\library;
  
-use yii/base/Model;
+use yii\base\Model;
  
 /**
  * @file WechatPayClient.php
@@ -29,7 +29,7 @@ class WechatPayClient
     const URL_WXPAY_SHORTURL = 'https://api.mch.weixin.qq.com/tools/shorturl';
     const URL_WXPAY_ORDER_QUERY = 'https://api.mch.weixin.qq.com/pay/orderquery';
     const URL_WXPAY_ORDER_CLOSE = 'https://api.mch.weixin.qq.com/pay/closeorder';
-    const URL_WXPAY_ORDER_CLOSE = 'https://api.mch.weixin.qq.com/secapi/pay/refund';
+    const URL_WXPAY_ORDER_REFUND = 'https://api.mch.weixin.qq.com/secapi/pay/refund';
 
     /**
      * @brief 统一下单
@@ -43,7 +43,7 @@ class WechatPayClient
      **/
     public static function generateUnifiedOrder($payOrder) {
 
-        $xml = $payOrder->toXml($payOrder->attributes());
+        $xml = $payOrder->toXml($payOrder->toArray());
         $response = new WechatPayResponse(self::postXmlToWechatServer($xml, self::URL_WXPAY_UNIFIED_ORDER));
         return $response;
 

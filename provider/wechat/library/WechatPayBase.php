@@ -8,6 +8,7 @@
  
 namespace lubaogui\payment\provider\wechat\library;
  
+use Yii;
 use yii\base\Model;
 use lubaogui\payment\provider\wechat\library\PayBase;
  
@@ -23,10 +24,12 @@ use lubaogui\payment\provider\wechat\library\PayBase;
 class WechatPayBase extends PayBase 
 {
 
-    //所有的wechatPay
-    public $appId;
-    public $mchId;
-    public $key;
+    //公共配置
+    protected $_config;
+
+    public function __construct($config) {
+        $this->_config = $config;
+    }
 
     /**
      * @brief 设置签名
@@ -39,7 +42,9 @@ class WechatPayBase extends PayBase
      * @date 2016/03/06 16:12:02
     **/
     public function setSign() {
-        $this->$_attributes['sign'] = $this->makeSign();
+        $this->setAttribute('sign', $this->makeSign());
+        Yii::error("签名之后的结果如下:");
+        Yii::error($this->toArray());
     }
 
     /**
@@ -53,13 +58,18 @@ class WechatPayBase extends PayBase
      * @date 2016/03/04 14:40:30
     **/
     protected function makeSign() {
-        $params = $this->attributes();
+        $params = $this->toArray();
         ksort($params);
+        Yii::error('参与签名的参数数组为:*************************************');
+        Yii::error($params);
         $string = $this->toUrlFormat($params);
-        $string = $string . '&key=' . $this->key;
+        Yii::error($string);
+        $string = $string . '&key=' . $this->_config['key'];
+        Yii::error('参与签名的字符串为:*************************************');
+        Yii::error($string);
         $string = md5($string);
-        $result = strtoupper($string);
-        return $result;
+        $sign = strtoupper($string);
+        return $sign;
     } 
 
 
@@ -77,11 +87,11 @@ class WechatPayBase extends PayBase
         $buff = '';
         foreach ($params as $k => $v) {
             if ($key != 'sign' && $v != '' && !is_array($v)) {
-                $buff .= $k . '=' . '&';
+				$buff .= $k . "=" . $v . "&";
             }
-            $buff = trim($buff, '&');
-            return $buff;
         }
+        $buff = trim($buff, '&');
+        return $buff;
     }
 
     /**
@@ -130,7 +140,23 @@ class WechatPayBase extends PayBase
     		}
         }
         $xml.="</xml>";
+        Yii::warning("生成的xml为:" . $xml);
         return $xml; 
+    }
+
+    /**
+     * @brief 返回属性列表
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/05/07 20:31:30
+    **/
+    public function attributes() {
+        $scenarios = $this->scenarios();
+        return $scenarios[$this->getScenario()];
     }
 
 }

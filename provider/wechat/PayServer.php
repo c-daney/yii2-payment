@@ -7,6 +7,7 @@
 
 namespace lubaogui\payment\provider\wechat;
 
+use Yii;
 use lubaogui\payment\PayServer as BasePayServer;
 use lubaogui\payment\provider\wechat\WechatPay;
 use lubaogui\payment\provider\wechat\WechatPayNotify;
@@ -24,22 +25,7 @@ use lubaogui\payment\provider\wechat\WechatPayNotify;
 class PayServer extends BasePayServer
 {
     private $_config = []; 
-
-    /**
-     * 构造函数 
-     *
-     * @param array $wechatpayConfig 配置信息，配置信息重require文件中获得 
-     */
-    public function __construct($options = null) 
-    {
-       $configs = require(dirname(__FILE__) . '/config/config.php'); 
-       if (!empty($options['app_id'])) {
-           $this->_config = $configs[$options['app_id']];
-       }
-       else {
-           $this->_config = $configs['apps'][$configs['default_app_id']];
-       }
-    }
+    public $app_id;
 
     /**
      * @brief 获取实际的支付实例
@@ -53,6 +39,14 @@ class PayServer extends BasePayServer
     **/
     public function getPayService() {
         if (empty($this->_payService)) {
+            $configs = require(dirname(__FILE__) . '/config/config.php'); 
+            if ($this->app_id) {
+                $this->_config = $configs['apps'][$this->app_id];
+            }
+            else {
+                $this->_config = $configs['apps'][$configs['default_app_id']];
+            }
+
             $this->_payService = new WechatPay($this->_config);
         }
         return $this->_payService;

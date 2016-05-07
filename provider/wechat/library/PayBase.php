@@ -9,6 +9,9 @@
 namespace lubaogui\payment\provider\wechat\library;
  
 use yii\base\Model;
+use yii\base\InvalidParamException;
+use lubaogui\payment\provider\wechat\library;
+
  
 /**
  * @file PayBase.php
@@ -19,7 +22,7 @@ use yii\base\Model;
  *
  **/
 
-class PayBase extends Model 
+abstract class PayBase extends Model implements WechatPayBaseInterface
 {
 
     private $_attributes = [];
@@ -87,13 +90,23 @@ class PayBase extends Model
         return isset($this->_attributes[$name]) || in_array($name, $this->attributes());
     }
 
+    /**
+     * @brief 设置某个属性
+     *
+     * @return  bool 是否包含该属性
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/03/07 16:14:00
+    **/
     public function setAttribute($name, $value) {
 
         if ($this->hasAttribute($name)) {
             $this->_attributes[$name] = $value;
         }
         else {
-            return false;
+            throw new InvalidParamException(get_class($this) . 'has no attribute named' . $name);
         }
 
     }
@@ -112,19 +125,6 @@ class PayBase extends Model
 
     }
 
-    /**
-     * @brief 获取属性列表
-     *
-     * @return  public function 
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2016/03/07 11:03:08
-    **/
-    public function attributes() {
-        return $this->_attributes;
-    }
 
 }
 

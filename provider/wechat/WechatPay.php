@@ -15,11 +15,12 @@ namespace lubaogui\payment\provider\wechat;
  *
  **/
 
-use yii\base\Exception;
 use Yii;
+use yii\base\Model;
+use yii\base\Exception;
 use lubaogui\payment\provider\wechat\library\WechatPayOrder;;
 
-class WechatPay {
+class WechatPay extends Model {
 
     // 配置信息在实例化时从配置文件读入，配置文件需要放在该文件同目录下
     private $_config = [];
@@ -59,9 +60,12 @@ class WechatPay {
 
         $orderParams['notify_url'] = $this->_config['notify_url'];
         $orderParams['trade_type'] = $this->_config['trade_type'];
+        Yii::error("订单参数为:");
+        Yii::error($orderParams);
 
         $response = $this->generateUnifiedOrder($orderParams);
-        if ($response　=== false) {
+        if ($response == false) {
+            $this->addError(__METHOD__, 'response content is false!');
             return false;
         }
         $resultData = $response->getAttributes();
@@ -109,11 +113,14 @@ class WechatPay {
         $response = $wxPayOrder -> generateUnifiedOrder($orderParams);
         $unifiedOrderData = $response->getAttributes();
         if ($unifiedOrderData['return_code'] !== 'SUCCESS') {
-            $this->addError('wechat-pay-unified-order', $unifiedOrderData['return_msg']);
+            //$this->addError('wechat-pay-unified-order', $unifiedOrderData['return_msg']);
+            $this->addError('wechat-pay-unified-order', $unifiedOrderData);
+            $this->addError(__METHOD__, $response);
             return false;
         }
         if ($unifiedOrderData['result_code'] !== 'SUCCESS') {
-            $this->addError('wechat-pay-unified-order', $unifiedOrderData['err_code_des']);
+            //$this->addError('wechat-pay-unified-order', $unifiedOrderData['err_code_des']);
+            $this->addError('wechat-pay-unified-order', $unifiedOrderData);
             return false;
         }
 
