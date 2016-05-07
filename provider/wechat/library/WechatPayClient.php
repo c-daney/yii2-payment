@@ -61,7 +61,7 @@ class WechatPayClient
      **/
     public static function queryOrderPayStatus($payOrder) {
 
-        $xml = $payOrder->toXml($payOrder->attributes());
+        $xml = $payOrder->toXml($payOrder->toArray());
         $response = new WechatPayResponse(self::postXmlToWechatServer($xml, self::URL_WXPAY_ORDER_QUERY));
         return $response;
 

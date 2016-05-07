@@ -6,8 +6,11 @@
  *
  **************************************************************************/
  
-namespace lubaogui\payment\provider\wechat\library;
+namespace lubaogui\payment\provider\wechat;
  
+use Yii;
+use lubaogui\payment\provider\wechat\library\WechatPayBase;
+use lubaogui\payment\provider\wechat\library\WechatPayOrder;
  
 /**
  * @file WechatPayNotify.php
@@ -20,8 +23,7 @@ namespace lubaogui\payment\provider\wechat\library;
 
 class WechatPayNotify extends WechatPayBase {
 
-    $private $_notifyData = [];
-    $private $_config = [];
+    private $_notifyData = [];
 
     /**
      * @brief 构造函数，将Notify的内容转换为WechatPayNotify对象
@@ -37,7 +39,10 @@ class WechatPayNotify extends WechatPayBase {
         $xml = file_get_contents("php://input");
         if ($xml) {
             $this->_notifyData = $this->transferXmlToArray($xml);
-            $this->_config['app_id'] = $this->_notifyData['app_id'];
+            Yii::error("服务器回告结果为:");
+            Yii::error($this->_notifyData);
+
+            $this->_config['appid'] = $this->_notifyData['app_id'];
             $this->_config['mch_id'] = $this->_notifyData['mch_id'];
             $this->_config['trade_type'] = $this->_notifyData['trade_type'];
         }
@@ -55,6 +60,7 @@ class WechatPayNotify extends WechatPayBase {
     **/
     public function checkPayStatus($out_trade_no = null) {
 
+        Yii::error('查询输入_______________________________');
         $data = [];
         if (empty($out_trade_no)) {
             $data = $this->_notifyData;
@@ -69,13 +75,16 @@ class WechatPayNotify extends WechatPayBase {
         }
         else {
             $payOrder = new WechatPayOrder($this->_config);
+            Yii::error('查询输入');
+            Yii::error($data);
             $orderResult = $payOrder->queryPayStatus($data);
-            $this->_notifyData = $result;
+            Yii::error($orderResult);
+            $this->_notifyData = $orderResult;
             if ($orderResult['return_code'] !== 'SUCCESS') {
                 $this->addError('wechat-pay', $orderResult['return_msg']);
                 return false;
             }
-            if ($orderResult['result_code'] !=== 'SUCCESS') {
+            if ($orderResult['result_code'] !== 'SUCCESS') {
                 $this->addError('wechat-pay-error', $orderResult['err_code_des']);
                 return false;
             }

@@ -25,11 +25,10 @@ class WechatPayOrder extends WechatPayBase
         return [
             'unifiedOrder'=>[
                 'appid', 'mch_id', 'body', 'attach', 'out_trade_no', 'total_fee', 'time_start', 'time_expire', 
-                'goods_tag', 'trade_type', 'notify_url', 'product_id', 'sign' 
+                'goods_tag', 'trade_type', 'notify_url', 'product_id', 'sign', 'nonce_str' 
             ],
             'query'=>[
-                'appid', 'mch_id', 'body', 'attach', 'out_trade_no', 'total_fee', 'time_start', 'time_expire', 
-                'goods_tag', 'trade_type', 'notify_url', 'product_id', 'sign' 
+                'appid', 'mch_id', 'transaction_id', 'out_trade_no',  'sign', 'nonce_str'
             ],
         ];
     }
@@ -64,14 +63,12 @@ class WechatPayOrder extends WechatPayBase
     public function generateUnifiedOrder($orderParams) {
 
         $this->setScenario('unifiedOrder');
+        $orderParams['nonce_str'] = $this->getNonceStr();
         $orderParams = array_merge($this->_config, $orderParams);
         $this->load($orderParams, '');
 
-        $this->setSign();
-        Yii::warning("参数加载列表为:");
-        Yii::warning($this->toArray());
-
         //签名
+        $this->setSign();
         
         //统一下单的结果
         $wxResponse = WechatPayClient::generateUnifiedOrder($this);
@@ -93,7 +90,10 @@ class WechatPayOrder extends WechatPayBase
     public function queryPayStatus($orderParams) {
 
         $this->setScenario('query');
+        $orderParams = array_merge($this->_config, $orderParams);
         $this->load($orderParams, '');
+        Yii::error('是不是有啊啊啊******************************************');
+        Yii::error($this->toArray());
         $this->setSign();
         return WechatPayClient::queryOrderPayStatus($this);
 

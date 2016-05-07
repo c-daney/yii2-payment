@@ -123,7 +123,25 @@ abstract class PayBase extends Model implements WechatPayBaseInterface
     **/
     public function getAttribute($name) {
 
+
     }
+
+	/**
+	 * 
+	 * 产生随机字符串，不长于32位
+	 * @param int $length
+	 * @return 产生的随机字符串
+	 */
+	public function getNonceStr($length = 32) 
+	{
+		$chars = "abcdefghijklmnopqrstuvwxyz0123456789";  
+		$str ="";
+		for ( $i = 0; $i < $length; $i++ )  {  
+			$str .= substr($chars, mt_rand(0, strlen($chars)-1), 1);  
+		} 
+		return $str;
+	}
+
 
 
 }
