@@ -154,6 +154,20 @@ class Payment extends Model
     }
 
     /**
+     * @brief 获取支付通知对应的本地订单
+     *
+     * @return  public function 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/05/08 22:11:54
+    **/
+    public function getReceivable($receivableId = null) {
+        return $this->getPayServer()->getReceivable($receivable);
+    }
+
+    /**
      * @brief 
      *
      * @return  bool 

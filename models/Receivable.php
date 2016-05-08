@@ -78,6 +78,12 @@ class Receivable extends ActiveRecord
 
     }
 
+
+    public function hasPayFinished() {
+        return $this->status > self::PAY_STATUS_SUCCEEDED ? true : false;
+    }
+
+
     public function getUserAccount() {
         return $this->hasOne(UserAccount::className(), ['uid'=>'uid']);
     }

@@ -101,7 +101,7 @@ class PayServer extends BasePayServer
     }
 
     /**
-     * @brief 检查订单的支付状态，该函数会引起远程网络调用，不能放在事物中处理
+     * @brief 检查支付状态，该函数会引起远程网络调用，不能放在事物中处理
      *
      * @return  查询交易状态 
      * @retval   
@@ -112,6 +112,21 @@ class PayServer extends BasePayServer
     **/
     public function checkPayStatus($out_trade_no = null) {
         return $this->getNotifyService()->checkPayStatus($out_trade_no);
+    }
+
+    /**
+     * @brief 检查收款单的支付状态，该函数会检查本地收款单的处理状态，如果处理，则不进行后续的处理
+     * 同时需要返回成功给支付服务器
+     *
+     * @return  查询交易状态 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/03/10 10:28:03
+    **/
+    public function getReceivable($out_trade_no = null) {
+        return $this->getNotifyService()->getReceivable($out_trade_no);
     }
 
     /**

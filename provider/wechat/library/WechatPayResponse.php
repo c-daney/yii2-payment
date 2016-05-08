@@ -32,8 +32,6 @@ class WechatPayResponse extends WechatPayBase {
             else {
                 $this->setScenario($scenario);
                 $this->setAttributes($data, false);
-                Yii::warning('支付服务器return结果为:-----------------------');
-                Yii::warning($this->toArray());
                 if ($this->getAttribute('return_code') !== 'SUCCESS') {
                     $this->addError(__METHOD__, $this->getAttribute('return_msg'));
                 }

@@ -9,8 +9,10 @@
 namespace lubaogui\payment\provider\wechat;
  
 use Yii;
+use lubaogui\payment\models\Receivable;
 use lubaogui\payment\provider\wechat\library\WechatPayBase;
 use lubaogui\payment\provider\wechat\library\WechatPayOrder;
+use lubaogui\payment\provider\wechat\library\WechatPayClient;
  
 /**
  * @file WechatPayNotify.php
@@ -94,12 +96,36 @@ class WechatPayNotify extends WechatPayBase {
                 return false;
             }
             //支付成功
-            Yii::error('订单查询结果数据');
-            Yii::error($orderResult);
             if ($this->_notifyData['trade_state'] === 'SUCCESS') {
                 return true;
             }
             return true;
+        }
+
+    }
+
+    /**
+     * @brief 检查订单的支付状态，该函数会引起远程网络调用，不能放在事物中处理
+     *
+     * @return  查询交易状态 
+     * @retval   
+     * @see 
+     * @note 
+     * @author 吕宝贵
+     * @date 2016/03/10 10:28:03
+    **/
+    public function getReceivable($receivableId = null) {
+
+        if (! $receivableId) {
+            $receivableId = $this->_notifyData['out_trade_no'];
+        }
+        $receivable = Receivable::findOne($receivableId);
+        if (! $receivable) {
+            Yii::error('无法找到对应的交易订单');
+            return false;
+        }
+        else {
+            return $receivable;
         }
 
     }
@@ -128,6 +154,16 @@ class WechatPayNotify extends WechatPayBase {
         if (!$receivable->save()) {
             throw new LBUserException('保存交易信息失败', 3, $this->getErrors());
             return false;
+        }
+        else {
+            //call callback function
+            if (call_user_func($handlers['paySuccessHandler'], $receivable->trans_id)) {
+                return $receivable->trans_id;
+            }
+            else {
+                Yii::warning(__METHOD__ . ' callback failed');
+                return false;
+            }
         }
 
     }
