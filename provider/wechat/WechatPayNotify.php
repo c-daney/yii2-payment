@@ -123,10 +123,10 @@ class WechatPayNotify extends WechatPayBase {
         if (! $receivable) {
             Yii::error('无法找到对应的交易订单');
             return false;
-        }
-        else {
+        } 
+        else { 
             return $receivable;
-        }
+        } 
 
     }
 
