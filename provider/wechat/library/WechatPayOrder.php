@@ -28,7 +28,7 @@ class WechatPayOrder extends WechatPayBase
                 'goods_tag', 'trade_type', 'notify_url', 'product_id', 'sign', 'nonce_str' 
             ],
             'query'=>[
-                'appid', 'mch_id', 'transaction_id', 'out_trade_no',  'sign', 'nonce_str'
+                'appid', 'mch_id', 'out_trade_no', 'transaction_id', 'sign', 'nonce_str'
             ],
         ];
     }
@@ -91,9 +91,8 @@ class WechatPayOrder extends WechatPayBase
 
         $this->setScenario('query');
         $orderParams = array_merge($this->_config, $orderParams);
+        $orderParams['nonce_str'] = $this->getNonceStr();
         $this->load($orderParams, '');
-        Yii::error('是不是有啊啊啊******************************************');
-        Yii::error($this->toArray());
         $this->setSign();
         return WechatPayClient::queryOrderPayStatus($this);
 

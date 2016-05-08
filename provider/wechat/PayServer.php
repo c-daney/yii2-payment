@@ -25,7 +25,13 @@ use lubaogui\payment\provider\wechat\WechatPayNotify;
 class PayServer extends BasePayServer
 {
     private $_config = []; 
-    public $app_id;
+    public $trade_type;
+    private $_configs = [];
+
+
+    public function __construct() {
+        $this->_configs = require(__DIR__ . '/config/config.php'); 
+    }
 
     /**
      * @brief 获取实际的支付实例
@@ -39,14 +45,13 @@ class PayServer extends BasePayServer
     **/
     public function getPayService() {
         if (empty($this->_payService)) {
-            $configs = require(dirname(__FILE__) . '/config/config.php'); 
-            if ($this->app_id) {
-                $this->_config = $configs['apps'][$this->app_id];
+            if ($this->trade_type) {
+                $this->_config = $this->_configs['apps'][$this->trade_type];
             }
             else {
-                $this->_config = $configs['apps'][$configs['default_app_id']];
+                $this->_config = $this->_configs['apps'][$this->_configs['default_trade_type']];
             }
-
+            $this->_config['trade_type'] = $this->trade_type;
             $this->_payService = new WechatPay($this->_config);
         }
         return $this->_payService;
@@ -64,7 +69,7 @@ class PayServer extends BasePayServer
     **/
     public function getNotifyService() {
         if (empty($this->_notifyService)) {
-            $this->_notifyService = new WechatPayNotify();
+            $this->_notifyService = new WechatPayNotify($this->_configs);
         }
         return $this->_notifyService;
     }

@@ -35,16 +35,25 @@ class WechatPayNotify extends WechatPayBase {
      * @author 吕宝贵
      * @date 2016/03/10 10:39:42
     **/
-    public function __construct() {
+    public function __construct($configs) {
         $xml = file_get_contents("php://input");
         if ($xml) {
             $this->_notifyData = $this->transferXmlToArray($xml);
             Yii::error("服务器回告结果为:");
             Yii::error($this->_notifyData);
 
-            $this->_config['appid'] = $this->_notifyData['app_id'];
+            $this->_config['appid'] = $this->_notifyData['appid'];
             $this->_config['mch_id'] = $this->_notifyData['mch_id'];
             $this->_config['trade_type'] = $this->_notifyData['trade_type'];
+
+            $config = $configs['apps'][$this->_notifyData['trade_type']];
+            if ($this->_notifyData['appid'] != $config['appid'] || $this->_notifyData['mch_id'] != $config['mch_id']) {
+                Yii::error("返回信息和本地信息不符合!");
+                return false;
+            }
+            else {
+                $this->_config = $config;
+            }
         }
     }
 
@@ -60,7 +69,6 @@ class WechatPayNotify extends WechatPayBase {
     **/
     public function checkPayStatus($out_trade_no = null) {
 
-        Yii::error('查询输入_______________________________');
         $data = [];
         if (empty($out_trade_no)) {
             $data = $this->_notifyData;
@@ -75,21 +83,20 @@ class WechatPayNotify extends WechatPayBase {
         }
         else {
             $payOrder = new WechatPayOrder($this->_config);
-            Yii::error('查询输入');
-            Yii::error($data);
             $orderResult = $payOrder->queryPayStatus($data);
-            Yii::error($orderResult);
-            $this->_notifyData = $orderResult;
-            if ($orderResult['return_code'] !== 'SUCCESS') {
+            $this->_notifyData = $orderResult->toArray();
+            if ($this->_notifyData['return_code'] !== 'SUCCESS') {
                 $this->addError('wechat-pay', $orderResult['return_msg']);
                 return false;
             }
-            if ($orderResult['result_code'] !== 'SUCCESS') {
+            if ($this->_notifyData['result_code'] !== 'SUCCESS') {
                 $this->addError('wechat-pay-error', $orderResult['err_code_des']);
                 return false;
             }
             //支付成功
-            if ($orderResult['trade_state'] === 'SUCCESS') {
+            Yii::error('订单查询结果数据');
+            Yii::error($orderResult);
+            if ($this->_notifyData['trade_state'] === 'SUCCESS') {
                 return true;
             }
             return true;

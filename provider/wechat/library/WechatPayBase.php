@@ -43,8 +43,6 @@ class WechatPayBase extends PayBase
     **/
     public function setSign() {
         $this->setAttribute('sign', $this->makeSign());
-        Yii::error("签名之后的结果如下:");
-        Yii::error($this->toArray());
     }
 
     /**
@@ -60,13 +58,11 @@ class WechatPayBase extends PayBase
     protected function makeSign() {
         $params = $this->toArray();
         ksort($params);
-        Yii::error('参与签名的参数数组为:*************************************');
-        Yii::error($params);
+        if ($params['sign']) {
+            unset($params['sign']);
+        }
         $string = $this->toUrlFormat($params);
-        Yii::error($string);
         $string = $string . '&key=' . $this->_config['key'];
-        Yii::error('参与签名的字符串为:*************************************');
-        Yii::error($string);
         $string = md5($string);
         $sign = strtoupper($string);
         return $sign;

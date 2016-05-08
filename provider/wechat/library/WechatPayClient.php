@@ -8,6 +8,7 @@
  
 namespace lubaogui\payment\provider\wechat\library;
  
+use Yii;
 use yii\base\Model;
  
 /**
@@ -62,7 +63,8 @@ class WechatPayClient
     public static function queryOrderPayStatus($payOrder) {
 
         $xml = $payOrder->toXml($payOrder->toArray());
-        $response = new WechatPayResponse(self::postXmlToWechatServer($xml, self::URL_WXPAY_ORDER_QUERY));
+        $response = new WechatPayResponse(self::postXmlToWechatServer($xml, self::URL_WXPAY_ORDER_QUERY), 'query');
+        Yii::error($response);
         return $response;
 
     }
