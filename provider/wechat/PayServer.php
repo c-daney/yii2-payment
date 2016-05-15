@@ -25,7 +25,6 @@ use lubaogui\payment\provider\wechat\WechatPayNotify;
 class PayServer extends BasePayServer
 {
     private $_config = []; 
-    public $trade_type;
     private $_configs = [];
 
 
@@ -74,31 +73,6 @@ class PayServer extends BasePayServer
         return $this->_notifyService;
     }
 
-    /**
-     * @brief 产生客户端支付请求的参数列表
-     *
-     * @return array 参数数组 
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2016/02/26 00:09:02
-    **/
-    public function generatePayRequestParams($receivable) {
-
-        //根据订单信息，统一下单
-        $orderParams['body'] = 'Mr-Hug产品充值';
-        $orderParams['out_trade_no'] = $receivable->id;
-        //$orderParams['total_fee'] = round($receivable->money*100);
-        $orderParams['total_fee'] = round($receivable->money);
-        $orderParams['time_start'] = date('YmdHis', $receivable->created_at);
-        $orderParams['time_expire'] = date('YmdHis', $receivable->created_at + 3600);
-        $orderParams['goods_tag'] = 'Mr-Hug深度旅游服务 充值';
-        $orderParams['product_id'] = 1;
-
-        $payService = $this->getPayService();
-        return $payService->generatePayRequestParams($orderParams);
-    }
 
     /**
      * @brief 检查支付状态，该函数会引起远程网络调用，不能放在事物中处理

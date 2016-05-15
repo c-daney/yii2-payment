@@ -56,8 +56,19 @@ class WechatPay extends Model {
      * @author 吕宝贵
      * @date 2016/02/26 00:12:06
     **/
-    public function generatePayRequestParams($orderParams) {
+    public function generatePayRequestParams($receivable) {
 
+        //订单参数
+        $orderParams['body'] = 'Mr-Hug产品充值';
+        $orderParams['out_trade_no'] = $receivable->id;
+        //$orderParams['total_fee'] = round($receivable->money*100);
+        $orderParams['total_fee'] = round($receivable->money);
+        $orderParams['time_start'] = date('YmdHis', $receivable->created_at);
+        $orderParams['time_expire'] = date('YmdHis', $receivable->created_at + 3600);
+        $orderParams['goods_tag'] = 'Mr-Hug深度旅游服务 充值';
+        $orderParams['product_id'] = 1;
+
+        //通用参数
         $orderParams['notify_url'] = $this->_config['notify_url'];
         $orderParams['trade_type'] = $this->_config['trade_type'];
         Yii::error("订单参数为:");

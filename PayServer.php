@@ -45,6 +45,8 @@ abstract class PayServer extends Object
     protected $_payService;
     protected $_notifyService;
 
+    public $trade_type;
+
     //默认支付方式
     public $defaultPayServer;
 
@@ -92,7 +94,7 @@ abstract class PayServer extends Object
      * @return array 支付请求的数组信息 
      */
     public function generatePayRequestParams($receivable) {
-        return $this->getPayService->generatePayRequestParams($receivable);
+        return $this->getPayService()->generatePayRequestParams($receivable);
     }
 
     /**
