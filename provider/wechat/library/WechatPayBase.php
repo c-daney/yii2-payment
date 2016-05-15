@@ -136,7 +136,7 @@ class WechatPayBase extends PayBase
     		}
         }
         $xml .= "</xml>";
-        //Yii::info("生成的xml为:" . $xml);
+        Yii::info("生成的xml为:" . $xml);
         return $xml; 
     }
 

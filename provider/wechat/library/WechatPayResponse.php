@@ -25,6 +25,8 @@ class WechatPayResponse extends WechatPayBase {
     public function __construct($xml, $scenario = 'unifiedOrder') {
         if ($xml) {
             $data = $this->transferXmlToArray($xml);
+            Yii::warning('Response content of Server is:');
+            Yii::warning($data);
             if (!is_array($data)) {
                 $this->addError('debug', __METHOD__ . ':服务器返回xml不可解析:' . $xml);
                 return false;

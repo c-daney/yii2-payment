@@ -69,6 +69,8 @@ class WechatPay extends Model {
             return false;
         }
         $resultData = $response->getAttributes();
+        Yii::error("response content of UnifyOrder:");
+        Yii::error($resultData);
 
         //根据不同的交易类型，产出不同的输出
         switch ($orderParams['trade_type']) {
