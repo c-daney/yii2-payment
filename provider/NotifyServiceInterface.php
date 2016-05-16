@@ -30,4 +30,12 @@ interface NotifyServiceInterface
     public function processNotify($handlers); 
 
 
+    public function replySuccessToServer(); 
+
+    public function replyFailureToServer();
+
+
+    public function checkPayStatus();
+
+
 }
