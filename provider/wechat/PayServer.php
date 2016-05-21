@@ -13,7 +13,7 @@ use lubaogui\payment\provider\wechat\WechatPay;
 use lubaogui\payment\provider\wechat\WechatPayNotify;
 
 /**
- * 支付宝服务类，主要用于产生支付宝请求和校验支付宝的服务器返回.
+ * 微信支付服务类，主要用于产生请求和校验服务器返回.
  *
  *
  * Additionally, when attaching an event handler, extra data may be passed
@@ -74,46 +74,5 @@ class PayServer extends BasePayServer
     }
 
 
-    /**
-     * @brief 检查支付状态，该函数会引起远程网络调用，不能放在事物中处理
-     *
-     * @return  查询交易状态 
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2016/03/10 10:28:03
-    **/
-    public function checkPayStatus($out_trade_no = null) {
-        return $this->getNotifyService()->checkPayStatus($out_trade_no);
-    }
-
-    /**
-     * @brief 检查收款单的支付状态，该函数会检查本地收款单的处理状态，如果处理，则不进行后续的处理
-     * 同时需要返回成功给支付服务器
-     *
-     * @return  查询交易状态 
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2016/03/10 10:28:03
-    **/
-    public function getReceivable($out_trade_no = null) {
-        return $this->getNotifyService()->getReceivable($out_trade_no);
-    }
-
-    /**
-     * @brief 处理后台的支付通知消息，通过调用回调函数来处理相关业务逻辑
-     *
-     * @return array 数组，返回数组 
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2015/12/19 10:49:12
-    **/
-    public function processNotify($handlers) {
-        return $this->getNotifyService()->processNotify($handlers);
-    }
 
 }

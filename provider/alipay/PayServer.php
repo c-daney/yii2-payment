@@ -69,7 +69,7 @@ class PayServer extends BasePayServer
      * @author 吕宝贵
      * @date 2016/02/26 10:39:45
     **/
-    public function generateUserRequestParams($receivable)
+    public function generatePayRequestParams($receivable)
     {
         $submitToAlipayParams = $this->transformToAlipayParams($receivable);
         $requestStr = $this->_alipay->buildRequestString($submitToAlipayParams);
@@ -143,20 +143,6 @@ class PayServer extends BasePayServer
     }
 
     /**
-     * @brief 生成用于支付的扫描二维码
-     *
-     * @return  public function 
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2015/12/25 23:56:10
-    **/
-    public function generateUserScanQRCode($receivable) { 
-        return ''; 
-    }
-
-    /**
      * @brief 处理用户返回
      *
      * @return  public function 
@@ -167,6 +153,7 @@ class PayServer extends BasePayServer
      * @date 2015/12/25 23:55:54
     **/
     public function processReturn() { 
+
     } 
 
     /**
@@ -181,15 +168,6 @@ class PayServer extends BasePayServer
     **/
     protected function transformToAlipayParams($receivable) {
 
-        $alipayParams = [];
-        
-        $alipayParams['out_trade_no'] = $receivable->id;
-        $alipayParams['subject'] = $receivable->description;
-        $alipayParams['total_fee'] = round($receivable->money, 2);
-        $alipayParams['body'] = $receivable->description;
-        $alipayParams['show_url'] = '';
-        $alipayParams['notify_url'] = 'http://www.mr-hug.com/account/alipay-notify';
-        $alipayParams['return_url'] = 'http://www.mr-hug.com/user-booking';
 
         return $alipayParams;
 
