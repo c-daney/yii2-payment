@@ -23,8 +23,8 @@ class AlipayBase {
     private $config = [];
 
 
-    private $alipayGateway        = 'https://mapi.alipay.com/gateway.do?';
-    private $alipayGatewayMobile = 'http://wappaygw.alipay.com/service/rest.htm?';
+    protected $alipayGateway        = 'https://mapi.alipay.com/gateway.do?';
+    protected $alipayGatewayMobile = 'http://wappaygw.alipay.com/service/rest.htm?';
 
     private $verifyUrl            = 'http://notify.alipay.com/trade/notify_query.do?';
     private $verifyUrlHttps      = 'https://mapi.alipay.com/gateway.do?service=notify_verify&';

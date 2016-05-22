@@ -54,26 +54,9 @@ class PayServer extends BasePayServer
      */
     public function generateUserRequestHtml($receivable) 
     {
-        $submitToAlipayParams = $this->transformToAlipayParams($receivable);
+        $submitToAlipayParams = $this->generatePayRequestParams($receivable);
         $requestHtml = $this->_alipay->buildRequestForm($submitToAlipayParams, 'post', 'confirm');
         return $requestHtml;
-    }
-
-    /**
-     * @brief 产生用户端请求的参数数组
-     *
-     * @return  public function 
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2016/02/26 10:39:45
-    **/
-    public function generatePayRequestParams($receivable)
-    {
-        $submitToAlipayParams = $this->transformToAlipayParams($receivable);
-        $requestStr = $this->_alipay->buildRequestString($submitToAlipayParams);
-        return $requestStr;
     }
 
     /**
@@ -140,37 +123,6 @@ class PayServer extends BasePayServer
             }
             default: break;
         }
-    }
-
-    /**
-     * @brief 处理用户返回
-     *
-     * @return  public function 
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2015/12/25 23:55:54
-    **/
-    public function processReturn() { 
-
-    } 
-
-    /**
-     * @brief 将Receivable转换成符合支付宝的支付参数
-     *
-     * @return  protected function 
-     * @retval   
-     * @see 
-     * @note 
-     * @author 吕宝贵
-     * @date 2015/12/26 12:04:41
-    **/
-    protected function transformToAlipayParams($receivable) {
-
-
-        return $alipayParams;
-
     }
 
 }

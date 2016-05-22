@@ -54,7 +54,7 @@ class Alipay extends AlipayBase {
         $alipayParams['notify_url'] = $this->config['notify_url'];
         $alipayParams['return_url'] = $this->config['return_url'];
 
-        return $this->buildRequestParams($params);
+        return $this->buildRequestForm($alipayParams);
 
     }
 
