@@ -23,6 +23,8 @@ use lubaogui\payment\models\Receivable;
 class PayServer extends BasePayServer
 {
 
+    private $config = []; 
+
     /*
      * alipay 接口类实例
      */
