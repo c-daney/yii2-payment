@@ -150,6 +150,16 @@ abstract class PayServer extends Object
      * @date 2016/03/14 18:47:03
     **/
     public function replySuccessToServer() {
+        $response = null;
+        if (Yii::$app->has('response')) {
+            $response = Yii::$app->getResponse();
+            $response->isSent = false;
+            $response->stream = null;
+            $response->data = null;
+            $response->content = null;
+        } else {
+            $response = new Response();
+        }
         $this->getNotifyService()->replySuccessToServer();
     }
 
@@ -164,7 +174,17 @@ abstract class PayServer extends Object
      * @date 2016/03/14 18:47:07
     **/
     public function replyFailureToServer() {
-        $this->getNotifyService->replyFailureToServer();
+        $response = null;
+        if (Yii::$app->has('response')) {
+            $response = Yii::$app->getResponse();
+            $response->isSent = false;
+            $response->stream = null;
+            $response->data = null;
+            $response->content = null;
+        } else {
+            $response = new Response();
+        }
+        $this->getNotifyService()->replyFailureToServer();
     }
 
 }
