@@ -2,11 +2,11 @@
 
 return [
         //合作身份者id，以2088开头的16位纯数字
-        'partner' => '2088121209198888',
+        'partner' => '',
         //商家注册邮件地址
-        'seller_email' => 'haha@xxx.com',
+        'seller_email' => '',
         //当采用md5签名方式时，需要提供key
-        'key' => 'xxxxxx',
+        'key' => '',
         //商户的私钥（后缀是.pen）文件相对路径
         'private_key_path' => '',
         //支付宝公钥（后缀是.pen）文件相对路径
@@ -20,4 +20,6 @@ return [
         'cacert' => dirname(__FILE__).'/cacert.pem',
         //访问模式,根据自己的服务器是否支持ssl访问，若支持请选择https；若不支持请选择http
         'transport' => 'http',
+        'notify_url' => '',
+        'return_url' => ''
     ];

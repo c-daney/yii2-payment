@@ -16,12 +16,13 @@ namespace lubaogui\payment\provider\alipay\library;
  *
  **/
 
-
 class AlipayBase {
 
     // 配置信息在实例化时从配置文件读入，配置文件需要放在该文件同目录下
-    private $config = [];
+    protected $config = [];
 
+    private $service               = 'create_direct_pay_by_user';
+    private $serviceMobile           = 'alipay.wap.trade.create.direct';
 
     protected $alipayGateway        = 'https://mapi.alipay.com/gateway.do?';
     protected $alipayGatewayMobile = 'http://wappaygw.alipay.com/service/rest.htm?';
@@ -30,6 +31,8 @@ class AlipayBase {
     private $verifyUrlHttps      = 'https://mapi.alipay.com/gateway.do?service=notify_verify&';
 
     private $_notifyData;
+
+
 
     /**
      * 生成签名后的请求参数
