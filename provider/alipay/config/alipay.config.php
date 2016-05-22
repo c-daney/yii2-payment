@@ -2,13 +2,13 @@
 
 return [
         //合作身份者id，以2088开头的16位纯数字
-        'partner' => '2088111111111111',
+        'partner' => '2088888888888888',
         //商家注册邮件地址
-        'seller_email' => 'mrhug@withwindtrip.com',
+        'seller_email' => 'haha@xxx.com',
         //当采用md5签名方式时，需要提供key
-        'key' => 'xxxxxxxxxxxx',
+        'key' => 'xxxxxx',
         //商户的私钥（后缀是.pen）文件相对路径
-        'private_key_path' => 'xxxxxxxxxx',
+        'private_key_path' => '',
         //支付宝公钥（后缀是.pen）文件相对路径
         'ali_public_key_path' => '',
         //签名方式 不需修改,支持md5和rsa, md5验证，请填写上面的key配置，rsa请配置私匙和公匙 md5: MD5, rsa:RSA
