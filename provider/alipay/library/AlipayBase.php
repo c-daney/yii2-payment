@@ -7,6 +7,8 @@
 
 namespace lubaogui\payment\provider\alipay\library;
 
+use Yii;
+
 /**
  * @file Alipay.php
  * @author 吕宝贵(lbaogui@lubanr.com)
@@ -29,10 +31,6 @@ class AlipayBase {
 
     private $verifyUrl            = 'http://notify.alipay.com/trade/notify_query.do?';
     private $verifyUrlHttps      = 'https://mapi.alipay.com/gateway.do?service=notify_verify&';
-
-    private $_notifyData;
-
-
 
     /**
      * 生成签名后的请求参数
@@ -111,14 +109,10 @@ class AlipayBase {
      * @param $async <Boolean> 是否异步通知模式
      * @return <Boolean>
      */
-    protected function verifyNotify() {
-        $async = empty($_GET);
-        $data = $async ? $_POST : $_GET;
-        if (empty($data)) {
-            return false;
-        }
-        $this->_notifyData = $data;
+    protected function verifyNotify($notifyData) {
+        $data = $notifyData;
         $signValid = $this->verifyParameters($data, $data["sign"]);
+        Yii::warning($data,  __METHOD__);
         $notifyId = $data['notify_id'];
         if ($async && $this->is_mobile){
             //对notify_data解密
@@ -129,16 +123,21 @@ class AlipayBase {
             //notify_id从decrypt_post_para中解析出来（也就是说decrypt_post_para中已经包含notify_id的内容）
             $doc = new DOMDocument();
             $doc->loadXML($data['notify_data']);
+            Yii::warning('is a mobile request, so ,change notifyId ',  __METHOD__);
             $notifyId = $doc->getElementsByTagName( 'notify_id' )->item(0)->nodeValue;
         }
         //获取支付宝远程服务器ATN结果（验证是否是支付宝发来的消息）
         $responseTxt = 'true';
         if (! empty($notifyId)) {
-            $responseTxt = $this->verifyFromServer($notify_id);
+            $responseTxt = $this->verifyFromServer($notifyId);
         }
+        Yii::warning('notify_id of the order is ' . $notifyId,  __METHOD__);
+        Yii::warning($responseTxt, __METHOD__);
+        Yii::warning(iconv('GB2312', 'UTF-8', $responseTxt), __METHOD__);
+
         //验证
         //$signValid的结果不是true，与安全校验码、请求时的参数格式（如：带自定义参数等）、编码格式有关
-        //$responsetTxt的结果不是true，与服务器设置问题、合作身份者ID、notify_id一分钟失效有关
+        //$responseTxt的结果不是true，与服务器设置问题、合作身份者ID、notify_id一分钟失效有关
         return $signValid && preg_match("/true$/i", $responseTxt);
     }
 
@@ -186,7 +185,7 @@ class AlipayBase {
     protected function verifyFromServer($notifyId) {
         $transport = strtolower(trim($this->config['transport']));
         $partner = trim($this->config['partner']);
-        $veryfyUrl = ($transport == 'https' ? $this->verifyUrlHttps : $this->verifyUrl) . "partner=$partner&notify_id=$notify_id";
+        $veryfyUrl = ($transport == 'https' ? $this->verifyUrlHttps : $this->verifyUrl) . "partner=$partner&notify_id=$notifyId";
         $curl = curl_init($veryfyUrl);
         curl_setopt($curl, CURLOPT_HEADER, 0 ); // 过滤HTTP头
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);//SSL证书认证
@@ -284,6 +283,7 @@ class AlipayBase {
         openssl_free_key($res);
         return $result;
     }
+
 
 }
 /* vim: set et ts=4 sw=4 sts=4 tw=100: */

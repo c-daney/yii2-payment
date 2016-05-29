@@ -13,6 +13,7 @@ use lubaogui\payment\models\Receivable;
 use lubaogui\payment\provider\wechat\library\WechatPayBase;
 use lubaogui\payment\provider\wechat\library\WechatPayOrder;
 use lubaogui\payment\provider\wechat\library\WechatPayClient;
+use lubaogui\common\exceptions\LBUserException;
  
 /**
  * @file WechatPayNotify.php

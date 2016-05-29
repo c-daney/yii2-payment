@@ -7,6 +7,11 @@
 
 namespace lubaogui\payment\provider\alipay;
 
+use Yii;
+use  lubaogui\payment\provider\alipay\library\AlipayBase;
+use lubaogui\payment\models\Receivable;
+use lubaogui\common\exceptions\LBUserException;
+
 /**
  * @file Alipay.php
  * @author 吕宝贵(lbaogui@lubanr.com)
@@ -19,7 +24,7 @@ namespace lubaogui\payment\provider\alipay;
 
 class AlipayNotify extends AlipayBase {
 
-    private $_notifyData = [];
+    private $_notifyData;
 
     function __construct($config, $isMobile = false){
         $this->config = $config;
@@ -28,6 +33,16 @@ class AlipayNotify extends AlipayBase {
             $this->service = $this->serviceWap;
             $this->alipayGateway = $this->alipayGatewayMobile;
         }
+        else {
+
+        }
+
+        $this->_notifyData = $_POST;
+        if (empty($this->_notifyData)) {
+            Yii::warning('回告的内容数据为空', __METHOD__);
+            return false;
+        }
+
     }
  
     /**
@@ -42,15 +57,20 @@ class AlipayNotify extends AlipayBase {
     **/
     public function checkPayStatus($out_trade_no = null) {
 
-        if (! $this->verifyNotify()) {
+        if (! $this->verifyNotify($this->_notifyData)) {
+            Yii::warning('支付宝回调结果真实性check failed!');
             return false;
         }
         else {
             //此处需要判断支付的状态，只有支付成功的状态才会返回true
-            if (trim($this->_notifyData['trade_status']) === 'TRADE_FINISHED') {
+            $tradeStatus = trim($this->_notifyData['trade_status']);
+            Yii::warning('订单状态为:' . $tradeStatus, __METHOD__);
+            if ($tradeStatus === 'TRADE_FINISHED' || $tradeStatus === 'TRADE_SUCCESS') {
+                Yii::warning('订单已支付成功', __METHOD__);
                 return true;
             }
             else {
+                Yii::warning('订单回告显示订单未支付成功', __METHOD__);
                 return false;
             }
         }
