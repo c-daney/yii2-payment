@@ -30,6 +30,10 @@ class WechatPayOrder extends WechatPayBase
             'query'=>[
                 'appid', 'mch_id', 'out_trade_no', 'transaction_id', 'sign', 'nonce_str'
             ],
+            'generateAppForm' => [
+                'appid', 'noncestr', 'partnerid', 'prepayid', 'timestamp', 'package', 'sign'
+            ],
+
         ];
     }
 

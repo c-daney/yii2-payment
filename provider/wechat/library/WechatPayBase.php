@@ -56,7 +56,10 @@ class WechatPayBase extends PayBase
      * @date 2016/03/04 14:40:30
     **/
     protected function makeSign() {
+        Yii::warning('********************************', __METHOD__);
+        Yii::warning($this, __METHOD__);
         $params = $this->toArray();
+        Yii::warning($params, __METHOD__);
         ksort($params);
         if ($params['sign']) {
             unset($params['sign']);
@@ -65,6 +68,8 @@ class WechatPayBase extends PayBase
         $string = $string . '&key=' . $this->_config['key'];
         $string = md5($string);
         $sign = strtoupper($string);
+        Yii::warning('********************************', __METHOD__);
+        Yii::warning($sign, __METHOD__);
         return $sign;
     } 
 

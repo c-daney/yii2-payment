@@ -58,6 +58,7 @@ class WechatPay extends Model {
     **/
     public function generatePayRequestParams($receivable) {
 
+        Yii::error("generate pay for according to receivable", __METHOD__);
         //订单参数
         $orderParams['body'] = 'Mr-Hug产品充值';
         $orderParams['out_trade_no'] = $receivable->id;
@@ -100,8 +101,13 @@ class WechatPay extends Model {
             $clientOrderParams['package'] = 'Sign=WXPay';
 
             $wxPayOrder = new WechatPayOrder($this->_config);
-            $wxPayOrder -> load($clientOrderParams);
+            $wxPayOrder->setScenario('generateAppForm');
+            $wxPayOrder -> load($clientOrderParams, '');
+            Yii::error($clientOrderParams, __METHOD__);
+            Yii::error($wxPayOrder, __METHOD__);
             $wxPayOrder -> setSign();
+            Yii::error("签名之后的订单参数为:");
+            Yii::error($wxPayOrder->getAttributes(), __METHOD__);
 
             return $wxPayOrder->getAttributes();
         }

@@ -53,6 +53,7 @@ class PayServer extends BasePayServer
             $this->_config['trade_type'] = $this->trade_type;
             $this->_payService = new WechatPay($this->_config);
         }
+        Yii::warning($this->_config, __METHOD__);
         return $this->_payService;
     }
 
