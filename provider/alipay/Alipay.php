@@ -46,7 +46,7 @@ class Alipay extends AlipayBase {
         
         $alipayParams['out_trade_no'] = $receivable->id;
         $alipayParams['subject'] = $receivable->description;
-        $alipayParams['total_fee'] = round($receivable->money/100, 2);
+        $alipayParams['total_fee'] = round($receivable->money, 2);
         $alipayParams['body'] = $receivable->description;
         $alipayParams['show_url'] = '';
         $alipayParams['notify_url'] = $this->config['notify_url'];
