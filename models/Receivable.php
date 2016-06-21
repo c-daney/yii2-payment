@@ -80,7 +80,7 @@ class Receivable extends ActiveRecord
 
 
     public function hasPaySucceeded() {
-        return $this->status > self::PAY_STATUS_SUCCEEDED ? true : false;
+        return $this->status >= self::PAY_STATUS_SUCCEEDED ? true : false;
     }
 
 
