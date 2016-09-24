@@ -50,5 +50,7 @@ return $payment->generateUserRequestHtml($receivable);
 
 对于业务逻辑相关功能，用户可以在自己的产品流程中添加
 此模块结合lubaogui/yii2-account模块一起使用，效果更佳。
+in yii2-account module, the controller file AccountController shows the usage of this module.
+
 
 如果有愿意一起讨论开发的，请加 QQ: 6649216 谢谢。
